@@ -28,7 +28,7 @@ public class FileUploadController {
 
     @PostMapping("/uploadPdf")
     @CrossOrigin(origins = "https://job4jobless.com")
-    public String uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
+    public ResponseEntity<?> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
         if (!file.isEmpty()) {
             try {
                 String uploadDirectory = "/root/folder_name/upload_pdf/";               
@@ -49,13 +49,17 @@ public class FileUploadController {
               
                 resumeUploadRepository.save(resumeUpload);
 
-                return "File uploaded successfully with UID: " + uid;
+//                return "File uploaded successfully with UID: " + uid;
+                return ResponseEntity.ok(resumeUpload);
             } catch (IOException e) {
-                return "File upload failed: " + e.getMessage();
+//                return "File upload failed: " + e.getMessage();
+            	  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
             }
-        } else {
-            return "File is empty.";
         }
+//        else {
+////            return "File is empty."
+//        	 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+//        }
     }
 
     
