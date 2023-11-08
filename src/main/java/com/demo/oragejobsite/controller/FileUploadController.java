@@ -56,10 +56,10 @@ public class FileUploadController {
             	  return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
             }
         }
-//        else {
-////            return "File is empty."
-//        	 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-//        }
+        else {
+//            return "File is empty."
+        	  return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resume not found for the user : ");
+        }
     }
 
     
