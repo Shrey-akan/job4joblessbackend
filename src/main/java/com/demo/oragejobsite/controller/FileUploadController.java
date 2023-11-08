@@ -31,21 +31,22 @@ public class FileUploadController {
     public String uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
         if (!file.isEmpty()) {
             try {
-                String uploadDirectory = "/root/folder_name/upload_pdf/";
-                String originalFileName = file.getOriginalFilename();
-
-                // Create the directory if it doesn't exist
-                new File(uploadDirectory).mkdirs();
-
+                String uploadDirectory = "/root/folder_name/upload_pdf/";               
+                String originalFileName = uid + ".pdf";
+                File directory = new File(uploadDirectory);
+                if (!directory.exists()) {
+                    directory.mkdirs();
+                }
                 String filePath = uploadDirectory + originalFileName;
+
+             
                 file.transferTo(new File(filePath));
 
-                // Save the file information to the database along with the UID
+            
                 ResumeUpload resumeUpload = new ResumeUpload();
                 resumeUpload.setUid(uid);
                 resumeUpload.setFileName(originalFileName);
-                // Set other fields as needed
-
+              
                 resumeUploadRepository.save(resumeUpload);
 
                 return "File uploaded successfully with UID: " + uid;
@@ -56,6 +57,7 @@ public class FileUploadController {
             return "File is empty.";
         }
     }
+
     
     @GetMapping("/fetchByUid")
     @CrossOrigin(origins = "https://job4jobless.com")
