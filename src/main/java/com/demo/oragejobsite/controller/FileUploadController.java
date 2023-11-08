@@ -18,15 +18,16 @@ import com.demo.oragejobsite.dao.ResumeUploadRepository;
 import com.demo.oragejobsite.entity.ResumeUpload;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 @RequestMapping("/api")
 public class FileUploadController {
 
     @Autowired
     private ResumeUploadRepository resumeUploadRepository; // Create a repository for the ResumeUpload entity
 
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
+    @PostMapping("/uploadPdf")
+    @CrossOrigin(origins = "https://job4jobless.com")
+    public String uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
         if (!file.isEmpty()) {
             try {
                 String uploadDirectory = "/root/folder_name/upload_pdf/";
@@ -56,6 +57,7 @@ public class FileUploadController {
     }
     
     @GetMapping("/fetchByUid")
+    @CrossOrigin(origins = "https://job4jobless.com")
     public ResponseEntity<?> fetchByUid(@RequestParam("uid") String uid) {
         try {
             // Query the database to retrieve data by uid
