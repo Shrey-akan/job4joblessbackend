@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.demo.oragejobsite.dao.ResumeUploadRepository;
 import com.demo.oragejobsite.entity.ResumeUpload;
 
+import antlr.collections.List;
+
 @RestController
 @CrossOrigin(origins = "https://job4jobless.com")
 public class FileUploadController {
@@ -71,4 +73,22 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+    
+    @GetMapping("/fetchAll")
+    @CrossOrigin(origins = "https://job4jobless.com")
+    public ResponseEntity<java.util.List<ResumeUpload>> fetchAll() {
+        try {
+            java.util.List<ResumeUpload> resumeUploads = resumeUploadRepository.findAll();
+
+            if (!resumeUploads.isEmpty()) {
+                return ResponseEntity.ok(resumeUploads);
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }
