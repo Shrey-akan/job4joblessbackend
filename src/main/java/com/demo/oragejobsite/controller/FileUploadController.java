@@ -57,20 +57,18 @@ public class FileUploadController {
     
     @GetMapping("/fetchByUid")
     @CrossOrigin(origins = "https://job4jobless.com")
-    public ResponseEntity<?> fetchByUid(@RequestParam("uid") String uid) {
+    public ResponseEntity<ResumeUpload> fetchByUid(@RequestParam("uid") String uid) {
         try {
-            // Query the database to retrieve data by uid
             ResumeUpload resumeUpload = resumeUploadRepository.findByUid(uid);
 
             if (resumeUpload != null) {
-                // Return the data as a response
                 return ResponseEntity.ok(resumeUpload);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
