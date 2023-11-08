@@ -1,13 +1,18 @@
 package com.demo.oragejobsite.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -97,4 +102,30 @@ public class FileUploadController {
         }
     }
 
+    @GetMapping("/getPdfByUid/{uid}")
+    @CrossOrigin(origins = "https://job4jobless.com")
+    public void getPdfByUid(@PathVariable("uid") String uid, HttpServletResponse response) {
+        try {
+            // Retrieve the ResumeUpload object by UID
+            ResumeUpload resumeUpload = resumeUploadRepository.findByUid(uid);
+
+            if (resumeUpload != null) {
+                String filePath = "/root/folder_name/upload_pdf/" + uid + ".pdf";
+
+                // Set the content type and headers for the response
+                response.setContentType("application/pdf");
+                response.setHeader("Content-Disposition", "inline; filename=" + uid + ".pdf");
+
+                // Read the PDF file and write it to the response output stream
+                FileInputStream fileInputStream = new FileInputStream(filePath);
+                IOUtils.copy(fileInputStream, response.getOutputStream());
+                response.flushBuffer();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle errors as needed
+        }
+    }
+
+    
 }
