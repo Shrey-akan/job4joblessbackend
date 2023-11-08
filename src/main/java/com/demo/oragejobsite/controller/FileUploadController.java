@@ -19,7 +19,6 @@ import com.demo.oragejobsite.entity.ResumeUpload;
 
 @RestController
 @CrossOrigin(origins = "https://job4jobless.com")
-@RequestMapping("/api")
 public class FileUploadController {
 
     @Autowired
