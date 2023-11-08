@@ -3,9 +3,10 @@ package com.demo.oragejobsite.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
+import java.nio.file.Files;
 import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -126,6 +127,29 @@ public class FileUploadController {
             // Handle errors as needed
         }
     }
+    @GetMapping("/getPdfByUi/{uid}")
+    public ResponseEntity<byte[]> getPdfByUi(@PathVariable("uid") String uid) {
+        try {
+            // Construct the file path
+            String filePath = "/root/folder_name/upload_pdf/" + uid + ".pdf";
 
+            // Read the PDF file as bytes
+            File pdfFile = new File(filePath);
+            byte[] pdfBytes = Files.readAllBytes(pdfFile.toPath());
+
+            // Create response headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Disposition", "inline; filename=" + uid + ".pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .body(pdfBytes);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle errors as needed
+            return ResponseEntity.notFound().build();
+        }
+    }
     
 }
