@@ -575,7 +575,7 @@ public boolean checkIfEmailExists(String email) {
 
             if (existingUser != null) {
                 // User exists, return user data and access token
-                String accessToken = jwtTokenUtil.generateToken(existingUser.getUserName());
+                String accessToken = tokenProvider.generateAccessToken(existingUser.getUid());
 
                 // Generate and set a refresh token
                 String refreshToken = tokenProvider.generateRefreshToken(userName, existingUser.getUid());
