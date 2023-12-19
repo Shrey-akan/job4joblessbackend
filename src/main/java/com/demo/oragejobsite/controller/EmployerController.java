@@ -681,7 +681,7 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
                 responseBody.put("empfname", checkmail.getEmpfname());
                 responseBody.put("emplname", checkmail.getEmplname());
                 responseBody.put("empmailid", checkmail.getEmpmailid());
-                responseBody.put("empcountry", checkmail.getEmpcountry()n);
+                responseBody.put("empcountry", checkmail.getEmpcountry());
                 responseBody.put("empstate", checkmail.getEmpstate());
                 responseBody.put("empcity", checkmail.getEmpcity());
 
