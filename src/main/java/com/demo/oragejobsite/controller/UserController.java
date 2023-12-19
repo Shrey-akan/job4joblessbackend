@@ -617,7 +617,7 @@ public boolean checkIfEmailExists(String email) {
                 refreshTokenRepository.save(refreshTokenEntity);
 
                 // Generate an access token
-                String accessToken = jwtTokenUtil.generateToken(userName);
+                String accessToken = tokenProvider.generateAccessToken(newUser.getUid());
 
                 // Create a response object that includes the access token and refresh token
                 Map<String, Object> responseBody = new HashMap<>();
