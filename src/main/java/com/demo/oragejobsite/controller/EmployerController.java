@@ -637,4 +637,64 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
        // After saving the employer, you should return the saved employer entity.
        return ed.save(newEmployer);
    }
+   
+   
+   
+
+@CrossOrigin(origins = "https://job4jobless.com")
+@PostMapping("/apploginemployer")
+public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServletResponse response) {
+   try {
+       String checkemail = e12.getEmpmailid();
+       String checkpass = e12.getEmppass();
+       checkpass = hashPassword(checkpass);
+       System.out.println(checkemail + " " + checkpass);
+
+       Employer checkmail = checkMailUser(checkemail, checkpass);
+       if (checkmail != null) {
+           // Create and set cookies here
+           Cookie employerCookie = new Cookie("emp", checkmail.toString());
+           // Set the domain to match your frontend (e.g., localhost)
+//          
+           employerCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
+           employerCookie.setPath("/");
+           response.addCookie(employerCookie);
+       
+           
+           // Generate an access token for the employer
+                String accessToken = jwtTokenUtil.generateToken(checkemail);
+                // Generate and set a refresh token
+                String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
+                // Save the refresh token in the database
+                RefreshToken refreshTokenEntity = new RefreshToken();
+                refreshTokenEntity.setTokenId(refreshToken);
+                refreshTokenEntity.setUsername(checkmail.getEmpid()); // Assuming you have an ID field in your Employer entity
+                // Set the expiry date using TokenProvider
+                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                refreshTokenRepository.save(refreshTokenEntity);
+
+                // Create a response object that includes the access token, refresh token, and employer data
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("accessToken", accessToken);
+                responseBody.put("refreshToken", refreshToken);
+                responseBody.put("empid", checkmail.getEmpid());
+                responseBody.put("empfname", checkmail.getEmpfname());
+                responseBody.put("emplname", checkmail.getEmplname());
+                responseBody.put("empmailid", checkmail.getEmpmailid());
+                responseBody.put("empcountry", checkmail.getEmpcountry()n);
+                responseBody.put("empstate", checkmail.getEmpstate());
+                responseBody.put("empcity", checkmail.getEmpcity());
+
+
+                return ResponseEntity.ok(responseBody);
+       }
+
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+   } catch (Exception e) {
+       // Handle any exceptions that may occur
+       e.printStackTrace();
+       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // You can customize the error response as needed
+   }
+}
+
 }
