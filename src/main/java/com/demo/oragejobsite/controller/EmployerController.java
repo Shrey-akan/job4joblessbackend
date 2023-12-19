@@ -239,7 +239,7 @@ public ResponseEntity<?> employerLoginCheck(@RequestBody Employer employer, Http
                response.addCookie(employerCookie);
 
                // Generate an access token for the employer
-               String accessToken = jwtTokenUtil.generateToken(checkEmail);
+               String accessToken = tokenProvider.generateAccessToken(foundEmployer.getEmpid());
                // Generate and set a refresh token
                String refreshToken = tokenProvider.generateRefreshToken(checkEmail, foundEmployer.getEmpid());
                // Save the refresh token in the database
@@ -300,7 +300,7 @@ public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletRes
        
            
            // Generate an access token for the employer
-                String accessToken = jwtTokenUtil.generateToken(checkemail);
+                String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
                 // Generate and set a refresh token
                 String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
                 // Save the refresh token in the database
@@ -555,7 +555,7 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             employerCookie.setPath("/"); // Set the path to match your frontend
             response.addCookie(employerCookie);
 
-            String accessToken = jwtTokenUtil.generateToken(empmailid);
+            String accessToken = tokenProvider.generateAccessToken(existingEmployer.getEmpid());
 
             String refreshToken = tokenProvider.generateRefreshToken(empmailid, existingEmployer.getEmpid());
 
@@ -587,7 +587,7 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             response.addCookie(employerCookie);
 
             // Generate an access token for the employer
-            String accessToken = jwtTokenUtil.generateToken(empmailid);
+            String accessToken = tokenProvider.generateAccessToken(newEmployer.getEmpid());
 
             // Generate and set a refresh token
             String refreshToken = tokenProvider.generateRefreshToken(empmailid, newEmployer.getEmpid());
@@ -662,7 +662,7 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
        
            
            // Generate an access token for the employer
-                String accessToken = jwtTokenUtil.generateToken(checkemail);
+                String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
                 // Generate and set a refresh token
                 String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
                 // Save the refresh token in the database
