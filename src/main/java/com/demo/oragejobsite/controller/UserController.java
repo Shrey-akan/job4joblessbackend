@@ -713,7 +713,7 @@ public ResponseEntity<?> applogin(@RequestBody User c12, HttpServletResponse res
             responseBody.put("usercountry", checkmail.getUsercountry());
             responseBody.put("usercity", checkmail.getUsercity());
             responseBody.put("userstate", checkmail.getUserstate());
-            
+            responseBody.put("websiteuser", checkmail.getWebsiteuser());
             
             return ResponseEntity.ok(responseBody);
         } else {
