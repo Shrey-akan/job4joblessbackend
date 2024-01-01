@@ -255,7 +255,12 @@ public ResponseEntity<?> employerLoginCheck(@RequestBody Employer employer, Http
                responseBody.put("accessToken", accessToken);
                responseBody.put("refreshToken", refreshToken);
                responseBody.put("empid", foundEmployer.getEmpid());
-
+               responseBody.put("empfname", foundEmployer.getEmpfname());
+               responseBody.put("emplname", foundEmployer.getEmplname());
+               responseBody.put("empmailid", foundEmployer.getEmpmailid());
+               responseBody.put("empcountry", foundEmployer.getEmpcountry());
+               responseBody.put("empstate", foundEmployer.getEmpstate());
+               responseBody.put("empcity", foundEmployer.getEmpcity());
                return ResponseEntity.ok(responseBody);
            } else {
                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch employer data");
@@ -316,7 +321,12 @@ public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletRes
                 responseBody.put("accessToken", accessToken);
                 responseBody.put("refreshToken", refreshToken);
                 responseBody.put("empid", checkmail.getEmpid());
-
+                responseBody.put("empfname", checkmail.getEmpfname());
+                responseBody.put("emplname", checkmail.getEmplname());
+                responseBody.put("empmailid", checkmail.getEmpmailid());
+                responseBody.put("empcountry", checkmail.getEmpcountry());
+                responseBody.put("empstate", checkmail.getEmpstate());
+                responseBody.put("empcity", checkmail.getEmpcity());
 
                 return ResponseEntity.ok(responseBody);
        }
@@ -572,7 +582,12 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             responseBody.put("accessToken", accessToken);
             responseBody.put("refreshToken", refreshToken);
             responseBody.put("empid", existingEmployer.getEmpid());
-
+            responseBody.put("empfname", existingEmployer.getEmpfname());
+            responseBody.put("emplname", existingEmployer.getEmplname());
+            responseBody.put("empmailid", existingEmployer.getEmpmailid());
+            responseBody.put("empcountry", existingEmployer.getEmpcountry());
+            responseBody.put("empstate", existingEmployer.getEmpstate());
+            responseBody.put("empcity", existingEmployer.getEmpcity());
             
 
             return ResponseEntity.ok(responseBody);
@@ -606,7 +621,12 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             responseBody.put("accessToken", accessToken);
             responseBody.put("refreshToken", refreshToken);
             responseBody.put("empid", newEmployer.getEmpid());
-
+            responseBody.put("empfname", newEmployer.getEmpfname());
+            responseBody.put("emplname", newEmployer.getEmplname());
+            responseBody.put("empmailid", newEmployer.getEmpmailid());
+            responseBody.put("empcountry", newEmployer.getEmpcountry());
+            responseBody.put("empstate", newEmployer.getEmpstate());
+            responseBody.put("empcity", newEmployer.getEmpcity());
             return ResponseEntity.ok(responseBody);
         }
     } catch (Exception e) {
