@@ -328,7 +328,13 @@ public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletRespo
                responseBody.put("accessToken", accessToken);
                responseBody.put("refreshToken", refreshToken);
                responseBody.put("uid", user.getUid());
-
+               responseBody.put("userName", user.getUserName());
+               responseBody.put("userFirstName", user.getUserFirstName());
+               responseBody.put("userLastName", user.getUserLastName());
+               responseBody.put("usercountry", user.getUsercountry());
+               responseBody.put("usercity", user.getUsercity());
+               responseBody.put("userstate", user.getUserstate());
+               responseBody.put("websiteuser", user.getWebsiteuser());
                return ResponseEntity.ok(responseBody);
            } else {
                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch UID");
@@ -593,6 +599,13 @@ public boolean checkIfEmailExists(String email) {
                 responseBody.put("accessToken", accessToken);
                 responseBody.put("refreshToken", refreshToken);
                 responseBody.put("uid", existingUser.getUid());
+                responseBody.put("userName", existingUser.getUserName());
+                responseBody.put("userFirstName", existingUser.getUserFirstName());
+                responseBody.put("userLastName", existingUser.getUserLastName());
+                responseBody.put("usercountry", existingUser.getUsercountry());
+                responseBody.put("usercity", existingUser.getUsercity());
+                responseBody.put("userstate", existingUser.getUserstate());
+                responseBody.put("websiteuser", existingUser.getWebsiteuser());
 
                 // Set a user cookie (if needed)
                 Cookie userCookie = new Cookie("user", userName);
@@ -625,7 +638,13 @@ public boolean checkIfEmailExists(String email) {
                 responseBody.put("accessToken", accessToken);
                 responseBody.put("refreshToken", refreshToken);
                 responseBody.put("uid", newUser.getUid());
-
+                responseBody.put("userName", newUser.getUserName());
+                responseBody.put("userFirstName", newUser.getUserFirstName());
+                responseBody.put("userLastName", newUser.getUserLastName());
+                responseBody.put("usercountry", newUser.getUsercountry());
+                responseBody.put("usercity", newUser.getUsercity());
+                responseBody.put("userstate", newUser.getUserstate());
+                responseBody.put("websiteuser", newUser.getWebsiteuser());
                 // Set a user cookie (if needed)
                 Cookie userCookie = new Cookie("user", userName);
                 userCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
