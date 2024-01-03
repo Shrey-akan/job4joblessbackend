@@ -106,8 +106,8 @@ public class ApplyController {
 	    }
 	}
 	@CrossOrigin(origins = "https://job4jobless.com")
-	@GetMapping("/fetchapplyform")
-	public ResponseEntity<?> fetchApplyForm(
+	@GetMapping("/fetchapplyformbyjobid")
+	public ResponseEntity<?> fetchapplyformbyjobid(
 	        @RequestParam(name = "empid") String empid,
 	        @RequestParam(name = "jobid") String jobid
 	) {
