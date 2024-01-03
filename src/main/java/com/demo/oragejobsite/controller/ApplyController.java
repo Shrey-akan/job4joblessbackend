@@ -105,7 +105,27 @@ public class ApplyController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	
-	
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/fetchapplyform")
+	public ResponseEntity<?> fetchApplyForm(
+	        @RequestParam(name = "empid") String empid,
+	        @RequestParam(name = "jobid") String jobid
+	) {
+	    try {
+	        // Fetch ApplyJob records based on empid and jobid
+	        List<ApplyJob> applyJobs = apd.findByEmpidAndJobid(empid, jobid);
+
+	        return ResponseEntity.ok(applyJobs);
+	    } catch (DataAccessException e) {
+	        // Handle database-related exceptions
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	    } catch (Exception e) {
+	        // Handle any other exceptions that may occur
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	    }
+	}
+
 
 }
