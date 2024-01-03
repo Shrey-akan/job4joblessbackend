@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.ApplyDao;
@@ -105,26 +104,5 @@ public class ApplyController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	
-	 @GetMapping("/fetchapplyform")
-	    public ResponseEntity<?> fetchApplyForm(
-	            @RequestParam(name = "empid") String empid,
-	            @RequestParam(name = "jobid") String jobid
-	    ) {
-	        try {
-	            // Fetch ApplyJob records based on empid and jobid
-	            List<ApplyJob> applyJobs = apd.findByEmpidAndJobid(empid, jobid);
-
-	            return ResponseEntity.ok(applyJobs);
-	        } catch (DataAccessException e) {
-	            // Handle database-related exceptions
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-	        } catch (Exception e) {
-	            // Handle any other exceptions that may occur
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-	        }
-	    }
 
 }
