@@ -14,5 +14,7 @@ public interface ApplyDao extends JpaRepository<ApplyJob, String>{
 	 // Define a custom method to find an ApplyJob entity by juid
     ApplyJob findByJuid(String juid);
 
+	List<ApplyJob> findByEmpidAndJobid(String empid, String jobid);
+
 }
 
