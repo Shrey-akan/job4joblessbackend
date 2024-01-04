@@ -32,20 +32,27 @@ public class SendMessageController {
 
     @CrossOrigin(origins = "https://job4jobless.com")
 	    @PostMapping("/send")
-	    public ResponseEntity<SendMessage> sendMessage(@RequestBody SendMessage message) {
-	        // Call the service to save the message to the database
-	    	SendMessage savedMessage = messageService.saveMessage(message);
-	
-	        // Return a response with the saved message and a status code
-	        return new ResponseEntity<>(savedMessage, HttpStatus.CREATED);
-	    }
+    public ResponseEntity<SendMessage> sendMessage(@RequestBody SendMessage message) {
+        try {
+            SendMessage savedMessage = messageService.saveMessage(message);
+            return new ResponseEntity<>(savedMessage, HttpStatus.CREATED);
+        } catch (Exception e) {
+            // Log the exception or handle it appropriately
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 	    
     @CrossOrigin(origins = "https://job4jobless.com")
 	    @GetMapping("/fetchMessages")
-	    public ResponseEntity<List<SendMessage>> fetchMessages() {
-	        List<SendMessage> messages = messageService.getAllMessages();
-	        return new ResponseEntity<>(messages, HttpStatus.OK);
-	    }
+    public ResponseEntity<List<SendMessage>> fetchMessages() {
+        try {
+            List<SendMessage> messages = messageService.getAllMessages();
+            return new ResponseEntity<>(messages, HttpStatus.OK);
+        } catch (Exception e) {
+            // Log the exception or handle it appropriately
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 	    
 	    
