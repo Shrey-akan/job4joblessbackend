@@ -18,7 +18,7 @@ public class SendMessage {
     private String messageTo;
     private String messageFrom;
     private String message;
-    
+    private String isSender;
     @CreationTimestamp
     private Date sendTime;
     
@@ -27,12 +27,14 @@ public class SendMessage {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SendMessage(Long messageId, String messageTo, String messageFrom, String message, Date sendTime) {
+	public SendMessage(Long messageId, String messageTo, String messageFrom, String message, String isSender,
+			Date sendTime) {
 		super();
 		this.messageId = messageId;
 		this.messageTo = messageTo;
 		this.messageFrom = messageFrom;
 		this.message = message;
+		this.isSender = isSender;
 		this.sendTime = sendTime;
 	}
 
@@ -68,6 +70,14 @@ public class SendMessage {
 		this.message = message;
 	}
 
+	public String getIsSender() {
+		return isSender;
+	}
+
+	public void setIsSender(String isSender) {
+		this.isSender = isSender;
+	}
+
 	public Date getSendTime() {
 		return sendTime;
 	}
@@ -75,6 +85,8 @@ public class SendMessage {
 	public void setSendTime(Date sendTime) {
 		this.sendTime = sendTime;
 	}
+
+	
 
     
    
