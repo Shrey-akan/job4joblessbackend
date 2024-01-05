@@ -556,7 +556,16 @@ public ResponseEntity<String> logoutEmployer(HttpServletResponse response) {
 public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
     try {
         String empmailid = requestBody.get("empmailid"); // Get the "empmailid" from the request body
-        String empfname = requestBody.get("empfname");
+//        String empfname = requestBody.get("empfname");
+        String empname = requestBody.get("empfname");
+//      String userFirstName = requestBody.get("userFirstName"); // Get the "userFirstName" from the request body
+      String[] nameParts = empname.split("\\s+", 2);
+      String empfname = nameParts.length > 0 ? nameParts[0] : "";
+      String emplname = nameParts.length > 1 ? nameParts[1] : "";
+
+      // Remove any invalid characters (e.g., CR) from the userFirstName and userLastName
+      empfname = empfname.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+      emplname = emplname.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
         Employer existingEmployer = ed.findByEmpmailid(empmailid);
         
         if (existingEmployer != null) {
@@ -594,7 +603,7 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             return ResponseEntity.ok(responseBody);
         } else {
             // Employer doesn't exist, create a new employer
-            Employer newEmployer = createEmployer(empmailid, empfname, true);
+            Employer newEmployer = createEmployer(empmailid, empfname,emplname, true);
 
             // Set an employer cookie
             Cookie employerCookie = new Cookie("emp", empmailid);
@@ -658,10 +667,11 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
 //       // After saving the employer, you should return the saved employer entity.
 //       return ed.save(newEmployer);
 //   }
-   public Employer createEmployer(String empmailid, String empfname, boolean verified) {
+   public Employer createEmployer(String empmailid, String empfname ,String emplname , boolean verified) {
 	   Employer newEmployer = new Employer();
 	   newEmployer.setEmpmailid(empmailid);
 	   newEmployer.setEmpfname(empfname); // Set userFirstName
+	   newEmployer.setEmplname(emplname);
 	   newEmployer.setVerifiedemp(verified);
 
 	    // Log the received values for debugging
