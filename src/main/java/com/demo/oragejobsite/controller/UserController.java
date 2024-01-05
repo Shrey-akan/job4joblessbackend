@@ -294,7 +294,7 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
 public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletResponse response) {
    try {
        String checkemail = c12.getUserName();
-
+       
        // Check if the email exists in your database
        boolean emailExists = checkIfEmailExists(checkemail);
 
@@ -303,13 +303,13 @@ public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletRespo
            Optional<User> userOptional = Optional.ofNullable(ud.findByUserName(checkemail));
            if (userOptional.isPresent()) {
                User user = userOptional.get();
-
+               
                // Create and set cookies here
                Cookie userCookie = new Cookie("user", checkemail);
                userCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
                userCookie.setPath("/"); // Set the path to match your frontend
                response.addCookie(userCookie);
-
+               
                // Generate and set a refresh token
                String refreshToken = tokenProvider.generateRefreshToken(checkemail, user.getUid());
                // Save the refresh token in the database
@@ -572,7 +572,9 @@ public boolean checkIfEmailExists(String email) {
     @PostMapping("/createOrGetUser")
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
         try {
-            String userName = requestBody.get("userName"); // Get the "userName" from the request body
+            String userName = requestBody.get("userName");
+            String userFirstName = requestBody.get("userFirstName"); // Get the "userFirstName" from the request body
+
             // Remove any invalid characters (e.g., CR) from the userName
             userName = userName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
 
@@ -590,17 +592,16 @@ public boolean checkIfEmailExists(String email) {
                 RefreshToken refreshTokenEntity = new RefreshToken();
                 refreshTokenEntity.setTokenId(refreshToken);
                 refreshTokenEntity.setUsername(existingUser.getUid());
-                // Set the expiry date using TokenProvider
                 refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
                 refreshTokenRepository.save(refreshTokenEntity);
 
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("userName", userName);
+                responseBody.put("userFirstName", existingUser.getUserFirstName()); // Include userFirstName from existing user
                 responseBody.put("accessToken", accessToken);
                 responseBody.put("refreshToken", refreshToken);
                 responseBody.put("uid", existingUser.getUid());
                 responseBody.put("userName", existingUser.getUserName());
-                responseBody.put("userFirstName", existingUser.getUserFirstName());
                 responseBody.put("userLastName", existingUser.getUserLastName());
                 responseBody.put("usercountry", existingUser.getUsercountry());
                 responseBody.put("usercity", existingUser.getUsercity());
@@ -609,14 +610,14 @@ public boolean checkIfEmailExists(String email) {
 
                 // Set a user cookie (if needed)
                 Cookie userCookie = new Cookie("user", userName);
-                userCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
-                userCookie.setPath("/"); // Set the path to match your frontend
+                userCookie.setMaxAge(3600);
+                userCookie.setPath("/");
                 response.addCookie(userCookie);
 
                 return ResponseEntity.ok(responseBody);
             } else {
                 // User doesn't exist, create a new user
-                User newUser = createUser(userName, true);
+                User newUser = createUser(userName, userFirstName, true); // Pass userFirstName to createUser method
 
                 // Generate and set a refresh token
                 String refreshToken = tokenProvider.generateRefreshToken(userName, newUser.getUid());
@@ -625,7 +626,6 @@ public boolean checkIfEmailExists(String email) {
                 RefreshToken refreshTokenEntity = new RefreshToken();
                 refreshTokenEntity.setTokenId(refreshToken);
                 refreshTokenEntity.setUsername(newUser.getUid());
-                // Set the expiry date using TokenProvider
                 refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
                 refreshTokenRepository.save(refreshTokenEntity);
 
@@ -635,20 +635,21 @@ public boolean checkIfEmailExists(String email) {
                 // Create a response object that includes the access token and refresh token
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("userName", userName);
+                responseBody.put("userFirstName", newUser.getUserFirstName()); // Include userFirstName from new user
                 responseBody.put("accessToken", accessToken);
                 responseBody.put("refreshToken", refreshToken);
                 responseBody.put("uid", newUser.getUid());
                 responseBody.put("userName", newUser.getUserName());
-                responseBody.put("userFirstName", newUser.getUserFirstName());
                 responseBody.put("userLastName", newUser.getUserLastName());
                 responseBody.put("usercountry", newUser.getUsercountry());
                 responseBody.put("usercity", newUser.getUsercity());
                 responseBody.put("userstate", newUser.getUserstate());
                 responseBody.put("websiteuser", newUser.getWebsiteuser());
+
                 // Set a user cookie (if needed)
                 Cookie userCookie = new Cookie("user", userName);
-                userCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
-                userCookie.setPath("/"); // Set the path to match your frontend
+                userCookie.setMaxAge(3600);
+                userCookie.setPath("/");
                 response.addCookie(userCookie);
 
                 return ResponseEntity.ok(responseBody);
@@ -663,9 +664,11 @@ public boolean checkIfEmailExists(String email) {
     }
 
 
-    public User createUser(String userName, boolean verified) {
+
+    public User createUser(String userName, String userFirstName, boolean verified) {
         User newUser = new User();
         newUser.setUserName(userName);
+        newUser.setUserFirstName(userFirstName); // Set userFirstName
         newUser.setVerified(verified);
 
         // Generate a UUID for the new user
@@ -680,6 +683,7 @@ public boolean checkIfEmailExists(String email) {
         // After saving the user, you should return the saved user entity.
         return ud.save(newUser);
     }
+
 
     
 
