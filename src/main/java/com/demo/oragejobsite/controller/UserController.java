@@ -573,7 +573,7 @@ public boolean checkIfEmailExists(String email) {
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
         try {
             String userName = requestBody.get("userName");
-            String fullName = requestBody.get("fullName");
+            String fullName = requestBody.get("userFirstName");
 //            String userFirstName = requestBody.get("userFirstName"); // Get the "userFirstName" from the request body
             String[] nameParts = fullName.split("\\s+", 2);
             String userFirstName = nameParts.length > 0 ? nameParts[0] : "";
