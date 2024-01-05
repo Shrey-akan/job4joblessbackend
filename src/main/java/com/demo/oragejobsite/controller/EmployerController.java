@@ -556,8 +556,9 @@ public ResponseEntity<String> logoutEmployer(HttpServletResponse response) {
 public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
     try {
         String empmailid = requestBody.get("empmailid"); // Get the "empmailid" from the request body
+        String empfname = requestBody.get("empfname");
         Employer existingEmployer = ed.findByEmpmailid(empmailid);
-
+        
         if (existingEmployer != null) {
             // Employer exists, return employer data and access token
   Cookie employerCookie = new Cookie("emp", empmailid);
@@ -593,7 +594,7 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
             return ResponseEntity.ok(responseBody);
         } else {
             // Employer doesn't exist, create a new employer
-            Employer newEmployer = createEmployer(empmailid, true);
+            Employer newEmployer = createEmployer(empmailid, empfname, true);
 
             // Set an employer cookie
             Cookie employerCookie = new Cookie("emp", empmailid);
@@ -639,25 +640,52 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
 }
 
 
-   // Create a new Employer (similar to createUser)
-   public Employer createEmployer(String empmailid, boolean verified) {
-       Employer newEmployer = new Employer();
-       newEmployer.setEmpmailid(empmailid);
-       newEmployer.setVerifiedemp(verified);
+//   // Create a new Employer (similar to createUser)
+//   public Employer createEmployer(String empmailid, boolean verified) {
+//       Employer newEmployer = new Employer();
+//       newEmployer.setEmpmailid(empmailid);
+//       newEmployer.setVerifiedemp(verified);
+//
+//       // Generate an employer ID, similar to your User ID generation
+//       // Generate a UUID for the new user
+//       String uuid = UUID.randomUUID().toString();
+//       // Remove hyphens and special symbols
+//       uuid = uuid.replaceAll("-", "");
+//       newEmployer.setEmpid(uuid);
+//       // Perform the necessary operations to save the employer to your database.
+//       // You might need to use JPA, Hibernate, or your database's API here.
+//
+//       // After saving the employer, you should return the saved employer entity.
+//       return ed.save(newEmployer);
+//   }
+   public Employer createEmployer(String empmailid, String empfname, boolean verified) {
+	   Employer newEmployer = new Employer();
+	   newEmployer.setEmpmailid(empmailid);
+	   newEmployer.setEmpfname(empfname); // Set userFirstName
+	   newEmployer.setVerifiedemp(verified);
 
-       // Generate an employer ID, similar to your User ID generation
-       // Generate a UUID for the new user
-       String uuid = UUID.randomUUID().toString();
-       // Remove hyphens and special symbols
-       uuid = uuid.replaceAll("-", "");
-       newEmployer.setEmpid(uuid);
-       // Perform the necessary operations to save the employer to your database.
-       // You might need to use JPA, Hibernate, or your database's API here.
+	    // Log the received values for debugging
+	    System.out.println("Received userName: " + empmailid);
+	    System.out.println("Received userFirstName: " + empfname);
 
-       // After saving the employer, you should return the saved employer entity.
-       return ed.save(newEmployer);
-   }
-   
+	    // Generate a UUID for the new user
+	    String uuid = UUID.randomUUID().toString();
+	    // Remove hyphens and special symbols
+	    uuid = uuid.replaceAll("-", "");
+	    newEmployer.setEmpid(uuid);
+
+	    // Perform the necessary operations to save the user to your database.
+	    // You might need to use JPA, Hibernate, or your database's API here.
+
+	    // After saving the user, you should return the saved user entity.
+	    Employer savedEmployer = ed.save(newEmployer);
+
+	    // Log the saved user details for debugging
+	    System.out.println("Saved user with userName: " + savedEmployer.getEmpmailid() + ", userFirstName: " + savedEmployer.getEmpfname());
+
+	    return savedEmployer;
+	}
+
    
    
 
