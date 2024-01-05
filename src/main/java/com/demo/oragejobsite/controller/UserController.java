@@ -665,23 +665,51 @@ public boolean checkIfEmailExists(String email) {
 
 
 
+//    public User createUser(String userName, String userFirstName, boolean verified) {
+//        User newUser = new User();
+//        newUser.setUserName(userName);
+//        newUser.setUserFirstName(userFirstName); // Set userFirstName
+//        newUser.setVerified(verified);
+//
+//        // Generate a UUID for the new user
+//        String uuid = UUID.randomUUID().toString();
+//        // Remove hyphens and special symbols
+//        uuid = uuid.replaceAll("-", "");
+//        newUser.setUid(uuid);
+//       
+//        // Perform the necessary operations to save the user to your database.
+//        // You might need to use JPA, Hibernate, or your database's API here.
+//
+//        // After saving the user, you should return the saved user entity.
+//        return ud.save(newUser);
+//    }
+
     public User createUser(String userName, String userFirstName, boolean verified) {
         User newUser = new User();
         newUser.setUserName(userName);
         newUser.setUserFirstName(userFirstName); // Set userFirstName
         newUser.setVerified(verified);
 
+        // Log the received values for debugging
+        System.out.println("Received userName: " + userName);
+        System.out.println("Received userFirstName: " + userFirstName);
+
         // Generate a UUID for the new user
         String uuid = UUID.randomUUID().toString();
         // Remove hyphens and special symbols
         uuid = uuid.replaceAll("-", "");
         newUser.setUid(uuid);
-       
+
         // Perform the necessary operations to save the user to your database.
         // You might need to use JPA, Hibernate, or your database's API here.
 
         // After saving the user, you should return the saved user entity.
-        return ud.save(newUser);
+        User savedUser = ud.save(newUser);
+
+        // Log the saved user details for debugging
+        System.out.println("Saved user with userName: " + savedUser.getUserName() + ", userFirstName: " + savedUser.getUserFirstName());
+
+        return savedUser;
     }
 
 
