@@ -573,7 +573,15 @@ public boolean checkIfEmailExists(String email) {
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
         try {
             String userName = requestBody.get("userName");
-            String userFirstName = requestBody.get("userFirstName"); // Get the "userFirstName" from the request body
+            String fullName = requestBody.get("fullName");
+//            String userFirstName = requestBody.get("userFirstName"); // Get the "userFirstName" from the request body
+            String[] nameParts = fullName.split("\\s+", 2);
+            String userFirstName = nameParts.length > 0 ? nameParts[0] : "";
+            String userLastName = nameParts.length > 1 ? nameParts[1] : "";
+
+            // Remove any invalid characters (e.g., CR) from the userFirstName and userLastName
+            userFirstName = userFirstName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+            userLastName = userLastName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
 
             // Remove any invalid characters (e.g., CR) from the userName
             userName = userName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
@@ -617,7 +625,7 @@ public boolean checkIfEmailExists(String email) {
                 return ResponseEntity.ok(responseBody);
             } else {
                 // User doesn't exist, create a new user
-                User newUser = createUser(userName, userFirstName, true); // Pass userFirstName to createUser method
+                User newUser = createUser(userName, userFirstName,userLastName, true); // Pass userFirstName to createUser method
 
                 // Generate and set a refresh token
                 String refreshToken = tokenProvider.generateRefreshToken(userName, newUser.getUid());
@@ -684,10 +692,11 @@ public boolean checkIfEmailExists(String email) {
 //        return ud.save(newUser);
 //    }
 
-    public User createUser(String userName, String userFirstName, boolean verified) {
+    public User createUser(String userName, String userFirstName,String userLastName, boolean verified) {
         User newUser = new User();
         newUser.setUserName(userName);
         newUser.setUserFirstName(userFirstName); // Set userFirstName
+        newUser.setUserLastName(userLastName);
         newUser.setVerified(verified);
 
         // Log the received values for debugging
