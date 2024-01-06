@@ -68,6 +68,22 @@ public class PostjobController {
 	    }
 	}
 	
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/fetchJobPostById/{jobId}")
+	public ResponseEntity<PostJob> fetchJobPostById(@PathVariable String jobId) {
+	    try {
+	        Optional<PostJob> jobPost = pjd.findById(jobId);
+	        if (jobPost.isPresent()) {
+	            return ResponseEntity.ok(jobPost.get());
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
 	 
 	@CrossOrigin(origins = "https://job4jobless.com")
     @PutMapping("/jobpostupdate/{jobid}")
