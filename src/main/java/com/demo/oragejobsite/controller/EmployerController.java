@@ -147,8 +147,25 @@ public ResponseEntity<List<Employer>> fetchemployer() {
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
    }
 }
+@CrossOrigin(origins = "https://job4jobless.com")
+@GetMapping("/fetchempById/{empid}")
+public ResponseEntity<Employer> fetchEmpById(@PathVariable String empid) {
+    try {
+        Optional<Employer> employerOptional = ed.findById(empid);
 
-
+        if (employerOptional.isPresent()) {
+            // Employer found, return the employer details
+            return ResponseEntity.ok(employerOptional.get());
+        } else {
+            // Employer not found, return a NOT FOUND response
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    } catch (Exception e) {
+        // Handle any exceptions that may occur
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
+}
 
 //update employer
 @CrossOrigin(origins = "https://job4jobless.com")

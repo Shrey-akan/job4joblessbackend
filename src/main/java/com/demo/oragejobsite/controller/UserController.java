@@ -158,6 +158,30 @@ public ResponseEntity<List<User>> fetchuser() {
    }
 }
 
+
+@CrossOrigin(origins = "https://job4jobless.com")
+@GetMapping("/fetchuserById/{uid}")
+public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
+    try {
+        // Fetch user details using the uid
+        Optional<User> userOptional = ud.findById(uid);
+
+        if (userOptional.isPresent()) {
+            // User found, return the user details
+            return ResponseEntity.ok(userOptional.get());
+        } else {
+            // User not found, return a NOT FOUND response
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                 .body(null);
+        }
+    } catch (Exception e) {
+        // Handle any exceptions that may occur
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(null);
+    }
+}
+
 //Update User data
 @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/updateUser")
