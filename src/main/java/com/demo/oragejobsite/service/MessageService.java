@@ -11,23 +11,20 @@ import com.demo.oragejobsite.entity.SendMessage;
 @Service
 public class MessageService {
 
-    private final SendMessageDao messageRepository;
+    private final SendMessageDao sendMessageDao; // Assuming you have a SendMessageDao
 
     @Autowired
-    public MessageService(SendMessageDao messageRepository) {
-        this.messageRepository = messageRepository;
+    public MessageService(SendMessageDao sendMessageDao) {
+        this.sendMessageDao = sendMessageDao;
     }
 
     public SendMessage saveMessage(SendMessage message) {
-        // Implement logic to save the message to the database
-        // You can use the messageRepository to save the message
-        return messageRepository.save(message);
+        // Add any business logic or validation before saving (if needed)
+        return sendMessageDao.save(message);
     }
-    
-    
+
     public List<SendMessage> getAllMessages() {
-        // Implement logic to retrieve all messages from your data source (e.g., database)
-        List<SendMessage> messages = messageRepository.findAll(); // Assuming you have a method like findAll() in your SendMessageDao
-        return messages;
+        // Add any additional logic if needed
+        return sendMessageDao.findAll();
     }
 }
