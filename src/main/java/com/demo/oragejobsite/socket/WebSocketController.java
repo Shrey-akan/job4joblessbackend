@@ -22,7 +22,7 @@ import com.demo.oragejobsite.entity.UserText;
 import com.demo.oragejobsite.service.MessageService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 public class WebSocketController {
 
 //    private final SimpMessagingTemplate messagingTemplate;
