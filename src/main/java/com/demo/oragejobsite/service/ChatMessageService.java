@@ -25,8 +25,8 @@ public class ChatMessageService {
 
     private SendMessage convertToEntity(ChatMessage chatMessage) {
     	SendMessage messageEntity = new SendMessage();
-        messageEntity.setMessageTo(chatMessage.getSender());
-        messageEntity.setMessageFrom(chatMessage.getMessageTo());
+        messageEntity.setMessageTo(chatMessage.getMessageTo());
+        messageEntity.setMessageFrom(chatMessage.getSender());
         messageEntity.setMessage(chatMessage.getContent());
        
         return messageEntity;
