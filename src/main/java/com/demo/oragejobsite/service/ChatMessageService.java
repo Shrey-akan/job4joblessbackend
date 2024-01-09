@@ -28,7 +28,7 @@ public class ChatMessageService {
         messageEntity.setMessageTo(chatMessage.getSender());
         messageEntity.setMessageFrom(chatMessage.getMessageTo());
         messageEntity.setMessage(chatMessage.getContent());
-        messageEntity.setIsSender(chatMessage.getSender());
+       
         return messageEntity;
     }
 }
