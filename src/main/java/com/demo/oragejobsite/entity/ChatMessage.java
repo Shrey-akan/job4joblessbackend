@@ -5,17 +5,26 @@ public class ChatMessage {
     private String content;
     private String sender;
 
+    // Additional properties
+    private String messageTo;
+
+  
+    
     public enum MessageType {
         CHAT,
         JOIN,
         LEAVE
     }
 
-	public ChatMessage(MessageType type, String content, String sender) {
+
+
+	public ChatMessage(MessageType type, String content, String sender, String messageTo) {
 		super();
 		this.type = type;
 		this.content = content;
 		this.sender = sender;
+		this.messageTo = messageTo;
+	
 	}
 
 	public ChatMessage() {
@@ -46,6 +55,15 @@ public class ChatMessage {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
-    
-    
+
+	public String getMessageTo() {
+		return messageTo;
+	}
+
+	public void setMessageTo(String messageTo) {
+		this.messageTo = messageTo;
+	}
+
+
+	
 }

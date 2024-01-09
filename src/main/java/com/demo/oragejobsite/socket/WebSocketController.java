@@ -16,17 +16,24 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.entity.ChatMessage;
-
-
+import com.demo.oragejobsite.service.ChatMessageService;
 import com.demo.oragejobsite.service.MessageService;
 
 @RestController
 @CrossOrigin(origins = "https://job4jobless.com")
 public class WebSocketController {
-
+	
+	
+	@Autowired
     private final SimpMessagingTemplate messagingTemplate;
+    @Autowired
     private final MessageService messageService; // Inject the MessageService
-
+    
+    
+    @Autowired
+    private ChatMessageService chatMessageService;
+    
+    
     @Autowired
     public WebSocketController(SimpMessagingTemplate messagingTemplate, MessageService messageService) {
         this.messagingTemplate = messagingTemplate;
@@ -56,6 +63,7 @@ public class WebSocketController {
     @MessageMapping("/chat.sendMessage")
     @SendTo("/topic/public")
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
+    	   chatMessageService.saveMessage(chatMessage);
         return chatMessage;
     }
 
@@ -63,6 +71,8 @@ public class WebSocketController {
     @SendTo("/topic/public")
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
                                SimpMessageHeaderAccessor headerAccessor) {
+    	
+    	 chatMessageService.saveJoinMessage(chatMessage);
         // Add username in web socket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
         return chatMessage;
