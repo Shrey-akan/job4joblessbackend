@@ -21,18 +21,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 //        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4200", "http://127.0.0.1:5500").withSockJS();
 //    }
 	
+	@Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+    	config.setApplicationDestinationPrefixes("/app");
+    	config.enableSimpleBroker("/topic");
+    }
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-	    registry.addEndpoint("/ws").setAllowedOrigins("https://oragetechchatapplication.vercel.app").withSockJS();
+		registry.addEndpoint("/ws");
+	    registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
 	}
 
 
-	    @Override
-	    public void configureMessageBroker(MessageBrokerRegistry registry) {
-	        registry.setApplicationDestinationPrefixes("/app");
-	        registry.enableSimpleBroker("/topic");
-	    }
+	   
 	    
 	    
 }
