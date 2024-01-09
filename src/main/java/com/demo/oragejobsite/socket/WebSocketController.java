@@ -72,9 +72,16 @@ public class WebSocketController {
     public ChatMessage addUser(@Payload ChatMessage chatMessage,
                                SimpMessageHeaderAccessor headerAccessor) {
     	
-    	 chatMessageService.saveJoinMessage(chatMessage);
-        // Add username in web socket session
+        chatMessageService.saveJoinMessage(chatMessage);
+
+        // Extract the selectedUser from the WebSocket session attributes
+        String selectedUser = (String) headerAccessor.getSessionAttributes().get("selectedUser");
+        chatMessage.setMessageTo(selectedUser);
+
+        // Add username and selectedUser in WebSocket session
         headerAccessor.getSessionAttributes().put("username", chatMessage.getSender());
+        headerAccessor.getSessionAttributes().put("selectedUser", selectedUser);
+
         return chatMessage;
     }
 //	
