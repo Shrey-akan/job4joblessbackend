@@ -10,16 +10,29 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-	@Override
-	public void configureMessageBroker(MessageBrokerRegistry config) {
-		config.enableSimpleBroker("/topic");
-		config.setApplicationDestinationPrefixes("/app");
-	}
-
+//    @Override
+//    public void configureMessageBroker(MessageBrokerRegistry config) {
+//        config.enableSimpleBroker("/topic");
+//        config.setApplicationDestinationPrefixes("/app");
+//    }
+//
+//    @Override
+//    public void registerStompEndpoints(StompEndpointRegistry registry) {
+//        registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4200", "http://127.0.0.1:5500").withSockJS();
+//    }
+	
+	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
-		registry.addEndpoint("/ws").setAllowedOrigins("http://localhost:4200","http://127.0.0.1:5500").withSockJS();
-//
-//		registry.addEndpoint("/ws").setAllowedOrigins("https://job4jobless.com", "com.example.iundeed_project").withSockJS();
+	    registry.addEndpoint("/ws").setAllowedOrigins("https://oragetechchatapplication.vercel.app").withSockJS();
 	}
+
+
+	    @Override
+	    public void configureMessageBroker(MessageBrokerRegistry registry) {
+	        registry.setApplicationDestinationPrefixes("/app");
+	        registry.enableSimpleBroker("/topic");
+	    }
+	    
+	    
 }

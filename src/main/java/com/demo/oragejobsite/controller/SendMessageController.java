@@ -18,41 +18,41 @@ import com.demo.oragejobsite.service.MessageService;
 @RestController
 @CrossOrigin(origins = "https://job4jobless.com")
 public class SendMessageController {
-	@Autowired
-	private SendMessageDao sendmessage;
-	
-	
-	
-	 private final MessageService messageService;
-
-    @Autowired
-    public SendMessageController(MessageService messageService) {
-        this.messageService = messageService;
-    }
-
-    @CrossOrigin(origins = "https://job4jobless.com")
-	    @PostMapping("/send")
-    public ResponseEntity<SendMessage> sendMessage(@RequestBody SendMessage message) {
-        try {
-            SendMessage savedMessage = messageService.saveMessage(message);
-            return new ResponseEntity<>(savedMessage, HttpStatus.CREATED);
-        } catch (Exception e) {
-            // Log the exception or handle it appropriately
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-	    
-    @CrossOrigin(origins = "https://job4jobless.com")
-	    @GetMapping("/fetchMessages")
-    public ResponseEntity<List<SendMessage>> fetchMessages() {
-        try {
-            List<SendMessage> messages = messageService.getAllMessages();
-            return new ResponseEntity<>(messages, HttpStatus.OK);
-        } catch (Exception e) {
-            // Log the exception or handle it appropriately
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//	@Autowired
+//	private SendMessageDao sendmessage;
+//	
+//	
+//	
+//	 private final MessageService messageService;
+//
+//    @Autowired
+//    public SendMessageController(MessageService messageService) {
+//        this.messageService = messageService;
+//    }
+//
+//    @CrossOrigin(origins = "https://job4jobless.com")
+//	    @PostMapping("/send")
+//    public ResponseEntity<SendMessage> sendMessage(@RequestBody SendMessage message) {
+//        try {
+//            SendMessage savedMessage = messageService.saveMessage(message);
+//            return new ResponseEntity<>(savedMessage, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            // Log the exception or handle it appropriately
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//	    
+//    @CrossOrigin(origins = "https://job4jobless.com")
+//	    @GetMapping("/fetchMessages")
+//    public ResponseEntity<List<SendMessage>> fetchMessages() {
+//        try {
+//            List<SendMessage> messages = messageService.getAllMessages();
+//            return new ResponseEntity<>(messages, HttpStatus.OK);
+//        } catch (Exception e) {
+//            // Log the exception or handle it appropriately
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
 	    
 	    
