@@ -21,7 +21,7 @@ public class MessageService {
             messageEntity.setMessageTo(chatMessage.getMessageTo());
             messageEntity.setMessageFrom(chatMessage.getMessageFrom());
             messageEntity.setMessage(chatMessage.getMessage());
-
+            messageEntity.setIsSender(chatMessage.getIsSender());
             return messageEntityRepository.save(messageEntity);
         } catch (Exception e) {
             // Log the exception or handle it appropriately
