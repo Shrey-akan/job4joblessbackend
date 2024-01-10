@@ -105,7 +105,6 @@ public class PostjobController {
                 currentJob.setPayjob(updatedJob.getPayjob());
                 currentJob.setPayjobsup(updatedJob.getPayjobsup());
                 currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
-       
 
                 // Save the updated job post
                 pjd.save(currentJob);
@@ -127,33 +126,33 @@ public class PostjobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
-	
 	@CrossOrigin(origins = "https://job4jobless.com")
-	  @PutMapping("/updateJobStatus/{jobid}/{uid}")
-	  public ResponseEntity<Object> updateJobStatus(@PathVariable String jobid, @PathVariable String uid, @RequestBody PostJob updatedJob) {
+	@PutMapping("/updateJobStatus/{jobid}")
+	public ResponseEntity<Object> updateJobStatus(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
 	    try {
-	      Optional<PostJob> existingJob = pjd.findById(jobid);
+	        Optional<PostJob> existingJob = pjd.findById(jobid);
 
-	      if (existingJob.isPresent()) {
-	        PostJob currentJob = existingJob.get();
-	  
-	        // Update the uid and status fields with the new values
-	        currentJob.setUid(uid);
-	        currentJob.setStatus(updatedJob.getStatus());
-	  
-	        pjd.save(currentJob);
-	  
-	        return ResponseEntity.status(HttpStatus.OK).body(currentJob);
-	      } else {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-	      }
+	        if (existingJob.isPresent()) {
+	            PostJob currentJob = existingJob.get();
+
+	            // Update the fields with the new values
+	            currentJob.setUid(updatedJob.getUid());
+	            currentJob.setStatus(updatedJob.getStatus());
+
+	            pjd.save(currentJob);
+
+	            return ResponseEntity.status(HttpStatus.OK).body(currentJob);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+	        }
 	    } catch (DataAccessException e) {
-	      e.printStackTrace();
-	      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
-	      e.printStackTrace();
-	      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
-	  }
+	}
+
 }
 
