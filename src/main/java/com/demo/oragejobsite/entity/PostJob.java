@@ -29,7 +29,7 @@ private String empid;
 @CreationTimestamp
 private Date sendTime;
 private String uid;
-private String status;
+private Boolean status;
 
 
 
@@ -44,7 +44,7 @@ public PostJob() {
 
 public PostJob(String jobid, String jobtitle, String companyforthisjob, Long numberofopening, String locationjob,
 		String jobtype, String schedulejob, Long payjob, Long payjobsup, String descriptiondata, String empid,
-		Date sendTime, String uid, String status) {
+		Date sendTime, String uid, Boolean status) {
 	super();
 	this.jobid = jobid;
 	this.jobtitle = jobtitle;
@@ -247,14 +247,14 @@ public void setUid(String uid) {
 
 
 
-public String getStatus() {
+public Boolean getStatus() {
 	return status;
 }
 
 
 
 
-public void setStatus(String status) {
+public void setStatus(Boolean status) {
 	this.status = status;
 }
 
