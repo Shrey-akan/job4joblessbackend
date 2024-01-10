@@ -1,10 +1,14 @@
 package com.demo.oragejobsite.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 public class PostJob {
@@ -22,6 +26,13 @@ private Long payjob;
 private Long payjobsup;
 private String descriptiondata;
 private String empid;
+@CreationTimestamp
+private Date sendTime;
+private String uid;
+private String status;
+
+
+
 
 public PostJob() {
 	super();
@@ -31,12 +42,9 @@ public PostJob() {
 
 
 
-
-
-
-
 public PostJob(String jobid, String jobtitle, String companyforthisjob, Long numberofopening, String locationjob,
-		String jobtype, String schedulejob, Long payjob, Long payjobsup, String descriptiondata, String empid) {
+		String jobtype, String schedulejob, Long payjob, Long payjobsup, String descriptiondata, String empid,
+		Date sendTime, String uid, String status) {
 	super();
 	this.jobid = jobid;
 	this.jobtitle = jobtitle;
@@ -49,11 +57,10 @@ public PostJob(String jobid, String jobtitle, String companyforthisjob, Long num
 	this.payjobsup = payjobsup;
 	this.descriptiondata = descriptiondata;
 	this.empid = empid;
+	this.sendTime = sendTime;
+	this.uid = uid;
+	this.status = status;
 }
-
-
-
-
 
 
 
@@ -75,54 +82,122 @@ public void setJobid(String jobid) {
 public String getJobtitle() {
 	return jobtitle;
 }
+
+
+
+
 public void setJobtitle(String jobtitle) {
 	this.jobtitle = jobtitle;
 }
+
+
+
+
 public String getCompanyforthisjob() {
 	return companyforthisjob;
 }
+
+
+
+
 public void setCompanyforthisjob(String companyforthisjob) {
 	this.companyforthisjob = companyforthisjob;
 }
+
+
+
+
 public Long getNumberofopening() {
 	return numberofopening;
 }
+
+
+
+
 public void setNumberofopening(Long numberofopening) {
 	this.numberofopening = numberofopening;
 }
+
+
+
+
 public String getLocationjob() {
 	return locationjob;
 }
+
+
+
+
 public void setLocationjob(String locationjob) {
 	this.locationjob = locationjob;
 }
+
+
+
+
 public String getJobtype() {
 	return jobtype;
 }
+
+
+
+
 public void setJobtype(String jobtype) {
 	this.jobtype = jobtype;
 }
+
+
+
+
 public String getSchedulejob() {
 	return schedulejob;
 }
+
+
+
+
 public void setSchedulejob(String schedulejob) {
 	this.schedulejob = schedulejob;
 }
+
+
+
+
 public Long getPayjob() {
 	return payjob;
 }
+
+
+
+
 public void setPayjob(Long payjob) {
 	this.payjob = payjob;
 }
+
+
+
+
 public Long getPayjobsup() {
 	return payjobsup;
 }
+
+
+
+
 public void setPayjobsup(Long payjobsup) {
 	this.payjobsup = payjobsup;
 }
+
+
+
+
 public String getDescriptiondata() {
 	return descriptiondata;
 }
+
+
+
+
 public void setDescriptiondata(String descriptiondata) {
 	this.descriptiondata = descriptiondata;
 }
@@ -135,6 +210,8 @@ public String getEmpid() {
 }
 
 
+
+
 public void setEmpid(String empid) {
 	this.empid = empid;
 }
@@ -142,8 +219,44 @@ public void setEmpid(String empid) {
 
 
 
+public Date getSendTime() {
+	return sendTime;
+}
 
 
+
+
+public void setSendTime(Date sendTime) {
+	this.sendTime = sendTime;
+}
+
+
+
+
+public String getUid() {
+	return uid;
+}
+
+
+
+
+public void setUid(String uid) {
+	this.uid = uid;
+}
+
+
+
+
+public String getStatus() {
+	return status;
+}
+
+
+
+
+public void setStatus(String status) {
+	this.status = status;
+}
 
 
 }
