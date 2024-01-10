@@ -2,33 +2,40 @@ package com.demo.oragejobsite.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import com.demo.oragejobsite.dao.MessageEntityRepository;
-import com.demo.oragejobsite.entity.ChatMessage;
 import com.demo.oragejobsite.entity.SendMessage;
-
 @Service
 public class MessageService {
+	private final MessageEntityRepository messageEntityRepository;
 
     @Autowired
-    private MessageEntityRepository messageEntityRepository;
-
-    public void saveMessage(ChatMessage chatMessage) {
-    	SendMessage messageEntity = convertToEntity(chatMessage);
-        messageEntityRepository.save(messageEntity);
+    public MessageService(MessageEntityRepository messageEntityRepository) {
+        this.messageEntityRepository = messageEntityRepository;
     }
 
-    public void saveJoinMessage(ChatMessage chatMessage) {
-        // Optionally, perform specific operations for join messages
-        saveMessage(chatMessage);
+    public SendMessage saveMessage(SendMessage chatMessage) {
+        try {
+            SendMessage messageEntity = new SendMessage();
+            messageEntity.setMessageTo(chatMessage.getMessageTo());
+            messageEntity.setMessageFrom(chatMessage.getMessageFrom());
+            messageEntity.setMessage(chatMessage.getMessage());
+
+            return messageEntityRepository.save(messageEntity);
+        } catch (Exception e) {
+            // Log the exception or handle it appropriately
+            throw new RuntimeException("Error saving message", e);
+        }
     }
 
-    private SendMessage convertToEntity(ChatMessage chatMessage) {
-    	SendMessage messageEntity = new SendMessage();
-        messageEntity.setMessageTo(chatMessage.getMessageTo());
-        messageEntity.setMessageFrom(chatMessage.getSender());
-        messageEntity.setMessage(chatMessage.getContent());
-
-        return messageEntity;
+    public List<SendMessage> getAllMessages() {
+        try {
+            return messageEntityRepository.findAll();
+        } catch (Exception e) {
+            // Log the exception or handle it appropriately
+            throw new RuntimeException("Error fetching messages", e);
+        }
     }
+	
 }
