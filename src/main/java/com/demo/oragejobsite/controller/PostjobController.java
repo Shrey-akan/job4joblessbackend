@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.PostjobDao;
@@ -126,7 +127,7 @@ public class PostjobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })
 	@PutMapping("/updateJobStatus/{jobid}")
 	public ResponseEntity<Object> updateJobStatus(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
 	    try {
