@@ -137,7 +137,7 @@ public class PostjobController {
 
 	            // Update the fields with the new values
 	            currentJob.setUid(updatedJob.getUid());
-	            currentJob.setStatus(updatedJob.getStatus());
+	            currentJob.setStatus(true);
 
 	            pjd.save(currentJob);
 
