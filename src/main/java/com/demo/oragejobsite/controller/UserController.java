@@ -47,19 +47,12 @@ public class UserController {
 
 @Autowired
 private UserDao ud;
-
-
-
-
-@Autowired
+	@Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-
-
-// Generate a secure key for HS256 algorithm
 private final byte[] refreshTokenSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
 private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-private final TokenProvider tokenProvider; // Inject your TokenProvider here
+private final TokenProvider tokenProvider;
    private final RefreshTokenRepository refreshTokenRepository;
    @Autowired
    public UserController(TokenProvider tokenProvider, RefreshTokenRepository refreshTokenRepository) {
@@ -274,10 +267,7 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
             userCookie.setPath("/"); // Set the path to match your frontend
             response.addCookie(userCookie);
 
-            // Generate and set a refresh token
-            // Generate and set a refresh token
-         // ...
-         // Assuming you have retrieved the user's UID in checkmail.getUid()
+       
          String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
 
 

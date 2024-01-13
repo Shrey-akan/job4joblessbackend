@@ -49,7 +49,7 @@ private EmployerDao ed;
 
 // Generate a secure key for HS256 algorithm
 private final byte[] refreshTokenSecret = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
-private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+private static final Logger logger = LoggerFactory.getLogger(EmployerController.class);
 private final TokenProvider tokenProvider; // Inject your TokenProvider here
    private final RefreshTokenRepository refreshTokenRepository;
    

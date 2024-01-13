@@ -1,6 +1,10 @@
 package com.demo.oragejobsite.controller;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -17,81 +21,117 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.AdminDao;
+import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.entity.Admin;
-import com.demo.oragejobsite.entity.DirectConntact;
+import com.demo.oragejobsite.entity.RefreshToken;
 import com.demo.oragejobsite.service.AdminService;
+import com.demo.oragejobsite.util.TokenProvider;
+
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AdminController {
-	@Autowired
-	private AdminDao admindao;
-	  private AdminService adminService;
 
-	    @Autowired
-	    public AdminController(AdminService adminService) {
-	        this.adminService = adminService;
-	    }
-	    @CrossOrigin(origins = "https://job4jobless.com")
-	@PostMapping("/insertadmin")
-	public ResponseEntity<Object> insertadmin(@RequestBody Admin admin) {
-	    try {
-	        // Generate a random UUID as a string
-	        String randomString = UUID.randomUUID().toString().replaceAll("-", "");
+    @Autowired
+    private AdminDao admindao;
+    private AdminService adminService;
+    private final TokenProvider tokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-	        // Set the randomString as the adminId for the Admin
-	        admin.setAdminId(randomString);
+    @Autowired
+    public AdminController(AdminService adminService, TokenProvider tokenProvider,
+            RefreshTokenRepository refreshTokenRepository) {
+        this.adminService = adminService;
+        this.tokenProvider = tokenProvider;
+        this.refreshTokenRepository = refreshTokenRepository;
+    }
 
+    private static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes());
+            byte[] hashedPasswordBytes = md.digest();
 
-	        // Save the admin
-	        Admin savedAdmin = admindao.save(admin);
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedPasswordBytes) {
+                sb.append(String.format("%02x", b));
+            }
 
-	        // If saving is successful, return true
-	        return ResponseEntity.status(HttpStatus.CREATED).body(true);
-	    } catch (DataAccessException e) {
-	        // Handle database-related exceptions (e.g., constraint violations)
-	        e.printStackTrace();
-	        // If an error occurs, return false
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
-	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
-	        e.printStackTrace();
-	        // If an error occurs, return false
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
-	    }
-	}
-	
-	    @CrossOrigin(origins = "https://job4jobless.com")
-	@GetMapping("/fetchadmin")
-	public ResponseEntity<List<Admin>> fetchadmin() {
-	    try {
-	        List<Admin> admindata = admindao.findAll();
-	        return ResponseEntity.status(HttpStatus.OK).body(admindata);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	    }
-	}
-	
-	    @CrossOrigin(origins = "https://job4jobless.com")
-	@PostMapping("/adminLoginCheck")
-    public ResponseEntity<?> adminLoginCheck(@RequestBody Admin admin, HttpServletResponse response) {
-        String adminMail = admin.getAdminMail();
-        String adminPass = admin.getAdminPass();
-
-        Admin authenticatedAdmin = adminService.authenticateAdmin(adminMail, adminPass);
-
-        if (authenticatedAdmin != null) {
-            // Create and set cookies here
-            Cookie adminCookie = new Cookie("admin", adminMail);
-            adminCookie.setMaxAge(3600); // Cookie expires in 1 hour (adjust as needed)
-            adminCookie.setPath("/"); // Set the path to match your frontend
-            response.addCookie(adminCookie);
-            System.out.println("Login Sucess");
-            return ResponseEntity.status(HttpStatus.OK).body(true);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid admin credentials");
+            return sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing password", e);
         }
     }
 
+    @PostMapping("/insertadmin")
+    public ResponseEntity<Object> insertadmin(@RequestBody Admin admin) {
+        try {
+            String randomString = UUID.randomUUID().toString().replaceAll("-", "");
+            admin.setAdminId(randomString);
+            admin.setAdminPass(hashPassword(admin.getAdminPass()));
+            Admin savedAdmin = admindao.save(admin);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Admin successfully created");
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving admin to the database");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
+        }
+    }
+
+    @PostMapping("/adminLoginCheck")
+    public ResponseEntity<?> adminLoginCheck(@RequestBody Admin admin, HttpServletResponse response) {
+        try {
+            String adminMail = admin.getAdminMail();
+            String adminPass = admin.getAdminPass();
+            adminPass = hashPassword(adminPass);
+
+            Admin authenticatedAdmin = adminService.authenticateAdmin(adminMail, adminPass);
+
+            if (authenticatedAdmin != null) {
+                Cookie adminCookie = new Cookie("admin", adminMail);
+                adminCookie.setMaxAge(3600);
+                adminCookie.setPath("/");
+                response.addCookie(adminCookie);
+
+                String refreshToken = tokenProvider.generateRefreshToken(adminMail, authenticatedAdmin.getAdminId());
+
+                RefreshToken refreshTokenEntity = new RefreshToken();
+                refreshTokenEntity.setTokenId(refreshToken);
+                refreshTokenEntity.setUsername(authenticatedAdmin.getAdminId());
+                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                refreshTokenRepository.save(refreshTokenEntity);
+
+                String accessToken = tokenProvider.generateAccessToken(authenticatedAdmin.getAdminId());
+
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("accessToken", accessToken);
+                responseBody.put("refreshToken", refreshToken);
+                responseBody.put("adminid", authenticatedAdmin.getAdminId());
+
+                return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid admin credentials");
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error accessing data");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
+        }
+    }
+
+
+    @GetMapping("/fetchadmin")
+    public ResponseEntity<List<Admin>> fetchadmin() {
+        try {
+            List<Admin> admindata = admindao.findAll();
+            return ResponseEntity.status(HttpStatus.OK).body(admindata);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
