@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.oragejobsite.dao.AdminDao;
 import com.demo.oragejobsite.dao.EmployerDao;
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.dao.UserDao;
+import com.demo.oragejobsite.entity.Admin;
 import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.User;
 import com.demo.oragejobsite.util.TokenProvider;
@@ -31,9 +33,11 @@ public class AccessTokenController {
 	@Value("${jwt.secret}")
 	private String jwtSecretValue;
 	  @Autowired
-	    private UserDao userDao; // Assuming you have a UserDao
+	    private UserDao userDao; 
 	    @Autowired
-	    private EmployerDao employerDao; // Assuming you have an EmployerDao
+	    private AdminDao adminDao;
+	    @Autowired
+	    private EmployerDao employerDao; 
 	    @Autowired
 	    private RefreshTokenRepository refreshTokenRepository;
 	// Inject the TokenProvider here
@@ -66,20 +70,16 @@ public class AccessTokenController {
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> requestMap) {
 	    try {
-	        // Get the refreshToken value from the requestMap
+	       
 	        String refreshToken = requestMap.get("refreshToken");
-
-	        // Log the received refresh token
 	        System.out.println("Received Refresh Token: " + refreshToken);
 
 	        if (refreshToken == null || refreshToken.isEmpty()) {
 	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
 	        }
-
-	        // Check if the refresh token is valid
 	        if (tokenProvider.isRefreshTokenValid(refreshToken)) {
 	        	 System.out.println("Received Refresh Token: " + tokenProvider.isRefreshTokenValid(refreshToken));
-	            // Extract the username from the refresh token
+
 	        	 String[] userData = tokenProvider.validateAndExtractUsernameAndUidFromRefreshToken(refreshToken);
 	            System.out.println("Received Refresh Token: " + userData);
 	            if (userData != null && userData.length == 2) {
@@ -88,8 +88,10 @@ public class AccessTokenController {
 	            	   System.out.println("Received Refresh Token: " + uid);
 	            	Optional<User> userOptional = userDao.findByUid(uid);
 	            	Optional<Employer> employerOptional = employerDao.findByEmpid(uid);
+	            	Optional<Admin> adminOptional = adminDao.findByAdminid(uid);
 	            	   System.out.println("Received Refresh Token: " + userOptional);
 	            	   System.out.println("Received Refresh Token: " + employerOptional);
+	            	   System.out.println("Received Refresh Token: " + adminOptional);
                     if (userOptional.isPresent()) {
                     	
                     	User user = userOptional.get();
@@ -111,6 +113,18 @@ public class AccessTokenController {
                         responseBody.put("empid", employer.getEmpid());
 
                         return ResponseEntity.ok(responseBody);
+                    }
+                    
+                    else if (adminOptional.isPresent()) {
+                        Admin admin = adminOptional.get();
+                        String newAccessToken = tokenProvider.generateAccessToken(admin.getAdminId());
+                        System.out.println("Received Refresh Token: " + newAccessToken);
+                        Map<String, Object> responseBody = new HashMap<>();
+                        responseBody.put("accessToken", newAccessToken);
+                        responseBody.put("role", "admin");
+                        responseBody.put("adminid", admin.getAdminId());
+                        return ResponseEntity.ok(responseBody);
+//                        return generateAccessTokenResponse(admin.getAdminid(), "admin");
                     }
                 }
 	        }
