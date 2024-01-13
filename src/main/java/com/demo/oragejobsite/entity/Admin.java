@@ -8,13 +8,13 @@ import javax.persistence.Id;
 public class Admin {
 @Id
 @Column(columnDefinition = "VARCHAR(36)") 
-private String adminId; // Use UUID for the UID field
+private String adminid; // Use UUID for the UID field
 private String adminName;
 private String adminMail;
 private String adminPass;
-public Admin(String adminId, String adminName, String adminMail, String adminPass) {
+public Admin(String adminid, String adminName, String adminMail, String adminPass) {
 	super();
-	this.adminId = adminId;
+	this.adminid = adminid;
 	this.adminName = adminName;
 	this.adminMail = adminMail;
 	this.adminPass = adminPass;
@@ -24,10 +24,10 @@ public Admin() {
 	// TODO Auto-generated constructor stub
 }
 public String getAdminId() {
-	return adminId;
+	return adminid;
 }
 public void setAdminId(String adminId) {
-	this.adminId = adminId;
+	this.adminid = adminId;
 }
 public String getAdminName() {
 	return adminName;
