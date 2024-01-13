@@ -74,7 +74,7 @@ public class AdminController {
 	}
 	
 	    @CrossOrigin(origins = "https://job4jobless.com")
-	@PostMapping("/logincheck")
+	@PostMapping("/adminLoginCheck")
     public ResponseEntity<?> adminLoginCheck(@RequestBody Admin admin, HttpServletResponse response) {
         String adminMail = admin.getAdminMail();
         String adminPass = admin.getAdminPass();
