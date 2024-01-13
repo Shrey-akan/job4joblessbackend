@@ -62,7 +62,7 @@ public class AdminController {
             throw new RuntimeException("Error hashing password", e);
         }
     }
-
+    @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/insertadmin")
     public ResponseEntity<Object> insertadmin(@RequestBody Admin admin) {
         try {
@@ -79,7 +79,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
         }
     }
-
+    @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/adminLoginCheck")
     public ResponseEntity<?> adminLoginCheck(@RequestBody Admin admin, HttpServletResponse response) {
         try {
@@ -123,7 +123,7 @@ public class AdminController {
         }
     }
 
-
+    @CrossOrigin(origins = "https://job4jobless.com")
     @GetMapping("/fetchadmin")
     public ResponseEntity<List<Admin>> fetchadmin() {
         try {

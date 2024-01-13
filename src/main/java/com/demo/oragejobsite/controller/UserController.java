@@ -84,7 +84,7 @@ private static  String hashPassword(String password) {
 
 
 //Insert User And Also Check if the user already exist in the database
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/insertusermail")
 public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
    try {
@@ -133,7 +133,7 @@ public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
 
 
 //fetch user data
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuser")
 public ResponseEntity<List<User>> fetchuser() {
    try {
@@ -152,7 +152,7 @@ public ResponseEntity<List<User>> fetchuser() {
 }
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuserById/{uid}")
 public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
     try {
