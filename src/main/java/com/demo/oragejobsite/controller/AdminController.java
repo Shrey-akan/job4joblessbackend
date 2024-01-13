@@ -29,7 +29,7 @@ import com.demo.oragejobsite.util.TokenProvider;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://job4jobless.com")
 public class AdminController {
 
     @Autowired
