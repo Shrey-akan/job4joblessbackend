@@ -123,6 +123,33 @@ public class AdminController {
         }
     }
 
+    
+    @CrossOrigin(origins = "https://job4jobless.com")
+    @PostMapping("/adminlogout")
+    public ResponseEntity<String> adminlogout(HttpServletResponse response) {
+        try {
+            // Delete cookies on the client-side
+            Cookie empCookie = new Cookie("adminid", null);
+            empCookie.setMaxAge(0);
+            empCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(empCookie);
+
+            Cookie accessTokenCookie = new Cookie("accessToken", null);
+            accessTokenCookie.setMaxAge(0);
+            accessTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(accessTokenCookie);
+
+            Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+            refreshTokenCookie.setMaxAge(0);
+            refreshTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(refreshTokenCookie);
+
+            return ResponseEntity.ok("Logout successful");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging purposes
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during logout");
+        }
+    }
     @CrossOrigin(origins = "https://job4jobless.com")
     @GetMapping("/fetchadmin")
     public ResponseEntity<List<Admin>> fetchadmin() {

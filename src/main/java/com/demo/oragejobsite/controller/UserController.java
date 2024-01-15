@@ -559,28 +559,56 @@ public boolean checkIfEmailExists(String email) {
                 .body("{\"message\": \"An error occurred while processing your request.\"}");
         }
     }
+//    @CrossOrigin(origins = "https://job4jobless.com")
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout(HttpServletResponse response) {
+//    // Delete cookies on the client-side
+//        Cookie empCookie = new Cookie("uid", null);
+//        empCookie.setMaxAge(0);
+//        empCookie.setPath("/"); // Make sure the path matches where the cookie was set
+//        response.addCookie(empCookie);
+//
+//        Cookie accessTokenCookie = new Cookie("accessToken", null);
+//        accessTokenCookie.setMaxAge(0);
+//        accessTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+//        response.addCookie(accessTokenCookie);
+//
+//        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+//        refreshTokenCookie.setMaxAge(0);
+//        refreshTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+//        response.addCookie(refreshTokenCookie);
+//
+//        return ResponseEntity.ok("Logout successful");
+//    }
+
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
-    // Delete cookies on the client-side
-        Cookie empCookie = new Cookie("uid", null);
-        empCookie.setMaxAge(0);
-        empCookie.setPath("/"); // Make sure the path matches where the cookie was set
-        response.addCookie(empCookie);
+        try {
+            // Delete cookies on the client-side
+            Cookie empCookie = new Cookie("uid", null);
+            empCookie.setMaxAge(0);
+            empCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(empCookie);
 
-        Cookie accessTokenCookie = new Cookie("accessToken", null);
-        accessTokenCookie.setMaxAge(0);
-        accessTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
-        response.addCookie(accessTokenCookie);
+            Cookie accessTokenCookie = new Cookie("accessToken", null);
+            accessTokenCookie.setMaxAge(0);
+            accessTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(accessTokenCookie);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
-        refreshTokenCookie.setMaxAge(0);
-        refreshTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
-        response.addCookie(refreshTokenCookie);
+            Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+            refreshTokenCookie.setMaxAge(0);
+            refreshTokenCookie.setPath("/"); // Make sure the path matches where the cookie was set
+            response.addCookie(refreshTokenCookie);
 
-        return ResponseEntity.ok("Logout successful");
+            return ResponseEntity.ok("Logout successful");
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception for debugging purposes
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during logout");
+        }
     }
 
+    
 
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/createOrGetUser")
