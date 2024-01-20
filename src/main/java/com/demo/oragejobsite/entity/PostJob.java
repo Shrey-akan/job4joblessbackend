@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Document(collection = "postjob")
 public class PostJob {
@@ -21,9 +22,11 @@ private Long payjob;
 private Long payjobsup;
 private String descriptiondata;
 private String empid;
-@Field("sendTime")
-@CreatedDate
-private Date sendTime;
+//@Field("sendTime")
+//@CreatedDate
+//private Date sendTime;
+@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+private Date sendTime = new Date();
 private String uid;
 private Boolean status;
 
@@ -52,7 +55,7 @@ public PostJob(String jobid, String jobtitle, String companyforthisjob, Long num
 	this.payjobsup = payjobsup;
 	this.descriptiondata = descriptiondata;
 	this.empid = empid;
-	this.sendTime = sendTime;
+	this.sendTime = new Date();
 	this.uid = uid;
 	this.status = status;
 }
@@ -252,6 +255,8 @@ public Boolean getStatus() {
 public void setStatus(Boolean status) {
 	this.status = status;
 }
+
+
 
 
 }

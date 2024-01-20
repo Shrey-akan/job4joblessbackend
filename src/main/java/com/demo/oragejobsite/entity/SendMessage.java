@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 
@@ -17,9 +18,10 @@ public class SendMessage {
     private String messageFrom;
     private String message;
     private String isSender;
-    @CreatedDate
-    private Date sendTime;
-    
+//    @CreatedDate
+//    private Date sendTime;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date sendTime = new Date();
 	public SendMessage() {
 		super();
 		// TODO Auto-generated constructor stub
