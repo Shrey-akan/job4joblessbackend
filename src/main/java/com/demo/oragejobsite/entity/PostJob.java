@@ -22,6 +22,7 @@ private Long payjobsup;
 private String descriptiondata;
 private String empid;
 @Field("sendTime")
+@CreatedDate
 private Date sendTime;
 private String uid;
 private Boolean status;
@@ -31,7 +32,6 @@ private Boolean status;
 
 public PostJob() {
 	super();
-	this.sendTime = new Date();
 }
 
 
@@ -52,7 +52,7 @@ public PostJob(String jobid, String jobtitle, String companyforthisjob, Long num
 	this.payjobsup = payjobsup;
 	this.descriptiondata = descriptiondata;
 	this.empid = empid;
-	 this.sendTime = new Date(); 
+	this.sendTime = sendTime;
 	this.uid = uid;
 	this.status = status;
 }
