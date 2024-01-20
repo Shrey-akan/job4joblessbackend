@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "postjob")
 public class PostJob {
@@ -20,7 +21,7 @@ private Long payjob;
 private Long payjobsup;
 private String descriptiondata;
 private String empid;
-@CreatedDate
+@Field("sendTime")
 private Date sendTime;
 private String uid;
 private Boolean status;
@@ -30,7 +31,7 @@ private Boolean status;
 
 public PostJob() {
 	super();
-	// TODO Auto-generated constructor stub
+	this.sendTime = new Date();
 }
 
 
@@ -51,7 +52,7 @@ public PostJob(String jobid, String jobtitle, String companyforthisjob, Long num
 	this.payjobsup = payjobsup;
 	this.descriptiondata = descriptiondata;
 	this.empid = empid;
-	this.sendTime = sendTime;
+	 this.sendTime = new Date(); 
 	this.uid = uid;
 	this.status = status;
 }
