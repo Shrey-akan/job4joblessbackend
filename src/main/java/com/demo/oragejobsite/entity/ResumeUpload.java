@@ -1,21 +1,16 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "resume_upload")
+@Document(collection = "resume_upload")
 public class ResumeUpload {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "uid")
+    private String id;
     private String uid;
-
-    @Column(name = "file_name")
     private String fileName;
 
-	public ResumeUpload(Long id, String uid, String fileName) {
+	public ResumeUpload(String id, String uid, String fileName) {
 		super();
 		this.id = id;
 		this.uid = uid;
@@ -27,11 +22,11 @@ public class ResumeUpload {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

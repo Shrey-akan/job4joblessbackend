@@ -1,22 +1,17 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "blogs")
 public class Blogs {
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int blogId;
+private String blogId;
 private String blogHead;
 private String blogSubHead;
 private String blogDescription;
-@Lob
 private byte[] blogImg;
-public Blogs(int blogId, String blogHead, String blogSubHead, String blogDescription, byte[] blogImg) {
+public Blogs(String blogId, String blogHead, String blogSubHead, String blogDescription, byte[] blogImg) {
 	super();
 	this.blogId = blogId;
 	this.blogHead = blogHead;
@@ -28,10 +23,10 @@ public Blogs() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public int getBlogId() {
+public String getBlogId() {
 	return blogId;
 }
-public void setBlogId(int blogId) {
+public void setBlogId(String blogId) {
 	this.blogId = blogId;
 }
 public String getBlogHead() {

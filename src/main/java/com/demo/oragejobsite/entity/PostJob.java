@@ -2,20 +2,13 @@ package com.demo.oragejobsite.entity;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.hibernate.annotations.CreationTimestamp;
-
-@Entity
+@Document(collection = "postjob")
 public class PostJob {
 @Id
-
-@Column(columnDefinition = "VARCHAR(36)") 
-private String jobid; // Use UUID for the UID field
+private String jobid; 
 private String jobtitle;
 private String companyforthisjob;
 private Long numberofopening;
@@ -26,7 +19,6 @@ private Long payjob;
 private Long payjobsup;
 private String descriptiondata;
 private String empid;
-@CreationTimestamp
 private Date sendTime;
 private String uid;
 private Boolean status;

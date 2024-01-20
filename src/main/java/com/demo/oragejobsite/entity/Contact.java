@@ -1,16 +1,12 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "contact")
 public class Contact {
-
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int contactid;
+private String contactid;
 private String contacthelp;
 private String contactname;
 private String contactmail;
@@ -20,7 +16,7 @@ public Contact() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public Contact(int contactid, String contacthelp, String contactname, String contactmail, String contactcompany,
+public Contact(String contactid, String contacthelp, String contactname, String contactmail, String contactcompany,
 		String contactphone) {
 	super();
 	this.contactid = contactid;
@@ -30,10 +26,10 @@ public Contact(int contactid, String contacthelp, String contactname, String con
 	this.contactcompany = contactcompany;
 	this.contactphone = contactphone;
 }
-public int getContactid() {
+public String getContactid() {
 	return contactid;
 }
-public void setContactid(int contactid) {
+public void setContactid(String contactid) {
 	this.contactid = contactid;
 }
 public String getContacthelp() {

@@ -1,17 +1,13 @@
 package com.demo.oragejobsite.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document(collection = "refreshtoken")
 public class RefreshToken {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String tokenId;
     private String username;
     private Date expiryDate;
@@ -22,7 +18,7 @@ public class RefreshToken {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public RefreshToken(Long id, String tokenId, String username, Date expiryDate) {
+	public RefreshToken(String id, String tokenId, String username, Date expiryDate) {
 		super();
 		this.id = id;
 		this.tokenId = tokenId;
@@ -30,10 +26,10 @@ public class RefreshToken {
 		this.expiryDate = expiryDate;
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

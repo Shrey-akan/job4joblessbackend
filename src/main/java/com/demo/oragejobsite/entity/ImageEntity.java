@@ -1,26 +1,15 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "image")
+@Document(collection = "imageentity")
 public class ImageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "image_url")
+    private String id;
     private String imageUrl;
-
-    @Column(name = "uid")
     private String uid;
-
-	public ImageEntity(Long id, String imageUrl, String uid) {
+	public ImageEntity(String id, String imageUrl, String uid) {
 		super();
 		this.id = id;
 		this.imageUrl = imageUrl;
@@ -32,11 +21,11 @@ public class ImageEntity {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

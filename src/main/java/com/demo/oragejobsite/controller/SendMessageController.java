@@ -33,7 +33,6 @@ public class SendMessageController {
             SendMessage savedMessage = messageService.saveMessage(message);
             return new ResponseEntity<>(savedMessage, HttpStatus.CREATED);
         } catch (Exception e) {
-            // Log the exception or handle it appropriately
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

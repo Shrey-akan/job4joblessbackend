@@ -2,24 +2,20 @@ package com.demo.oragejobsite.entity;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.hibernate.annotations.CreationTimestamp;
 
-@Entity
+
+@Document(collection = "sendmessage")
 public class SendMessage {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long messageId;
+    private String messageId;
 
     private String messageTo;
     private String messageFrom;
     private String message;
     private String isSender;
-    @CreationTimestamp
     private Date sendTime;
     
 	public SendMessage() {
@@ -27,7 +23,7 @@ public class SendMessage {
 		// TODO Auto-generated constructor stub
 	}
 
-	public SendMessage(Long messageId, String messageTo, String messageFrom, String message, String isSender,
+	public SendMessage(String messageId, String messageTo, String messageFrom, String message, String isSender,
 			Date sendTime) {
 		super();
 		this.messageId = messageId;
@@ -38,11 +34,11 @@ public class SendMessage {
 		this.sendTime = sendTime;
 	}
 
-	public Long getMessageId() {
+	public String getMessageId() {
 		return messageId;
 	}
 
-	public void setMessageId(Long messageId) {
+	public void setMessageId(String messageId) {
 		this.messageId = messageId;
 	}
 

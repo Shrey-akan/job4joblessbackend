@@ -2,7 +2,7 @@ package com.demo.oragejobsite.entity;
 
 
 public class UserAnswer {
-    private Long questionId;
+    private String questionId;
     private String selectedAnswer;
     private String userResponse;
     public UserAnswer() {
@@ -10,8 +10,7 @@ public class UserAnswer {
     }
 
    
-
-    public UserAnswer(Long questionId, String selectedAnswer, String userResponse) {
+    public UserAnswer(String questionId, String selectedAnswer, String userResponse) {
 		super();
 		this.questionId = questionId;
 		this.selectedAnswer = selectedAnswer;
@@ -20,11 +19,11 @@ public class UserAnswer {
 
 
 
-	public Long getQuestionId() {
+	public String getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(Long questionId) {
+    public void setQuestionId(String questionId) {
         this.questionId = questionId;
     }
 

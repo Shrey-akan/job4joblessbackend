@@ -1,15 +1,11 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document(collection = "resumebuilder")
 public class ResumeBuilder {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long rid;
+	private String rid;
 	private String rname;
 	private String rmail;
 	private Long rphone;
@@ -19,7 +15,7 @@ public class ResumeBuilder {
 	private String description;
 	
 
-	public ResumeBuilder(Long rid, String rname, String rmail, Long rphone, String experience, String skills,
+	public ResumeBuilder(String rid, String rname, String rmail, Long rphone, String experience, String skills,
 			String projectlink, String description) {
 		super();
 		this.rid = rid;
@@ -36,10 +32,10 @@ public class ResumeBuilder {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Long getRid() {
+	public String getRid() {
 		return rid;
 	}
-	public void setRid(Long rid) {
+	public void setRid(String rid) {
 		this.rid = rid;
 	}
 	public String getRname() {

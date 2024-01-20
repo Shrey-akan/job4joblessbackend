@@ -1,15 +1,12 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "notification")
 public class Notification {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long nid;
+	private String nid;
 	private String nhead;
 	private String nsubhead;
 	private String ndescription;
@@ -28,7 +25,7 @@ public class Notification {
 
 
 	
-	public Notification(Long nid, String nhead, String nsubhead, String ndescription, String notisend,
+	public Notification(String nid, String nhead, String nsubhead, String ndescription, String notisend,
 			String notifyuid) {
 		super();
 		this.nid = nid;
@@ -47,7 +44,7 @@ public class Notification {
 
 
 
-	public Long getNid() {
+	public String getNid() {
 		return nid;
 	}
 
@@ -56,7 +53,7 @@ public class Notification {
 
 
 
-	public void setNid(Long nid) {
+	public void setNid(String nid) {
 		this.nid = nid;
 	}
 

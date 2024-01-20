@@ -1,14 +1,12 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "admin")
 public class Admin {
-@Id
-@Column(columnDefinition = "VARCHAR(36)") 
-private String adminid; // Use UUID for the UID field
+	 @Id
+private String adminid;
 private String adminName;
 private String adminMail;
 private String adminPass;

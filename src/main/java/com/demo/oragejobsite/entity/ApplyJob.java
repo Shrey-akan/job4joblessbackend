@@ -1,16 +1,12 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "applyjob")
 public class ApplyJob {
 	@Id
-	@Column(columnDefinition = "VARCHAR(36)") 
-	private String juid; // Use UUID for the UID field
+	private String juid;
 	private String juname;
 	private String jumail;
 	private String jucompny;

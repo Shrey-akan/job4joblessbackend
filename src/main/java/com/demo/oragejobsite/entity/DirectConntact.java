@@ -1,21 +1,21 @@
 package com.demo.oragejobsite.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity
+
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "directcontact")
 public class DirectConntact {
 
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private int contactid;
+private String contactid;
 private String name;
 private String email;
 private String contactNumber;
 private String message;
-public DirectConntact(int contactid, String name, String email, String contactNumber, String message) {
+public DirectConntact(String contactid, String name, String email, String contactNumber, String message) {
 	super();
 	this.contactid = contactid;
 	this.name = name;
@@ -27,10 +27,10 @@ public DirectConntact() {
 	super();
 	// TODO Auto-generated constructor stub
 }
-public int getContactid() {
+public String getContactid() {
 	return contactid;
 }
-public void setContactid(int contactid) {
+public void setContactid(String contactid) {
 	this.contactid = contactid;
 }
 public String getName() {
