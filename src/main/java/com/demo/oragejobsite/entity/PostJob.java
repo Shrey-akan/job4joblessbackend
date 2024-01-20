@@ -2,6 +2,7 @@ package com.demo.oragejobsite.entity;
 
 import java.util.Date;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,6 +20,7 @@ private Long payjob;
 private Long payjobsup;
 private String descriptiondata;
 private String empid;
+@CreatedDate
 private Date sendTime;
 private String uid;
 private Boolean status;
