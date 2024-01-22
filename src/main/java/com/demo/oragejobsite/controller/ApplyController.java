@@ -27,6 +27,7 @@ public class ApplyController {
 	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
 	    try {
 	    	applyjob.setProfileupdate("Waiting");
+	    	System.out.println("ApplyJob object before saving: " + applyjob.getProfileupdate());
 	        ApplyJob savedApplyJob = apd.save(applyjob);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
 	    } catch (DataAccessException e) {
