@@ -1,7 +1,6 @@
 package com.demo.oragejobsite.controller;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -27,9 +26,7 @@ public class ApplyController {
 	@PostMapping("/insertapplyjob")
 	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
 	    try {
-	        String randomString = UUID.randomUUID().toString();
-	        randomString = randomString.replaceAll("-", "");
-    	 applyjob.setJuid(randomString);
+	        
 	        ApplyJob savedApplyJob = apd.save(applyjob);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
 	    } catch (DataAccessException e) {
