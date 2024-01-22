@@ -1,5 +1,6 @@
 package com.demo.oragejobsite.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ public class PostjobController {
 	@PostMapping("/jobpostinsert")
 	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
 	    try {
+	    	pj.setSendTime(new Date());
 	        PostJob savedPostJob = pjd.save(pj);
 	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
 	    } catch (DataAccessException e) {

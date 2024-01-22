@@ -30,15 +30,9 @@ private Date sendTime = new Date();
 private String uid;
 private Boolean status;
 
-
-
-
 public PostJob() {
 	super();
 }
-
-
-
 
 public PostJob(String jobid, String jobtitle, String companyforthisjob, Long numberofopening, String locationjob,
 		String jobtype, String schedulejob, Long payjob, Long payjobsup, String descriptiondata, String empid,
