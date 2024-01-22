@@ -26,7 +26,7 @@ public class ApplyController {
 	@PostMapping("/insertapplyjob")
 	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
 	    try {
-	        
+	    	applyjob.setProfileupdate("Waiting");
 	        ApplyJob savedApplyJob = apd.save(applyjob);
 	        return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
 	    } catch (DataAccessException e) {
