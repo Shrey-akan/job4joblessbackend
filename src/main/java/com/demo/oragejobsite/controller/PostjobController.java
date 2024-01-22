@@ -32,7 +32,9 @@ public class PostjobController {
 	@PostMapping("/jobpostinsert")
 	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
 	    try {
+	   
 	    	pj.setSendTime(new Date());
+	    	  System.out.println("PostJob object before saving: " + pj.getSendTime());
 	        PostJob savedPostJob = pjd.save(pj);
 	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
 	    } catch (DataAccessException e) {
