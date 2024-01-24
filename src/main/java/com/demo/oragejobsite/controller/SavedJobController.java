@@ -19,16 +19,13 @@ public class SavedJobController {
 	 private SavedJobDao savedJobDAo;
 	 
 	 @PostMapping("/like")
-	 public void likeJob(@RequestParam String userId, @RequestParam String jobId, @RequestParam Boolean saveStatus) {
+	 public void likeJob(@RequestParam String uid, @RequestParam String jobid, @RequestParam Boolean saveStatus) {
 	     SavedJob savedJob = new SavedJob();
-	     savedJob.setUid(userId);
-	     savedJob.setJobid(jobId);
+	     savedJob.setUid(uid);
+	     savedJob.setJobid(jobid);
 	     savedJob.setSaveStatus(saveStatus);
 	     savedJobDAo.save(savedJob);
 	 }
 
-	    @PostMapping("/unlike")
-	    public void unlikeJob(@RequestParam String userId, @RequestParam String jobId) {
-	    	savedJobDAo.deleteByUserIdAndJobId(userId, jobId);
-	    }
+
 }

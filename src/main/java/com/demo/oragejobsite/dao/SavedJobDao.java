@@ -7,6 +7,5 @@ import com.demo.oragejobsite.entity.SavedJob;
 
 public interface SavedJobDao extends MongoRepository<SavedJob, String>{
 
-	void deleteByUserIdAndJobId(String userId, String jobId);
 
 }
