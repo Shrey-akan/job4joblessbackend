@@ -18,10 +18,7 @@ public class ApplyJob {
 	private String jurelocation;
 	private String jueducation;
 	private String juexperience;
-	private String juexpinjava;
-	private String juexpjsp;
 	private String juinterviewdate;
-	private String jujavavalid;
 	private String jujobtitle;
 	private String jucompanyname;
 	private String description;
@@ -39,10 +36,9 @@ public class ApplyJob {
 		// TODO Auto-generated constructor stub
 	}
 	public ApplyJob(String juid, String juname, String jumail, String jucompny, String jutitle, String juresume,
-			String jurelocation, String jueducation, String juexperience, String juexpinjava, String juexpjsp,
-			String juinterviewdate, String jujavavalid, String jujobtitle, String jucompanyname, String description,
-			Long juphone, String julastsal, String juexpecsalary, String empid, String uid, String jobid,
-			String profileupdate, Date sendTime) {
+			String jurelocation, String jueducation, String juexperience, String juinterviewdate, String jujobtitle,
+			String jucompanyname, String description, Long juphone, String julastsal, String juexpecsalary,
+			String empid, String uid, String jobid, String profileupdate, Date sendTime) {
 		super();
 		this.juid = juid;
 		this.juname = juname;
@@ -53,10 +49,7 @@ public class ApplyJob {
 		this.jurelocation = jurelocation;
 		this.jueducation = jueducation;
 		this.juexperience = juexperience;
-		this.juexpinjava = juexpinjava;
-		this.juexpjsp = juexpjsp;
 		this.juinterviewdate = juinterviewdate;
-		this.jujavavalid = jujavavalid;
 		this.jujobtitle = jujobtitle;
 		this.jucompanyname = jucompanyname;
 		this.description = description;
@@ -123,29 +116,11 @@ public class ApplyJob {
 	public void setJuexperience(String juexperience) {
 		this.juexperience = juexperience;
 	}
-	public String getJuexpinjava() {
-		return juexpinjava;
-	}
-	public void setJuexpinjava(String juexpinjava) {
-		this.juexpinjava = juexpinjava;
-	}
-	public String getJuexpjsp() {
-		return juexpjsp;
-	}
-	public void setJuexpjsp(String juexpjsp) {
-		this.juexpjsp = juexpjsp;
-	}
 	public String getJuinterviewdate() {
 		return juinterviewdate;
 	}
 	public void setJuinterviewdate(String juinterviewdate) {
 		this.juinterviewdate = juinterviewdate;
-	}
-	public String getJujavavalid() {
-		return jujavavalid;
-	}
-	public void setJujavavalid(String jujavavalid) {
-		this.jujavavalid = jujavavalid;
 	}
 	public String getJujobtitle() {
 		return jujobtitle;
@@ -213,7 +188,7 @@ public class ApplyJob {
 	public void setSendTime(Date sendTime) {
 		this.sendTime = sendTime;
 	}
-	
+
 	
 	
 }
