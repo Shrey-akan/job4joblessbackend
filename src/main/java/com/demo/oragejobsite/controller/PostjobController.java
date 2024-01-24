@@ -54,60 +54,60 @@ public class PostjobController {
 	}
 
 	
-//	@CrossOrigin(origins = "https://job4jobless.com")
-//	@GetMapping("/fetchjobpost")
-//	public ResponseEntity<List<PostJob>> fetchjobpost() {
-//	    try {
-//	        List<PostJob> jobPosts = pjd.findAll();
-//	        return ResponseEntity.ok(jobPosts);
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//	    }
-//	}
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/fetchjobpost")
+	public ResponseEntity<List<PostJob>> fetchjobpost() {
+	    try {
+	        List<PostJob> jobPosts = pjd.findAll();
+	        return ResponseEntity.ok(jobPosts);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
 	
 	
-    @GetMapping("/fetchjobpost")
-    public ResponseEntity<List<Map<String, Object>>> fetchJobPosts(@RequestParam(required = false) String uid) {
-        try {
-            List<Map<String, Object>> jobPostsResponse = new ArrayList<>();
-
-            List<PostJob> allJobPosts = pjd.findAll();
-
-            if (uid != null) {
-                List<SavedJob> savedJobs = savedJobService.fetchSavedJobs(uid);
-
-                for (PostJob postJob : allJobPosts) {
-                    Map<String, Object> jobPostResponse = new HashMap<>();
-                    jobPostResponse.put("postJob", postJob);
-                    jobPostResponse.put("saveStatus", findSaveStatus(savedJobs, postJob));
-                    jobPostsResponse.add(jobPostResponse);
-                }
-            } else {
-                // If no UID is provided, set saveStatus as null for all jobs
-                for (PostJob postJob : allJobPosts) {
-                    Map<String, Object> jobPostResponse = new HashMap<>();
-                    jobPostResponse.put("postJob", postJob);
-                    jobPostResponse.put("saveStatus", null);
-                    jobPostsResponse.add(jobPostResponse);
-                }
-            }
-
-            return ResponseEntity.ok(jobPostsResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    private Boolean findSaveStatus(List<SavedJob> savedJobs, PostJob postJob) {
-        for (SavedJob savedJob : savedJobs) {
-            if (savedJob.getPostJob().equals(postJob)) {
-                return savedJob.getSaveStatus();
-            }
-        }
-        return false;
-    }
+//    @GetMapping("/fetchjobpost")
+//    public ResponseEntity<List<Map<String, Object>>> fetchJobPosts(@RequestParam(required = false) String uid) {
+//        try {
+//            List<Map<String, Object>> jobPostsResponse = new ArrayList<>();
+//
+//            List<PostJob> allJobPosts = pjd.findAll();
+//
+//            if (uid != null) {
+//                List<SavedJob> savedJobs = savedJobService.fetchSavedJobs(uid);
+//
+//                for (PostJob postJob : allJobPosts) {
+//                    Map<String, Object> jobPostResponse = new HashMap<>();
+//                    jobPostResponse.put("postJob", postJob);
+//                    jobPostResponse.put("saveStatus", findSaveStatus(savedJobs, postJob));
+//                    jobPostsResponse.add(jobPostResponse);
+//                }
+//            } else {
+//                // If no UID is provided, set saveStatus as null for all jobs
+//                for (PostJob postJob : allJobPosts) {
+//                    Map<String, Object> jobPostResponse = new HashMap<>();
+//                    jobPostResponse.put("postJob", postJob);
+//                    jobPostResponse.put("saveStatus", null);
+//                    jobPostsResponse.add(jobPostResponse);
+//                }
+//            }
+//
+//            return ResponseEntity.ok(jobPostsResponse);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//        }
+//    }
+//
+//    private Boolean findSaveStatus(List<SavedJob> savedJobs, PostJob postJob) {
+//        for (SavedJob savedJob : savedJobs) {
+//            if (savedJob.getPostJob().equals(postJob)) {
+//                return savedJob.getSaveStatus();
+//            }
+//        }
+//        return false;
+//    }
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchJobPostById/{jobId}")
