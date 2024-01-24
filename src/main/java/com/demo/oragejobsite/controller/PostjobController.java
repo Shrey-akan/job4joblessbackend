@@ -84,8 +84,8 @@ public class PostjobController {
             if (existingJob.isPresent()) {
                 PostJob currentJob = existingJob.get();
                 currentJob.setJobtitle(updatedJob.getJobtitle());
-                currentJob.setEmpName(updatedJob.getEmpName())
-                currentJob.setEmpEmail(updatedJob.getEmpEmail())
+                currentJob.setEmpName(updatedJob.getEmpName());
+                currentJob.setEmpEmail(updatedJob.getEmpEmail());
                
                 currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
                 currentJob.setNumberofopening(updatedJob.getNumberofopening());
