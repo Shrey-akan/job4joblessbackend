@@ -23,7 +23,7 @@ public class SavedJobController {
 	 public void likeJob(@RequestParam String uid, @RequestParam String jobid, @RequestParam Boolean saveStatus) {
 	     SavedJob savedJob = new SavedJob();
 	     savedJob.setUid(uid);
-	     savedJob.setJobid(jobid);
+	
 	     savedJob.setSaveStatus(saveStatus);
 	     savedJobDAo.save(savedJob);
 	 }
