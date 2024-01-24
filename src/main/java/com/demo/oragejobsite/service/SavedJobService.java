@@ -1,7 +1,9 @@
 package com.demo.oragejobsite.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
 
 public interface SavedJobService {
@@ -9,4 +11,5 @@ public interface SavedJobService {
     SavedJob saveJob(SavedJob savedJob);
     // Add other methods as needed...
 	SavedJob saveJob1(SavedJob savedJob);
+	Optional<SavedJob> getSavedJobByUidAndPostJob(String uid, PostJob postJob, String jobid);
 }

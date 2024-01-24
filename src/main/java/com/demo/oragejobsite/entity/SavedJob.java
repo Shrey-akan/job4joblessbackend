@@ -9,6 +9,7 @@ public class SavedJob {
 	@Id
     private String saveId;
 	private String uid;
+	private String jobid;
 	@DBRef
 	 private PostJob postJob;
 	private Boolean saveStatus;
@@ -16,10 +17,11 @@ public class SavedJob {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public SavedJob(String saveId, String uid, PostJob postJob, Boolean saveStatus) {
+	public SavedJob(String saveId, String uid, String jobid, PostJob postJob, Boolean saveStatus) {
 		super();
 		this.saveId = saveId;
 		this.uid = uid;
+		this.jobid = jobid;
 		this.postJob = postJob;
 		this.saveStatus = saveStatus;
 	}
@@ -35,6 +37,12 @@ public class SavedJob {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
+	public String getJobid() {
+		return jobid;
+	}
+	public void setJobid(String jobid) {
+		this.jobid = jobid;
+	}
 	public PostJob getPostJob() {
 		return postJob;
 	}
@@ -47,8 +55,7 @@ public class SavedJob {
 	public void setSaveStatus(Boolean saveStatus) {
 		this.saveStatus = saveStatus;
 	}
-	
-	
+
 	
 	
 }
