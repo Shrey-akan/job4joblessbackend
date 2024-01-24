@@ -10,14 +10,15 @@ import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.SavedJob;
 
 
-@RestController
 @CrossOrigin(origins = "https://job4jobless.com")
+@RestController
 public class SavedJobController {
 
 	
 	 @Autowired
 	 private SavedJobDao savedJobDAo;
 	 
+	 @CrossOrigin(origins = "https://job4jobless.com")
 	 @PostMapping("/like")
 	 public void likeJob(@RequestParam String uid, @RequestParam String jobid, @RequestParam Boolean saveStatus) {
 	     SavedJob savedJob = new SavedJob();
@@ -26,6 +27,5 @@ public class SavedJobController {
 	     savedJob.setSaveStatus(saveStatus);
 	     savedJobDAo.save(savedJob);
 	 }
-
 
 }
