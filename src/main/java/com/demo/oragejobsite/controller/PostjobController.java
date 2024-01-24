@@ -118,8 +118,7 @@ public class PostjobController {
 	        Optional<PostJob> existingJob = pjd.findById(jobid);
 	        if (existingJob.isPresent()) {
 	            PostJob currentJob = existingJob.get();
-	            currentJob.setUid(updatedJob.getUid());
-	            currentJob.setStatus(true);
+	      
 	            pjd.save(currentJob);
 	            return ResponseEntity.status(HttpStatus.OK).body(currentJob);
 	        } else {
