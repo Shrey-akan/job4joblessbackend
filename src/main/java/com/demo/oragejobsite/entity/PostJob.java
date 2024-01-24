@@ -12,8 +12,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 public class PostJob {
 @Id
 private String jobid; 
-private String name;
-private String email;
+private String empName;
+private String empEmail;
 private String jobtitle;
 private String companyforthisjob;
 private Long numberofopening;
@@ -36,13 +36,13 @@ public PostJob() {
 	super();
 }
 
-public PostJob(String jobid, String name, String email, String jobtitle, String companyforthisjob, Long numberofopening,
-		String locationjob, String jobtype, String schedulejob, Long payjob, Long payjobsup, String descriptiondata,
-		String empid, Date sendTime, String uid, Boolean status) {
+public PostJob(String jobid, String empName, String empEmail, String jobtitle, String companyforthisjob,
+		Long numberofopening, String locationjob, String jobtype, String schedulejob, Long payjob, Long payjobsup,
+		String descriptiondata, String empid, Date sendTime, String uid, Boolean status) {
 	super();
 	this.jobid = jobid;
-	this.name = name;
-	this.email = email;
+	this.empName = empName;
+	this.empEmail = empEmail;
 	this.jobtitle = jobtitle;
 	this.companyforthisjob = companyforthisjob;
 	this.numberofopening = numberofopening;
@@ -66,20 +66,20 @@ public void setJobid(String jobid) {
 	this.jobid = jobid;
 }
 
-public String getName() {
-	return name;
+public String getEmpName() {
+	return empName;
 }
 
-public void setName(String name) {
-	this.name = name;
+public void setEmpName(String empName) {
+	this.empName = empName;
 }
 
-public String getEmail() {
-	return email;
+public String getEmpEmail() {
+	return empEmail;
 }
 
-public void setEmail(String email) {
-	this.email = email;
+public void setEmpEmail(String empEmail) {
+	this.empEmail = empEmail;
 }
 
 public String getJobtitle() {
@@ -185,7 +185,6 @@ public Boolean getStatus() {
 public void setStatus(Boolean status) {
 	this.status = status;
 }
-
 
 
 }
