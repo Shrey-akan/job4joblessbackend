@@ -10,4 +10,6 @@ import com.demo.oragejobsite.entity.SavedJob;
 public interface SavedJobDao extends MongoRepository<SavedJob, String>{
 
 	List<SavedJob> findByUid(String uid);
+
+	SavedJob findByJobidAndUid(String jobid, String uid);
 }

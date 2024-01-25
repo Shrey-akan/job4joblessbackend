@@ -1,5 +1,6 @@
 package com.demo.oragejobsite.controller;
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,25 +24,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.PostjobDao;
+import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
-import com.demo.oragejobsite.service.SavedJobService;
+import com.demo.oragejobsite.service.SavedJobServiceImpl;
+
 
 @CrossOrigin(origins = "https://job4jobless.com")
 @RestController
 public class PostjobController {
 	@Autowired
 	private PostjobDao pjd;
-    @Autowired
-    private SavedJobService savedJobService;
+	
+	
+	  @Autowired
+	  private SavedJobDao savedJobServiceimpl;
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/jobpostinsert")
 	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
 	    try {
-	   
-	    	pj.setSendTime(new Date());
-	    	  System.out.println("PostJob object before saving: " + pj.getSendTime());
 	        PostJob savedPostJob = pjd.save(pj);
 	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
 	    } catch (DataAccessException e) {
@@ -54,60 +56,62 @@ public class PostjobController {
 	}
 
 	
-//	@CrossOrigin(origins = "https://job4jobless.com")
-//	@GetMapping("/fetchjobpost")
-//	public ResponseEntity<List<PostJob>> fetchjobpost() {
-//	    try {
-//	        List<PostJob> jobPosts = pjd.findAll();
-//	        return ResponseEntity.ok(jobPosts);
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//	    }
-//	}
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/fetchjobpost")
+	public ResponseEntity<List<PostJob>> fetchjobpost() {
+	    try {
+	        List<PostJob> jobPosts = pjd.findAll();
+	        return ResponseEntity.ok(jobPosts);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
 	
-    @GetMapping("/fetchjobpost")
-    public ResponseEntity<List<Map<String, Object>>> fetchJobPosts(@RequestParam(required = false) String uid) {
-        try {
-            List<Map<String, Object>> jobPostsResponse = new ArrayList<>();
-
-            List<PostJob> allJobPosts = pjd.findAll();
-
-            if (uid != null) {
-                List<SavedJob> savedJobs = savedJobService.fetchSavedJobs(uid);
-
-                for (PostJob postJob : allJobPosts) {
-                    Map<String, Object> jobPostResponse = new HashMap<>();
-                    jobPostResponse.put("postJob", postJob);
-                    jobPostResponse.put("saveStatus", findSaveStatus(savedJobs, postJob));
-                    jobPostsResponse.add(jobPostResponse);
-                }
-            } else {
-                // If no UID is provided, set saveStatus as null for all jobs
-                for (PostJob postJob : allJobPosts) {
-                    Map<String, Object> jobPostResponse = new HashMap<>();
-                    jobPostResponse.put("postJob", postJob);
-                    jobPostResponse.put("saveStatus", null);
-                    jobPostsResponse.add(jobPostResponse);
-                }
-            }
-
-            return ResponseEntity.ok(jobPostsResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    private Boolean findSaveStatus(List<SavedJob> savedJobs, PostJob postJob) {
-        for (SavedJob savedJob : savedJobs) {
-            if (savedJob.getPostJob().equals(postJob)) {
-                return savedJob.getSaveStatus();
-            }
-        }
-        return false;
-    }
 	
+	@GetMapping("/fetchjobpoststatus")
+	public ResponseEntity<List<Map<String, Object>>> fetchjobpoststatus(@RequestParam(required = false) String uid) {
+	    try {
+	        List<Map<String, Object>> jobPostsWithStatus = new ArrayList<>();
+
+	        // Fetch all job posts
+	        List<PostJob> allJobPosts = pjd.findAll();
+
+	        for (PostJob postJob : allJobPosts) {
+	            Map<String, Object> jobPostMap = new HashMap<>();
+	            jobPostMap.put("jobId", postJob.getJobid());
+	            jobPostMap.put("empName", postJob.getEmpName());
+	            jobPostMap.put("empEmail", postJob.getEmpEmail());
+	            jobPostMap.put("jobTitle", postJob.getJobtitle());
+	            jobPostMap.put("companyForThisJob", postJob.getCompanyforthisjob());
+	            jobPostMap.put("numberOfOpening", postJob.getNumberofopening());
+	            jobPostMap.put("locationJob", postJob.getLocationjob());
+	            jobPostMap.put("jobType", postJob.getJobtype());
+	            jobPostMap.put("scheduleJob", postJob.getSchedulejob());
+	            jobPostMap.put("payJob", postJob.getPayjob());
+	            jobPostMap.put("payJobSup", postJob.getPayjobsup());
+	            jobPostMap.put("descriptionData", postJob.getDescriptiondata());
+	            jobPostMap.put("empId", postJob.getEmpid());
+	            jobPostMap.put("sendTime", postJob.getSendTime());
+	            
+	            
+	            // If uid is provided, check status from saved_job_post collection
+	            if (uid != null) {
+	                SavedJob savedJob = savedJobServiceimpl.findByJobidAndUid(postJob.getJobid(), uid);
+	                boolean saveStatus = (savedJob != null) && savedJob.getSaveStatus();
+	                jobPostMap.put("saveStatus", saveStatus);
+	            }
+
+	            jobPostsWithStatus.add(jobPostMap);
+	        }
+	        return ResponseEntity.ok(jobPostsWithStatus);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
+
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchJobPostById/{jobId}")
 	public ResponseEntity<PostJob> fetchJobPostById(@PathVariable String jobId) {

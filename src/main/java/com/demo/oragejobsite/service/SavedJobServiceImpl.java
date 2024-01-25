@@ -1,11 +1,9 @@
 package com.demo.oragejobsite.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.demo.oragejobsite.dao.PostjobDao;
 import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
@@ -14,30 +12,29 @@ import com.demo.oragejobsite.entity.SavedJob;
 public class SavedJobServiceImpl implements SavedJobService {
 
     @Autowired
-    private SavedJobDao savedJobRepository;
-
+    private SavedJobDao savejobdao;
+	@Autowired
+	private PostjobDao postjobdao;
     @Override
-    public List<SavedJob> fetchSavedJobs(String uid) {
-        return savedJobRepository.findByUid(uid);
+    public SavedJob updateSavedJobStatus(String jobid, String uid, Boolean status) {
+    	 PostJob postJob = postjobdao.findByJobid(jobid);
+    	 if (postJob != null) {
+    	        SavedJob savedJob = savejobdao.findByJobidAndUid(jobid, uid);
+
+    	        if (savedJob != null) {
+    	            savedJob.setSaveStatus(status);
+    	            return savejobdao.save(savedJob);
+    	        } else {
+    	            // If SavedJob doesn't exist, create a new one
+    	            SavedJob newSavedJob = new SavedJob();
+    	            newSavedJob.setJobid(jobid);
+    	            newSavedJob.setUid(uid);
+    	            newSavedJob.setSaveStatus(status);
+    	            newSavedJob.setPostJob(postJob); // Link the PostJob
+    	            return savejobdao.save(newSavedJob);
+    	        }
+    	    }
+    	    return null;
     }
 
-    @Override
-    public SavedJob saveJob1(SavedJob savedJob) {
-        // Add any additional logic or validation before saving
-        return savedJobRepository.save(savedJob);
-    }
-
-	@Override
-	public SavedJob saveJob(SavedJob savedJob) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Optional<SavedJob> getSavedJobByUidAndPostJob(String uid, PostJob postJob, String jobid) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
-	}
-
-    // Add other methods as needed...
 }

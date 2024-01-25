@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
 import com.demo.oragejobsite.service.PostJobService;
 import com.demo.oragejobsite.service.SavedJobService;
+import com.demo.oragejobsite.service.SavedJobServiceImpl;
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -27,74 +29,27 @@ public class SavedJobController {
 	    private SavedJobService savedJobService;
 	 
 	    @Autowired
-	    private PostJobService postJobService;
-//
-//	    @PostMapping("/saveJobStatus")
-//	    public ResponseEntity<SavedJob> saveJobStatus(@RequestBody SavedJob saveJobStatusRequest) {
-//	        try {
-//	            Optional<PostJob> postJobOptional = postJobService.getPostJobById(saveJobStatusRequest.getJobid());
-//
-//	            if (postJobOptional.isPresent()) {
-//	                PostJob postJob = postJobOptional.get();
-//	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob,saveJobStatusRequest.getJobid());
-//	                SavedJob savedJob;
-//
-//	                if (savedJobOptional.isPresent()) {
-//	                    savedJob = savedJobOptional.get();
-//	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
-//	                } else {
-//	                    // If the saved job does not exist, create a new one
-//	                    savedJob = new SavedJob();
-//	                    savedJob.setUid(saveJobStatusRequest.getUid());
-//	                    savedJob.setPostJob(postJob);
-//	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
-//	                }
-//	                SavedJob saved = savedJobService.saveJob(savedJob);
-//	                return ResponseEntity.ok(saved);
-//	            } else {
-//	                return ResponseEntity.notFound().build();
-//	            }
-//	        } catch (Exception e) {
-//	            e.printStackTrace();
-//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//	        }
-//	    }
+	    private SavedJobServiceImpl savedJobServiceimpl;
+
 	    
-	    
-	    
-	    
-	    @PostMapping("/saveJobStatus")
-	    public ResponseEntity<Object> saveJobStatus(@RequestBody SavedJob saveJobStatusRequest) {
+	    @PutMapping("/update-status")
+	    public ResponseEntity<SavedJob> updateSavedJobStatus(
+	            @RequestParam String jobid,
+	            @RequestParam String uid,
+	            @RequestParam Boolean status
+	    ) {
 	        try {
-	            Optional<PostJob> postJobOptional = postJobService.getPostJobById(saveJobStatusRequest.getJobid());
-
-	            if (postJobOptional.isPresent()) {
-	                PostJob postJob = postJobOptional.get();
-	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob, saveJobStatusRequest.getJobid());
-	                SavedJob savedJob;
-
-	                if (savedJobOptional.isPresent()) {
-	                    savedJob = savedJobOptional.get();
-	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
-	                } else {
-	                    // If the saved job does not exist, create a new one
-	                    savedJob = new SavedJob();
-	                    savedJob.setUid(saveJobStatusRequest.getUid());
-	                    savedJob.setPostJob(postJob);
-	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
-	                }
-
-	                SavedJob saved = savedJobService.saveJob(savedJob);
-
-	                return ResponseEntity.ok(saved);
-	            } else {
-	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostJob not found for ID: " + saveJobStatusRequest.getJobid());
-	            }
+	            SavedJob savedJob = savedJobServiceimpl.updateSavedJobStatus(jobid, uid, status);
+	            System.out.println("checking the value"+savedJob);
+	            return new ResponseEntity<>(savedJob, HttpStatus.OK);
 	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error occurred");
+	        	 e.printStackTrace();
+	        	    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	        }
 	    }
+	    
+	    
+	  
 
 
 
