@@ -79,19 +79,19 @@ public class PostjobController {
 
 	        for (PostJob postJob : allJobPosts) {
 	            Map<String, Object> jobPostMap = new HashMap<>();
-	            jobPostMap.put("jobId", postJob.getJobid());
+	            jobPostMap.put("jobid", postJob.getJobid());
 	            jobPostMap.put("empName", postJob.getEmpName());
 	            jobPostMap.put("empEmail", postJob.getEmpEmail());
-	            jobPostMap.put("jobTitle", postJob.getJobtitle());
-	            jobPostMap.put("companyForThisJob", postJob.getCompanyforthisjob());
-	            jobPostMap.put("numberOfOpening", postJob.getNumberofopening());
-	            jobPostMap.put("locationJob", postJob.getLocationjob());
-	            jobPostMap.put("jobType", postJob.getJobtype());
-	            jobPostMap.put("scheduleJob", postJob.getSchedulejob());
-	            jobPostMap.put("payJob", postJob.getPayjob());
-	            jobPostMap.put("payJobSup", postJob.getPayjobsup());
-	            jobPostMap.put("descriptionData", postJob.getDescriptiondata());
-	            jobPostMap.put("empId", postJob.getEmpid());
+	            jobPostMap.put("jobtitle", postJob.getJobtitle());
+	            jobPostMap.put("companyforthisjob", postJob.getCompanyforthisjob());
+	            jobPostMap.put("numberofopening", postJob.getNumberofopening());
+	            jobPostMap.put("locationjob", postJob.getLocationjob());
+	            jobPostMap.put("jobtype", postJob.getJobtype());
+	            jobPostMap.put("schedulejob", postJob.getSchedulejob());
+	            jobPostMap.put("payjob", postJob.getPayjob());
+	            jobPostMap.put("payjobsup", postJob.getPayjobsup());
+	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
+	            jobPostMap.put("empid", postJob.getEmpid());
 	            jobPostMap.put("sendTime", postJob.getSendTime());
 	            
 	            
