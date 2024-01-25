@@ -25,7 +25,7 @@ public class SavedJobController {
 	
 	 @Autowired
 	    private SavedJobService savedJobService;
-
+	 
 	    @Autowired
 	    private PostJobService postJobService;
 
@@ -40,7 +40,6 @@ public class SavedJobController {
 	                SavedJob savedJob;
 
 	                if (savedJobOptional.isPresent()) {
-	                    // If the saved job exists, update the saveStatus
 	                    savedJob = savedJobOptional.get();
 	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
 	                } else {

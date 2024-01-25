@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "saved_job")
+@Document(collection = "saved_job_post")
 public class SavedJob {
 	@Id
     private String saveId;
