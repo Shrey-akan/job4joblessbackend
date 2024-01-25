@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.QuizQuestionRepository;
@@ -27,14 +28,18 @@ public class QuizController {
     
     @CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/add")
-    public ResponseEntity<Object> addQuestion(@RequestBody QuizQuestion question) {
+    public ResponseEntity<Object> addQuestion(@RequestParam String jobid, @RequestBody QuizQuestion question) {
         try {
+           
+            question.setJobid(jobid);
+
             questionRepository.save(question);
             return ResponseEntity.status(HttpStatus.OK).body(question);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add question");
         }
     }
+
 	
     @CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchquestion")
@@ -47,7 +52,16 @@ public class QuizController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
-
+    @GetMapping("/fetchquestionbyjobid")
+    public ResponseEntity<List<QuizQuestion>> fetchQuestionsByJobId(@RequestParam String jobid) {
+        try {
+            List<QuizQuestion> questions = questionRepository.findByJobid(jobid);
+            return ResponseEntity.ok(questions);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 	
     @CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/deletequestion")

@@ -13,12 +13,13 @@ public class QuizQuestion {
     private String optionC;
     private String optionD;
     private String correctAnswer;
+    private String jobid;
 	public QuizQuestion() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public QuizQuestion(String id, String question, String optionA, String optionB, String optionC, String optionD,
-			String correctAnswer) {
+			String correctAnswer, String jobid) {
 		super();
 		this.id = id;
 		this.question = question;
@@ -27,6 +28,7 @@ public class QuizQuestion {
 		this.optionC = optionC;
 		this.optionD = optionD;
 		this.correctAnswer = correctAnswer;
+		this.jobid = jobid;
 	}
 	public String getId() {
 		return id;
@@ -70,8 +72,13 @@ public class QuizQuestion {
 	public void setCorrectAnswer(String correctAnswer) {
 		this.correctAnswer = correctAnswer;
 	}
-    
-
+	public String getJobid() {
+		return jobid;
+	}
+	public void setJobid(String jobid) {
+		this.jobid = jobid;
+	}
+	
 }
 
 
