@@ -88,13 +88,14 @@ public class SavedJobController {
 
 	                return ResponseEntity.ok(saved);
 	            } else {
-	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body( null));
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("PostJob not found for ID: " + saveJobStatusRequest.getJobid());
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error occurred");
 	        }
 	    }
+
 
 
 }
