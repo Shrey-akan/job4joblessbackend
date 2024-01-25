@@ -28,15 +28,49 @@ public class SavedJobController {
 	 
 	    @Autowired
 	    private PostJobService postJobService;
-
+//
+//	    @PostMapping("/saveJobStatus")
+//	    public ResponseEntity<SavedJob> saveJobStatus(@RequestBody SavedJob saveJobStatusRequest) {
+//	        try {
+//	            Optional<PostJob> postJobOptional = postJobService.getPostJobById(saveJobStatusRequest.getJobid());
+//
+//	            if (postJobOptional.isPresent()) {
+//	                PostJob postJob = postJobOptional.get();
+//	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob,saveJobStatusRequest.getJobid());
+//	                SavedJob savedJob;
+//
+//	                if (savedJobOptional.isPresent()) {
+//	                    savedJob = savedJobOptional.get();
+//	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
+//	                } else {
+//	                    // If the saved job does not exist, create a new one
+//	                    savedJob = new SavedJob();
+//	                    savedJob.setUid(saveJobStatusRequest.getUid());
+//	                    savedJob.setPostJob(postJob);
+//	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
+//	                }
+//	                SavedJob saved = savedJobService.saveJob(savedJob);
+//	                return ResponseEntity.ok(saved);
+//	            } else {
+//	                return ResponseEntity.notFound().build();
+//	            }
+//	        } catch (Exception e) {
+//	            e.printStackTrace();
+//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//	        }
+//	    }
+	    
+	    
+	    
+	    
 	    @PostMapping("/saveJobStatus")
-	    public ResponseEntity<SavedJob> saveJobStatus(@RequestBody SavedJob saveJobStatusRequest) {
+	    public ResponseEntity<Object> saveJobStatus(@RequestBody SavedJob saveJobStatusRequest) {
 	        try {
 	            Optional<PostJob> postJobOptional = postJobService.getPostJobById(saveJobStatusRequest.getJobid());
 
 	            if (postJobOptional.isPresent()) {
 	                PostJob postJob = postJobOptional.get();
-	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob,saveJobStatusRequest.getJobid());
+	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob, saveJobStatusRequest.getJobid());
 	                SavedJob savedJob;
 
 	                if (savedJobOptional.isPresent()) {
@@ -49,15 +83,18 @@ public class SavedJobController {
 	                    savedJob.setPostJob(postJob);
 	                    savedJob.setSaveStatus(saveJobStatusRequest.getSaveStatus());
 	                }
+
 	                SavedJob saved = savedJobService.saveJob(savedJob);
+
 	                return ResponseEntity.ok(saved);
 	            } else {
-	                return ResponseEntity.notFound().build();
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body( null));
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
 	        }
 	    }
+
 
 }
