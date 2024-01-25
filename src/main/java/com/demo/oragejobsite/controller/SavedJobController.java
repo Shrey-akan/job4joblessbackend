@@ -36,8 +36,6 @@ public class SavedJobController {
 
 	            if (postJobOptional.isPresent()) {
 	                PostJob postJob = postJobOptional.get();
-
-	                // Check if the saved job already exists for the given uid and post job
 	                Optional<SavedJob> savedJobOptional = savedJobService.getSavedJobByUidAndPostJob(saveJobStatusRequest.getUid(), postJob,saveJobStatusRequest.getJobid());
 	                SavedJob savedJob;
 
