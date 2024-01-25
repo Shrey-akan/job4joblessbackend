@@ -10,4 +10,5 @@ public interface SavedJobService {
     List<SavedJob> fetchSavedJobs(String uid);
     SavedJob saveJob(SavedJob savedJob);
 	Optional<SavedJob> getSavedJobByUidAndPostJob(String uid, PostJob postJob, String jobid);
+	SavedJob saveJob1(SavedJob savedJob);
 }
