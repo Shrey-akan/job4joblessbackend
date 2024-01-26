@@ -2,7 +2,7 @@ package com.demo.oragejobsite.controller;
 
 
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,7 @@ import com.demo.oragejobsite.dao.PostjobDao;
 import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
-import com.demo.oragejobsite.service.SavedJobServiceImpl;
+
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -57,10 +57,12 @@ public class PostjobController {
 	  
 	  @CrossOrigin(origins = "https://job4jobless.com")
 	  @PostMapping("/jobpostinsert")
-	  public ResponseEntity<PostJob> jobpostinsert(@RequestBody PostJob pj) {
+	  public ResponseEntity<?> jobpostinsert(@RequestBody PostJob pj) {
 	      try {
 	          PostJob savedPostJob = pjd.save(pj);
-	          return ResponseEntity.status(HttpStatus.CREATED).body(savedPostJob);
+	          System.out.println("checking the response "+ savedPostJob.getJobid());
+	          String jobid = savedPostJob.getJobid();
+	          return ResponseEntity.status(HttpStatus.CREATED).body(savedPostJob.getJobid());
 	      } catch (DataAccessException e) {
 	          e.printStackTrace();
 	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
