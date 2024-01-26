@@ -60,7 +60,7 @@ public class PostjobController {
 	  public ResponseEntity<PostJob> jobpostinsert(@RequestBody PostJob pj) {
 	      try {
 	          PostJob savedPostJob = pjd.save(pj);
-	          return ResponseEntity.status(HttpStatus.CREATED).body(pj);
+	          return ResponseEntity.status(HttpStatus.CREATED).body(savedPostJob);
 	      } catch (DataAccessException e) {
 	          e.printStackTrace();
 	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
