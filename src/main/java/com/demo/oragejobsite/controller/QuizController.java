@@ -52,6 +52,8 @@ public class QuizController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	    }
 	}
+    
+    
     @GetMapping("/fetchquestionbyjobid")
     public ResponseEntity<List<QuizQuestion>> fetchQuestionsByJobId(@RequestParam String jobid) {
         try {
@@ -62,7 +64,17 @@ public class QuizController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-	
+    
+    @GetMapping("/checkjobid")
+    public ResponseEntity<Boolean> checkJobIdExists(@RequestParam String jobid) {
+        try {
+            boolean exists = questionRepository.existsByJobid(jobid);
+            return ResponseEntity.ok(exists);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+        }
+    }
     @CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/deletequestion")
 	public ResponseEntity<String> deleteQuestionById(@RequestBody Map<String, String> request) {

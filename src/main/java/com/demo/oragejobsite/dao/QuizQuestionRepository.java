@@ -11,6 +11,6 @@ import com.demo.oragejobsite.entity.QuizQuestion;
 public interface QuizQuestionRepository extends MongoRepository<QuizQuestion, String>{
 
 	List<QuizQuestion> findByJobid(String jobid);
-
+	 boolean existsByJobid(String jobid);
 }	
 
