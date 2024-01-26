@@ -40,20 +40,37 @@ public class PostjobController {
 	  @Autowired
 	  private SavedJobDao savedJobServiceimpl;
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
-	@PostMapping("/jobpostinsert")
-	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
-	    try {
-	        PostJob savedPostJob = pjd.save(pj);
-	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
-	    } catch (DataAccessException e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-	    }
-	}
+//	@CrossOrigin(origins = "https://job4jobless.com")
+//	@PostMapping("/jobpostinsert")
+//	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
+//	    try {
+//	        PostJob savedPostJob = pjd.save(pj);
+//	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
+//	    } catch (DataAccessException e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+//	    }
+//	}
+	  
+	  @CrossOrigin(origins = "https://job4jobless.com")
+	  @PostMapping("/jobpostinsert")
+	  public ResponseEntity<PostJob> jobpostinsert(@RequestBody PostJob pj) {
+	      try {
+	          PostJob savedPostJob = pjd.save(pj);
+	          return ResponseEntity.status(HttpStatus.CREATED).body(savedPostJob);
+	      } catch (DataAccessException e) {
+	          e.printStackTrace();
+	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	              .body(null); // Or you can return a ResponseEntity with HttpStatus and without a body
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	              .body(null); // Or you can return a ResponseEntity with HttpStatus and without a body
+	      }
+	  }
 
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
