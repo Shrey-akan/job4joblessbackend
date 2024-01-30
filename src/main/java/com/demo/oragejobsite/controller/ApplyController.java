@@ -134,11 +134,19 @@ public class ApplyController {
 	                        ApplyJob::getJobid,
 	                        Collectors.counting()
 	                ));
+	        
+	        List<ApplyJob> waitingApplications = applyJobs.stream()
+	                .filter(applyJob -> "Waiting".equals(applyJob.getProfileupdate()))
+	                .collect(Collectors.toList());
+
+	        // Count the number of waiting applications
+	        long waitingApplicationsCount = waitingApplications.size();
 
 	        Map<String, Object> responseMap = new HashMap<>();
 	        responseMap.put("jobidWaitingCountMap", jobidWaitingCountMap);
+	        responseMap.put("waitingApplicationsCount", waitingApplicationsCount);
 
-	        return ResponseEntity.ok(jobidWaitingCountMap);
+	        return ResponseEntity.ok(responseMap);
 	    } catch (DataAccessException e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
