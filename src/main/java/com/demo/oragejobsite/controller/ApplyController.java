@@ -121,7 +121,7 @@ public class ApplyController {
 //    }
 
 	@CrossOrigin(origins = "https://job4jobless.com")
-	@GetMapping("/notifyemployer")
+	@GetMapping("/notifyEmployer")
 	public ResponseEntity<?> notifyEmployer(@RequestParam(name = "empid") String empid) {
 	    try {
 	        // Fetch all apply jobs for the given employer
