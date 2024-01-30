@@ -1,6 +1,10 @@
 package com.demo.oragejobsite.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -98,6 +102,53 @@ public class ApplyController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
+
+	
+//	  public ResponseEntity<?> notifyEmployer(@RequestParam(name = "empid") String empid) {
+//        try {
+//            List<ApplyJob> applyJobs = apd.findByEmpid(empid);
+//            Map<String, Long> jobidUidCountMap = applyJobs.stream()
+//                    .collect(Collectors.groupingBy(ApplyJob::getJobid, Collectors.mapping(ApplyJob::getUid, Collectors.collectingAndThen(Collectors.toSet(), set -> (long) set.size()))));
+//
+//            return ResponseEntity.ok(jobidUidCountMap);
+//        } catch (DataAccessException e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+//        }
+//    }
+
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/notifyemployer")
+	public ResponseEntity<?> notifyEmployer(@RequestParam(name = "empid") String empid) {
+	    try {
+	        // Fetch all apply jobs for the given employer
+	        List<ApplyJob> applyJobs = apd.findByEmpid(empid);
+
+	        // Group apply jobs by jobid and count waiting applications
+	        Map<String, Long> jobidWaitingCountMap = applyJobs.stream()
+	                .filter(applyJob -> "Waiting".equals(applyJob.getProfileupdate()))
+	                .collect(Collectors.groupingBy(
+	                        ApplyJob::getJobid,
+	                        Collectors.counting()
+	                ));
+
+	        Map<String, Object> responseMap = new HashMap<>();
+	        responseMap.put("jobidWaitingCountMap", jobidWaitingCountMap);
+
+	        return ResponseEntity.ok(jobidWaitingCountMap);
+	    } catch (DataAccessException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	    }
+	}
+
+
 
 
 }

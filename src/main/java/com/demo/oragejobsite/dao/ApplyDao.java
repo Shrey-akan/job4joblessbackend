@@ -16,5 +16,7 @@ public interface ApplyDao extends MongoRepository<ApplyJob, String>{
 
     List<ApplyJob> findByEmpidAndJobid(String empid, String jobid);
 
+	List<ApplyJob> findByEmpid(String empid);
+
 }
 
