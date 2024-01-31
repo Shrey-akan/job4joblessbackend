@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.oragejobsite.dao.ApplicantsCountDao;
 import com.demo.oragejobsite.dao.PostjobDao;
 import com.demo.oragejobsite.dao.SavedJobDao;
+import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
 
@@ -39,21 +41,8 @@ public class PostjobController {
 	
 	  @Autowired
 	  private SavedJobDao savedJobServiceimpl;
-	
-//	@CrossOrigin(origins = "https://job4jobless.com")
-//	@PostMapping("/jobpostinsert")
-//	public ResponseEntity<String> jobpostinsert(@RequestBody PostJob pj) {
-//	    try {
-//	        PostJob savedPostJob = pjd.save(pj);
-//	        return ResponseEntity.status(HttpStatus.CREATED).body("Job post saved successfully");
-//	    } catch (DataAccessException e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-//	    }
-//	}
+	  @Autowired
+	    private ApplicantsCountDao applicantsCountRepository;
 	  
 	  @CrossOrigin(origins = "https://job4jobless.com")
 	  @PostMapping("/jobpostinsert")
@@ -75,27 +64,71 @@ public class PostjobController {
 	  }
 
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
-	@GetMapping("/fetchjobpost")
-	public ResponseEntity<List<PostJob>> fetchjobpost() {
-	    try {
-	        List<PostJob> jobPosts = pjd.findAll();
-	        return ResponseEntity.ok(jobPosts);
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//	@CrossOrigin(origins = "https://job4jobless.com")
+//	@GetMapping("/fetchjobpost")
+//	public ResponseEntity<List<PostJob>> fetchjobpost() {
+//	    try {
+//	        List<PostJob> jobPosts = pjd.findAll();
+//	        return ResponseEntity.ok(jobPosts);
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//	    }
+//	}
+	  
+	  @CrossOrigin(origins = "https://job4jobless.com")
+	   @GetMapping("/fetchjobpost")
+	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
+	        try {
+	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
+
+	            for (PostJob jobPost : jobPosts) {
+	                
+	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
+	                jobPost.setApplicants(applicantsCount);
+	            }
+
+	            return ResponseEntity.ok(jobPosts);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        }
 	    }
-	}
+
+	    // Helper method to fetch the count of applicants based on jobid and empid
+	    private int getApplicantsCount(String jobid, String empid) {
+	        try {
+	            ApplicantsCount applicantsCount = applicantsCountRepository.findByJobidAndEmpid(jobid, empid);
+	            System.out.print(applicantsCount);
+	            return (applicantsCount != null) ? applicantsCount.getApplicants() : 0;
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return 0;
+	        }
+	    }
+//	  @GetMapping("/fetchjobpost")
+//	  public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
+//	      try {
+//	          List<PostJob> jobPosts;
+//	          if (empid != null && !empid.isEmpty()) {
+//	              jobPosts = pjd.findByEmpid(empid);
+//	          } else {
+//	              jobPosts = pjd.findAll();
+//	          }
+//	          return ResponseEntity.ok(jobPosts);
+//	      } catch (Exception e) {
+//	          e.printStackTrace();
+//	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//	      }
+//	  }
+
 	
 	
 	@GetMapping("/fetchjobpoststatus")
 	public ResponseEntity<List<Map<String, Object>>> fetchjobpoststatus(@RequestParam(required = false) String uid) {
 	    try {
 	        List<Map<String, Object>> jobPostsWithStatus = new ArrayList<>();
-
-	        // Fetch all job posts
 	        List<PostJob> allJobPosts = pjd.findAll();
-
 	        for (PostJob postJob : allJobPosts) {
 	            Map<String, Object> jobPostMap = new HashMap<>();
 	            jobPostMap.put("jobid", postJob.getJobid());
@@ -112,9 +145,6 @@ public class PostjobController {
 	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
 	            jobPostMap.put("empid", postJob.getEmpid());
 	            jobPostMap.put("sendTime", postJob.getSendTime());
-	            
-	            
-	            // If uid is provided, check status from saved_job_post collection
 	            if (uid != null) {
 	                SavedJob savedJob = savedJobServiceimpl.findByJobidAndUid(postJob.getJobid(), uid);
 	                boolean saveStatus = (savedJob != null) && savedJob.getSaveStatus();

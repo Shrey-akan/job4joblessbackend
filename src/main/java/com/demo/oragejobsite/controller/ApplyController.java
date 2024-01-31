@@ -3,7 +3,6 @@ package com.demo.oragejobsite.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.oragejobsite.dao.ApplicantsCountDao;
 import com.demo.oragejobsite.dao.ApplyDao;
+import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.ApplyJob;
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -25,25 +26,48 @@ import com.demo.oragejobsite.entity.ApplyJob;
 public class ApplyController {
 	@Autowired
 	private ApplyDao apd;
-
+	@Autowired
+    private ApplicantsCountDao applicantsCountRepository;
 	@CrossOrigin(origins = "https://job4jobless.com")
-	@PostMapping("/insertapplyjob")
-	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
-	    try {
-	    	applyjob.setProfileupdate("Waiting");
-	    	System.out.println("ApplyJob object before saving: " + applyjob.getProfileupdate());
-	        ApplyJob savedApplyJob = apd.save(applyjob);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
-	    } catch (DataAccessException e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-	    } catch (Exception e) {
-	        // Handle any other exceptions that may occur
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-	    }
-	}
+    @PostMapping("/insertapplyjob")
+    public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
+        try {
+            applyjob.setProfileupdate("Waiting");
+            System.out.println("ApplyJob object before saving: " + applyjob.getProfileupdate());
+            ApplyJob savedApplyJob = apd.save(applyjob);
+            // Update ApplicantsCount based on jobid
+            String jobid = applyjob.getJobid();
+            ApplicantsCount applicantsCount = getApplicantsCountByJobId(jobid);
+            if (applicantsCount == null) {
+                // If no entry exists for the jobid, create a new one
+                applicantsCount = new ApplicantsCount();
+                applicantsCount.setJobid(jobid);
+                applicantsCount.setEmpid(applyjob.getEmpid());
+                applicantsCount.setUid(applyjob.getUid());
+                applicantsCount.setJuid(applyjob.getJuid());
+                applicantsCount.setApplicants(1); 
+                System.out.println(applicantsCount.getApplicants()+" "+applicantsCount.getJobid());
+            } else {
+            	int currentApplicants = applicantsCount.getApplicants();
+            	currentApplicants++;
+            	applicantsCount.setApplicants(currentApplicants);
+            }
+            applicantsCountRepository.save(applicantsCount);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+        } catch (Exception e) {
+            // Handle any other exceptions that may occur
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+        }
+    }
 
+    // Helper method to retrieve ApplicantsCount by jobid
+    private ApplicantsCount getApplicantsCountByJobId(String jobid) {
+        return applicantsCountRepository.findByJobid(jobid);
+    }
 	
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
@@ -71,6 +95,20 @@ public class ApplyController {
 	        if (existingApplyJob != null) {
 	            existingApplyJob.setProfileupdate(applyJob.getProfileupdate());
 	            ApplyJob updatedApplyJob = apd.save(existingApplyJob);
+	            String jobid = applyJob.getJobid();
+	            ApplicantsCount applicantsCount = getApplicantsCountByJobId(jobid);
+
+	            if (applicantsCount == null) {
+	              
+	                return ResponseEntity.ok(updatedApplyJob);
+	            } else {
+	                int currentApplicants = applicantsCount.getApplicants();
+	                if (currentApplicants > 0) {
+	                    currentApplicants--;
+	                    applicantsCount.setApplicants(currentApplicants);
+	                    applicantsCountRepository.save(applicantsCount);
+	                }
+	            }
 	            return ResponseEntity.ok(updatedApplyJob);
 	        } else {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ApplyJob not found for UID: " + applyJob.getJuid());
