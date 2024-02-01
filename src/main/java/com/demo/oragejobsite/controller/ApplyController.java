@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.ApplicantsCountDao;
 import com.demo.oragejobsite.dao.ApplyDao;
+import com.demo.oragejobsite.dao.UserStatusDao;
 import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.ApplyJob;
+import com.demo.oragejobsite.entity.UserStatus;
 
 @CrossOrigin(origins = "https://job4jobless.com")
 @RestController
@@ -28,6 +30,11 @@ public class ApplyController {
 	private ApplyDao apd;
 	@Autowired
     private ApplicantsCountDao applicantsCountRepository;
+	@Autowired
+	private UserStatusDao userstatusdao;
+	
+	@Autowired
+	private UserStatusDao userstatdao;
 	@CrossOrigin(origins = "https://job4jobless.com")
     @PostMapping("/insertapplyjob")
     public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
@@ -72,20 +79,59 @@ public class ApplyController {
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchapplyform")
-	public ResponseEntity<?> fetchapplyform() {
+	public ResponseEntity<?> fetchapplyform(@RequestParam(required = false) String uid) {
 	    try {
-	        List<ApplyJob> applyJobs = apd.findAll();
+	        List<ApplyJob> applyJobs;
+
+	        if (uid != null && !uid.isEmpty()) {
+	            applyJobs = apd.findByUid(uid);
+	        } else {
+	            applyJobs = apd.findAll();
+	        }
 	        return ResponseEntity.ok(applyJobs);
 	    } catch (DataAccessException e) {
 	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Database error occurred: " + e.getMessage());
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
 	
-	
+	@CrossOrigin(origins = "https://job4jobless.com")
+	@GetMapping("/notificationforuser")
+	public ResponseEntity<?> notificationforuser(@RequestParam(required = false) String uid) {
+	    try {
+	        List<ApplyJob> applyJobs;
+
+	        if (uid != null && !uid.isEmpty()) {
+	            applyJobs = apd.findByUid(uid);
+	            List<UserStatus> userStatusList = userstatdao.findByUid(uid);
+	            // Combine ApplyJob and UserStatus information
+	            for (ApplyJob applyJob : applyJobs) {
+	                for (UserStatus userStatus : userStatusList) {
+	                    if (applyJob.getUid().equals(userStatus.getUid())) {
+	                        applyJob.setUserStatus(userStatus);
+	                        break;
+	                    }
+	                }
+	            }
+	        } else {
+	            applyJobs = apd.findAll();
+	        }
+	        return ResponseEntity.ok(applyJobs);
+	    } catch (DataAccessException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("Database error occurred: " + e.getMessage());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body("An error occurred while processing your request: " + e.getMessage());
+	    }
+	}
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/updateProfileUpdate")
@@ -94,12 +140,26 @@ public class ApplyController {
 	        ApplyJob existingApplyJob = apd.findByJuid(applyJob.getJuid());
 	        if (existingApplyJob != null) {
 	            existingApplyJob.setProfileupdate(applyJob.getProfileupdate());
-	            ApplyJob updatedApplyJob = apd.save(existingApplyJob);
+	            ApplyJob updatedApplyJob = apd.save(existingApplyJob);	            
 	            String jobid = applyJob.getJobid();
+	            UserStatus userstat = userstatusdao.findByJuid(applyJob.getJuid());
+	            if(userstat == null) {
+	            	  userstat = new UserStatus();
+	                  userstat.setJuid(applyJob.getJuid());
+	                  userstat.setJobid(applyJob.getJobid());
+	                  userstat.setUid(existingApplyJob.getUid());
+	                  userstat.setEmpid(existingApplyJob.getJobid());
+	                  userstat.setApplystatus(applyJob.getProfileupdate());
+	                  userstat.setViewcheck(true);
+	                  userstatusdao.save(userstat);
+	            	
+	            }else {
+	            	   userstat.setApplystatus(applyJob.getProfileupdate());
+	            	   userstat.setViewcheck(true);
+	                   userstatusdao.save(userstat);
+	            }
 	            ApplicantsCount applicantsCount = getApplicantsCountByJobId(jobid);
-
 	            if (applicantsCount == null) {
-	              
 	                return ResponseEntity.ok(updatedApplyJob);
 	            } else {
 	                int currentApplicants = applicantsCount.getApplicants();
@@ -121,7 +181,6 @@ public class ApplyController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	
 	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@GetMapping("/fetchapplyformbyjobid")
