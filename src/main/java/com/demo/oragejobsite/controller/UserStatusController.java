@@ -41,7 +41,7 @@ public class UserStatusController {
 		    }
 		}
 	   
-	   
+	   @CrossOrigin(origins = "https://job4jobless.com")
 	   @PutMapping("/updateViewCheck")
 	    public ResponseEntity<String> updateViewCheck(@RequestParam String uid, @RequestParam String juid) {
 	        try {
