@@ -1,6 +1,8 @@
 package com.demo.oragejobsite.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +27,7 @@ public class UserStatusController {
 	
 	   @CrossOrigin(origins = "https://job4jobless.com")
 	   @GetMapping("/countTrueStatus")
-	   public ResponseEntity<Integer> countTrueStatus(@RequestParam String uid) {
+	   public ResponseEntity<Map<String, Integer>> countTrueStatus(@RequestParam String uid) {
 		    try {
 		    	System.out.println("Received uid: " + uid);
 		        List<UserStatus> statusList = userstatdao.findByUid(uid);
@@ -34,7 +36,10 @@ public class UserStatusController {
 		        int trueCount = (int) statusList.stream()
 		                .filter(userStatus -> Boolean.TRUE.equals(userStatus.getViewcheck()))
 		                .count();
-		        return ResponseEntity.ok(trueCount);
+		        Map<String, Integer> response = new HashMap<>();
+		        response.put("trueCount", trueCount);
+
+		        return ResponseEntity.ok(response);
 		    } catch (Exception e) {
 		        e.printStackTrace();
 		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

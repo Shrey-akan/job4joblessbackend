@@ -117,14 +117,16 @@ public class ApplyController {
 
 	            // Combine ApplyJob and filtered UserStatus information
 	            for (ApplyJob applyJob : applyJobs) {
+	            	 boolean foundMatchingUserStatus = false;				
 	                for (UserStatus userStatus : userStatusList) {
 	                    if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid())) {
 	                        applyJob.setUserStatus(true);
+	                        foundMatchingUserStatus = true;
 	                        break;
-	                    }else {
-	                    	 applyJob.setUserStatus(false);
-		                        break;
 	                    }
+	                }
+	                if (!foundMatchingUserStatus) {
+	                    applyJob.setUserStatus(false);
 	                }
 	            }
 	        } else {
