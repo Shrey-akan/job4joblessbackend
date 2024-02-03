@@ -121,6 +121,9 @@ public class ApplyController {
 	                    if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid())) {
 	                        applyJob.setUserStatus(true);
 	                        break;
+	                    }else {
+	                    	 applyJob.setUserStatus(false);
+		                        break;
 	                    }
 	                }
 	            }
