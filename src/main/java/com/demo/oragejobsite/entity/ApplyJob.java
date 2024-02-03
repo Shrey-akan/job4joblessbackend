@@ -29,7 +29,7 @@ public class ApplyJob {
 	private String uid;
 	private String jobid;
 	private String profileupdate;
-	 private UserStatus userStatus;
+	 private Boolean userStatus;
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date sendTime = new Date();
 	public ApplyJob() {
@@ -39,7 +39,7 @@ public class ApplyJob {
 	public ApplyJob(String juid, String juname, String jumail, String jucompny, String jutitle, String juresume,
 			String jurelocation, String jueducation, String juexperience, String juinterviewdate, String jujobtitle,
 			String jucompanyname, String description, Long juphone, String julastsal, String juexpecsalary,
-			String empid, String uid, String jobid, String profileupdate, UserStatus userStatus, Date sendTime) {
+			String empid, String uid, String jobid, String profileupdate, Boolean userStatus, Date sendTime) {
 		super();
 		this.juid = juid;
 		this.juname = juname;
@@ -184,10 +184,10 @@ public class ApplyJob {
 	public void setProfileupdate(String profileupdate) {
 		this.profileupdate = profileupdate;
 	}
-	public UserStatus getUserStatus() {
+	public Boolean getUserStatus() {
 		return userStatus;
 	}
-	public void setUserStatus(UserStatus userStatus) {
+	public void setUserStatus(Boolean userStatus) {
 		this.userStatus = userStatus;
 	}
 	public Date getSendTime() {
@@ -196,8 +196,6 @@ public class ApplyJob {
 	public void setSendTime(Date sendTime) {
 		this.sendTime = sendTime;
 	}
-	
-	
 	
 	
 	

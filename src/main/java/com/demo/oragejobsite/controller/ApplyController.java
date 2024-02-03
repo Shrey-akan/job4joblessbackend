@@ -108,12 +108,18 @@ public class ApplyController {
 
 	        if (uid != null && !uid.isEmpty()) {
 	            applyJobs = apd.findByUid(uid);
+
+	            // Get all UserStatus entries for the given uid
 	            List<UserStatus> userStatusList = userstatdao.findByUid(uid);
-	            // Combine ApplyJob and UserStatus information
+	            userStatusList = userStatusList.stream()
+	                    .filter(userStatus -> Boolean.TRUE.equals(userStatus.getViewcheck()))
+	                    .collect(Collectors.toList());
+
+	            // Combine ApplyJob and filtered UserStatus information
 	            for (ApplyJob applyJob : applyJobs) {
 	                for (UserStatus userStatus : userStatusList) {
-	                    if (applyJob.getUid().equals(userStatus.getUid())) {
-	                        applyJob.setUserStatus(userStatus);
+	                    if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid())) {
+	                        applyJob.setUserStatus(true);
 	                        break;
 	                    }
 	                }
@@ -132,7 +138,6 @@ public class ApplyController {
 	                .body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	
 	@CrossOrigin(origins = "https://job4jobless.com")
 	@PostMapping("/updateProfileUpdate")
 	public ResponseEntity<?> updateProfileUpdate(@RequestBody ApplyJob applyJob) {

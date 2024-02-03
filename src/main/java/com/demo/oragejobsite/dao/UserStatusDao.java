@@ -16,4 +16,6 @@ public interface UserStatusDao extends MongoRepository<UserStatus, String>{
 
 	List<UserStatus> findByUid(String uid);
 
+	List<UserStatus> findByUidAndApplystatus(String uid, boolean viewcheck);
+
 }
