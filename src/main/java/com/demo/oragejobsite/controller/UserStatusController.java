@@ -49,23 +49,23 @@ public class UserStatusController {
 	   
 	   @CrossOrigin(origins = "https://job4jobless.com")
 	   @PutMapping("/updateViewCheck")
-	    public ResponseEntity<String> updateViewCheck(@RequestParam String uid, @RequestParam String juid) {
-	        try {
-	            UserStatus userStatus = userstatdao.findByUidAndJuid(uid, juid);
-	            System.out.println(userStatus);
-	            if (userStatus != null) {
-	                userStatus.setViewcheck(false);
-	                userstatdao.save(userStatus);
-	                System.out.println(userStatus.getViewcheck());
-	                return ResponseEntity.ok("ViewCheck updated successfully.");
-	            } else {
-	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("UserStatus not found for uid: " + uid + " and juid: " + juid);
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-	        }
-	    }
+	   public ResponseEntity<Boolean> updateViewCheck(@RequestParam String uid, @RequestParam String juid) {
+		    try {
+		        UserStatus userStatus = userstatdao.findByUidAndJuid(uid, juid);
+		        System.out.println(userStatus);
+		        if (userStatus != null) {
+		            userStatus.setViewcheck(false);
+		            userstatdao.save(userStatus);
+		            System.out.println(userStatus.getViewcheck());
+		            return ResponseEntity.ok(true); // Return true if update is successful
+		        } else {
+		            return ResponseEntity.ok(false); // Return false if UserStatus not found
+		        }
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false); // Return false for any other error
+		    }
+		}
 	   
 	   @CrossOrigin(origins = "https://job4jobless.com")
 	   @DeleteMapping("/deleteUserStatus")
