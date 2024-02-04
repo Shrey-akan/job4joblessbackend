@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,5 +66,23 @@ public class UserStatusController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	        }
 	    }
+	   
+	   @CrossOrigin(origins = "https://job4jobless.com")
+	   @DeleteMapping("/deleteUserStatus")
+	   public ResponseEntity<Boolean> deleteUserStatus(@RequestParam String uid, @RequestParam String juid) {
+	       try {
+	           UserStatus userStatus = userstatdao.findByUidAndJuid(uid, juid);
+	           if (userStatus != null) {
+	               userstatdao.delete(userStatus);
+	               return ResponseEntity.ok(true); // Return true if deletion is successful
+	           } else {
+	               return ResponseEntity.ok(false); // Return false if UserStatus not found
+	           }
+	       } catch (Exception e) {
+	           e.printStackTrace();
+	           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false); // Return false for any other error
+	       }
+	   }
+
 	
 }
