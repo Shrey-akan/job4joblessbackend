@@ -119,11 +119,11 @@ public class ApplyController {
 	            for (ApplyJob applyJob : applyJobs) {
 	            	 boolean foundMatchingUserStatus = false;				
 	                for (UserStatus userStatus : userStatusList) {
-	                    if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid())) {
-	                        applyJob.setUserStatus(true);
-	                        foundMatchingUserStatus = true;
-	                        break;
-	                    }
+	                	if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid()) && userStatus.getViewcheck() != null && userStatus.getViewcheck()) {
+	                	    applyJob.setUserStatus(true);
+	                	    foundMatchingUserStatus = true;
+	                	    break;
+	                	}
 	                }
 	                if (!foundMatchingUserStatus) {
 	                    applyJob.setUserStatus(false);
