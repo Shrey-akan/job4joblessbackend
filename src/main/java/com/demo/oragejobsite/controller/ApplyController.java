@@ -105,30 +105,45 @@ public class ApplyController {
 	public ResponseEntity<?> notificationforuser(@RequestParam(required = false) String uid) {
 	    try {
 	        List<ApplyJob> applyJobs;
-
+	
 	        if (uid != null && !uid.isEmpty()) {
 	            applyJobs = apd.findByUid(uid);
-
+	            System.out.println(applyJobs);
 	            // Get all UserStatus entries for the given uid
 	            List<UserStatus> userStatusList = userstatdao.findByUid(uid);
-	            userStatusList = userStatusList.stream()
-	                    .filter(userStatus -> Boolean.TRUE.equals(userStatus.getViewcheck()))
-	                    .collect(Collectors.toList());
-
+	            System.out.println(userStatusList);
+//	            userStatusList = userStatusList.stream()
+//	                    .filter(userStatus -> Boolean.TRUE.equals(userStatus.getViewcheck()))
+//	                    .collect(Collectors.toList());
+//	            System.out.println(userStatusList);findByUid
 	            // Combine ApplyJob and filtered UserStatus information
 	            for (ApplyJob applyJob : applyJobs) {
-	            	 boolean foundMatchingUserStatus = false;				
+	                boolean foundMatchingUserStatus = false;
+
 	                for (UserStatus userStatus : userStatusList) {
-	                	if (uid.equals(userStatus.getUid()) && applyJob.getUid().equals(userStatus.getUid()) && userStatus.getViewcheck() != null && userStatus.getViewcheck()) {
-	                	    applyJob.setUserStatus(true);
-	                	    foundMatchingUserStatus = true;
-	                	    break;
-	                	}
+	                    if (uid.equals(userStatus.getUid()) && 
+	                        applyJob.getUid().equals(userStatus.getUid()) && 
+	                        applyJob.getJuid().equals(userStatus.getJuid()) &&  // Check juid here
+	                        userStatus.getViewcheck() != null && 
+	                        userStatus.getViewcheck()) {
+	                        
+	                        System.out.println(uid.equals(userStatus.getUid()));
+	                        System.out.println(applyJob.getUid().equals(userStatus.getUid()));
+	                        System.out.println(applyJob.getJuid().equals(userStatus.getJuid()));
+	                        System.out.println(userStatus.getViewcheck());
+
+	                        applyJob.setUserStatus(true);
+	                        System.out.println("check");
+	                        foundMatchingUserStatus = true;
+	                        break;
+	                    }
 	                }
+
 	                if (!foundMatchingUserStatus) {
 	                    applyJob.setUserStatus(false);
 	                }
 	            }
+
 	        } else {
 	            applyJobs = apd.findAll();
 	        }
