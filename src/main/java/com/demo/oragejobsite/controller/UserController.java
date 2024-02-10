@@ -347,8 +347,6 @@ public boolean checkIfEmailExists(String email) {
         }
     }
 
-
-
     // Delete User API
     @CrossOrigin(origins = "https://job4jobless.com")
     @DeleteMapping("/deleteUser/{uid}")

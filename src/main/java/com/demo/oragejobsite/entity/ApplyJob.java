@@ -6,6 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Document(collection = "applyjob")
 public class ApplyJob {
 	@Id
@@ -30,8 +32,9 @@ public class ApplyJob {
 	private String jobid;
 	private String profileupdate;
 	 private Boolean userStatus;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private Date sendTime = new Date();
+	 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+	 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+	 private Date sendTime = new Date();
 	public ApplyJob() {
 		super();
 		// TODO Auto-generated constructor stub

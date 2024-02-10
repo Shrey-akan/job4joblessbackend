@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 
 @Document(collection = "sendmessage")
@@ -20,6 +22,7 @@ public class SendMessage {
     private String isSender;
 //    @CreatedDate
 //    private Date sendTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date sendTime = new Date();
 	public SendMessage() {

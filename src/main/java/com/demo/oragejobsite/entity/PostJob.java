@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Document(collection = "postjob")
 public class PostJob {
 @Id
@@ -28,6 +30,7 @@ private int applicants;
 //@Field("sendTime")
 //@CreatedDate
 //private Date sendTime;
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 private Date sendTime = new Date();
 public PostJob() {
