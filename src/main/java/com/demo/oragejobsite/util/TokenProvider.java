@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 
 import java.security.SecureRandom;
 import java.security.SignatureException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Component;
 public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000; // 15 days in milliseconds
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 15 * 60 * 24 * 1000; // 15 minutes in milliseconds
-    private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final String INPUT_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    private static final String OUTPUT_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
     @Value("${jwt.secret}")
     private String jwtSecretValue;
 
@@ -104,35 +106,42 @@ public class TokenProvider {
 //
 //        return null;
 //    }
-    
-    public java.sql.Date getExpirationDateFromRefreshToken(String refreshToken) {
+    public java.sql.Date getExpirationDateFromRefreshToken(String refreshToken) throws SQLException {
         try {
             Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(jwtSecret)
-                    .build()
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
+                .setSigningKey(jwtSecret)
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
 
             Date expirationDate = claims.getExpiration();
 
             if (expirationDate != null) {
-                // Format the expiration date
-                SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
-                String formattedDate = dateFormat.format(expirationDate);
+                // Format the expiration date to the desired output format
+                String formattedDate = formatDate(expirationDate);
 
-                // Convert the formatted date string back to Date object
-                Date parsedDate = dateFormat.parse(formattedDate);
+                // Parse the formatted date string back to a Date object
+                SimpleDateFormat sdf = new SimpleDateFormat(OUTPUT_FORMAT_PATTERN);
+                java.util.Date parsedDate = sdf.parse(formattedDate);
 
-                // Convert the Date object to java.sql.Date
+                // Convert the parsed date to a SQL Date
                 return new java.sql.Date(parsedDate.getTime());
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new SQLException("Error occurred while parsing the expiration date.");
         }
 
         return null;
     }
 
+    // Method to format date to the desired output format
+    private String formatDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(OUTPUT_FORMAT_PATTERN);
+        return sdf.format(date);
+    }
+    
+  
     public SecretKey getRefreshTokenSecret() {
         return jwtSecret;
     }
