@@ -1,5 +1,6 @@
 package com.demo.oragejobsite.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,20 +107,47 @@ public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
 
 
 // Fetch User API
+//@CrossOrigin(origins = "https://job4jobless.com")
+//@GetMapping("/fetchuser")
+//public ResponseEntity<List<User>> fetchuser() {
+//   try {
+//       List<User> users = ud.findAll();
+//       if (users.isEmpty()) {
+//           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//       } else {
+//           return ResponseEntity.ok(users);
+//       }
+//   } catch (Exception e) {
+//       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//   }
+//}
+
+
+
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuser")
-public ResponseEntity<List<User>> fetchuser() {
-   try {
-       List<User> users = ud.findAll();
-       if (users.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-       } else {
-           return ResponseEntity.ok(users);
-       }
-   } catch (Exception e) {
-       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-   }
+public ResponseEntity<List<User>> fetchuser(@RequestParam(required = false) String uid) {
+    try {
+        List<User> users;
+        if (uid != null) {
+            // If uid is provided, fetch only the user with the specified uid
+            Optional<User> optionalUser = ud.findByUid(uid);
+            users = new ArrayList<>();
+            optionalUser.ifPresent(user -> users.add(user));
+        } else {
+            // If uid is not provided, fetch all users
+            users = ud.findAll();
+        }
+        if (users.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+            return ResponseEntity.ok(users);
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
 }
+
 
 // Fetch User By uid
 @CrossOrigin(origins = "https://job4jobless.com")

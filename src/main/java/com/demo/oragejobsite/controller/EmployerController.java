@@ -3,6 +3,7 @@ package com.demo.oragejobsite.controller;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,20 +99,47 @@ public ResponseEntity<Object> insertEmployer(@RequestBody Employer emp) {
 
 
 // Fetch Employer API
+//@CrossOrigin(origins = "https://job4jobless.com")
+//@GetMapping("/fetchemployer")
+//public ResponseEntity<List<Employer>> fetchemployer() {
+//   try {
+//       List<Employer> users = ed.findAll();
+//       if (users.isEmpty()) {
+//           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+//       } else {
+//           return ResponseEntity.ok(users);
+//       }
+//   } catch (Exception e) {
+//       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//   }
+//}
+
+
+
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchemployer")
-public ResponseEntity<List<Employer>> fetchemployer() {
-   try {
-       List<Employer> users = ed.findAll();
-       if (users.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-       } else {
-           return ResponseEntity.ok(users);
-       }
-   } catch (Exception e) {
-       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-   }
+public ResponseEntity<List<Employer>> fetchemployer(@RequestParam(required = false) String empid) {
+    try {
+        List<Employer> employers;
+        if (empid != null) {
+            // If UID is provided, fetch only the employer with the specified UID
+            Optional<Employer> employer = ed.findByEmpid(empid);
+            employers = new ArrayList<>();
+            employer.ifPresent(employers::add);
+        } else {
+            // If UID is not provided, fetch all employers
+            employers = ed.findAll();
+        }
+        if (employers.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } else {
+            return ResponseEntity.ok(employers);
+        }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
 }
+
 
 // Fetch Employer By empid
 @CrossOrigin(origins = "https://job4jobless.com")
