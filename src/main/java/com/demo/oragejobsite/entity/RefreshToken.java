@@ -4,14 +4,18 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 @Document(collection = "refreshtoken")
 public class RefreshToken {
     @Id
     private String id;
     private String tokenId;
     private String username;
-    private Date expiryDate;
-    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private Date expiryDate = new Date();
     
     
 	public RefreshToken() {
