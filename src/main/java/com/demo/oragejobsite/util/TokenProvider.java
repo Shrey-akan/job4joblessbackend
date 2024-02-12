@@ -120,7 +120,7 @@ public class TokenProvider {
                 // Format the expiration date to the desired output format
                 String formattedDate = formatDate(expirationDate);
 
-                // Parse the formatted date string back to a Date object
+                // Convert the formatted date string back to a java.sql.Date object
                 SimpleDateFormat sdf = new SimpleDateFormat(OUTPUT_FORMAT_PATTERN);
                 java.util.Date parsedDate = sdf.parse(formattedDate);
 

@@ -1,6 +1,9 @@
 package com.demo.oragejobsite.controller;
 
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -144,7 +147,12 @@ public class PostjobController {
 	            jobPostMap.put("payjobsup", postJob.getPayjobsup());
 	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
 	            jobPostMap.put("empid", postJob.getEmpid());
-	            jobPostMap.put("sendTime", postJob.getSendTime());
+	            LocalDateTime sendTime = postJob.getSendTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+                // Format sendTime
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedSendTime = sendTime.format(formatter);
+                jobPostMap.put("sendTime", formattedSendTime);
 	            if (uid != null) {
 	                SavedJob savedJob = savedJobServiceimpl.findByJobidAndUid(postJob.getJobid(), uid);
 	                boolean saveStatus = (savedJob != null) && savedJob.getSaveStatus();
