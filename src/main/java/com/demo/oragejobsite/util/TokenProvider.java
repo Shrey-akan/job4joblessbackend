@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 public class TokenProvider {
     private static final long REFRESH_TOKEN_EXPIRATION_TIME = 15 * 24 * 60 * 60 * 1000; // 15 days in milliseconds
     private static final long ACCESS_TOKEN_EXPIRATION_TIME = 15 * 60 * 24 * 1000; // 15 minutes in milliseconds
-    private static final String INPUT_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
     private static final String OUTPUT_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss";
     @Value("${jwt.secret}")
     private String jwtSecretValue;
@@ -106,6 +105,7 @@ public class TokenProvider {
 //
 //        return null;
 //    }
+    
     public java.sql.Date getExpirationDateFromRefreshToken(String refreshToken) throws SQLException {
         try {
             Claims claims = Jwts.parserBuilder()
@@ -140,8 +140,7 @@ public class TokenProvider {
         SimpleDateFormat sdf = new SimpleDateFormat(OUTPUT_FORMAT_PATTERN);
         return sdf.format(date);
     }
-    
-  
+
     public SecretKey getRefreshTokenSecret() {
         return jwtSecret;
     }
