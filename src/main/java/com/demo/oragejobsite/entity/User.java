@@ -1,5 +1,7 @@
 package com.demo.oragejobsite.entity;
 
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,18 +20,19 @@ private String userName;
    private String userstate;
    private String usercity;
    private boolean verified;
-   private String profile;
+   private Map<String, String> socialLinks;
+   private String summary;
+   private String userbio;
+   
    
 public User() {
 	super();
-	// TODO Auto-generated constructor stub
 }
-
 
 
 public User(String uid, String userName, String userFirstName, String userLastName, String userPassword,
 		String companyuser, String websiteuser, String userphone, String usercountry, String userstate, String usercity,
-		boolean verified, String profile) {
+		boolean verified, Map<String, String> socialLinks, String summary, String userbio) {
 	super();
 	this.uid = uid;
 	this.userName = userName;
@@ -43,79 +46,120 @@ public User(String uid, String userName, String userFirstName, String userLastNa
 	this.userstate = userstate;
 	this.usercity = usercity;
 	this.verified = verified;
-	this.profile = profile;
+	this.socialLinks = socialLinks;
+	this.summary = summary;
+	this.userbio = userbio;
 }
-
 
 
 public String getUid() {
 	return uid;
 }
 
+
 public void setUid(String uid) {
 	this.uid = uid;
 }
+
+
 public String getUserName() {
 	return userName;
 }
+
+
 public void setUserName(String userName) {
 	this.userName = userName;
 }
+
+
 public String getUserFirstName() {
 	return userFirstName;
 }
+
+
 public void setUserFirstName(String userFirstName) {
 	this.userFirstName = userFirstName;
 }
+
+
 public String getUserLastName() {
 	return userLastName;
 }
+
+
 public void setUserLastName(String userLastName) {
 	this.userLastName = userLastName;
 }
+
+
 public String getUserPassword() {
 	return userPassword;
 }
+
+
 public void setUserPassword(String userPassword) {
 	this.userPassword = userPassword;
 }
+
+
 public String getCompanyuser() {
 	return companyuser;
 }
+
+
 public void setCompanyuser(String companyuser) {
 	this.companyuser = companyuser;
 }
+
+
 public String getWebsiteuser() {
 	return websiteuser;
 }
+
+
 public void setWebsiteuser(String websiteuser) {
 	this.websiteuser = websiteuser;
 }
+
+
 public String getUserphone() {
 	return userphone;
 }
+
+
 public void setUserphone(String userphone) {
 	this.userphone = userphone;
 }
+
+
 public String getUsercountry() {
 	return usercountry;
 }
+
+
 public void setUsercountry(String usercountry) {
 	this.usercountry = usercountry;
 }
+
+
 public String getUserstate() {
 	return userstate;
 }
+
+
 public void setUserstate(String userstate) {
 	this.userstate = userstate;
 }
+
+
 public String getUsercity() {
 	return usercity;
 }
+
+
 public void setUsercity(String usercity) {
 	this.usercity = usercity;
 }
-
 
 
 public boolean isVerified() {
@@ -123,22 +167,40 @@ public boolean isVerified() {
 }
 
 
-
 public void setVerified(boolean verified) {
 	this.verified = verified;
 }
 
 
-
-public String getProfile() {
-	return profile;
+public Map<String, String> getSocialLinks() {
+	return socialLinks;
 }
 
 
-
-public void setProfile(String profile) {
-	this.profile = profile;
+public void setSocialLinks(Map<String, String> socialLinks) {
+	this.socialLinks = socialLinks;
 }
+
+
+public String getSummary() {
+	return summary;
+}
+
+
+public void setSummary(String summary) {
+	this.summary = summary;
+}
+
+
+public String getUserbio() {
+	return userbio;
+}
+
+
+public void setUserbio(String userbio) {
+	this.userbio = userbio;
+}
+
 
 
 }

@@ -66,18 +66,6 @@ public class PostjobController {
 	      }
 	  }
 
-	
-//	@CrossOrigin(origins = "https://job4jobless.com")
-//	@GetMapping("/fetchjobpost")
-//	public ResponseEntity<List<PostJob>> fetchjobpost() {
-//	    try {
-//	        List<PostJob> jobPosts = pjd.findAll();
-//	        return ResponseEntity.ok(jobPosts);
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//	    }
-//	}
 	  
 	  @CrossOrigin(origins = "https://job4jobless.com")
 	   @GetMapping("/fetchjobpost")

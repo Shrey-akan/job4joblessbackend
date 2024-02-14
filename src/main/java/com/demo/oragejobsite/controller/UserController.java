@@ -103,27 +103,6 @@ public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
    }
 }
 
-
-
-
-// Fetch User API
-//@CrossOrigin(origins = "https://job4jobless.com")
-//@GetMapping("/fetchuser")
-//public ResponseEntity<List<User>> fetchuser() {
-//   try {
-//       List<User> users = ud.findAll();
-//       if (users.isEmpty()) {
-//           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//       } else {
-//           return ResponseEntity.ok(users);
-//       }
-//   } catch (Exception e) {
-//       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//   }
-//}
-
-
-
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchuser")
 public ResponseEntity<List<User>> fetchuser(@RequestParam(required = false) String uid) {
@@ -169,61 +148,70 @@ public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
     }
 }
 
-	// Update user Profile
-	@CrossOrigin(origins = "https://job4jobless.com")
-    @PostMapping("/updateUser")
-    public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
-        try {
-        String uid = updatedUser.getUid();
-             System.out.println("Received UID: " + uid);
-             Optional<User> existingUserOptional = ud.findById(uid);
-             System.out.println("Existing User Optional: " + existingUserOptional);
-            if (existingUserOptional.isPresent()) {
-                User existingUser = existingUserOptional.get();
-                if (updatedUser.getProfile() != null) {
-                    existingUser.setProfile(updatedUser.getProfile());
-                }
-                if (updatedUser.getUserName() != null) {
-                    existingUser.setUserName(updatedUser.getUserName());
-                }
-                if (updatedUser.getUserFirstName() != null) {
-                    existingUser.setUserFirstName(updatedUser.getUserFirstName());
-                }
-                if (updatedUser.getUserLastName() != null) {
-                    existingUser.setUserLastName(updatedUser.getUserLastName());
-                }
-                if (updatedUser.getCompanyuser() != null) {
-                    existingUser.setCompanyuser(updatedUser.getCompanyuser());
-                }
-                if (updatedUser.getUserphone() != null) {
-                    existingUser.setUserphone(updatedUser.getUserphone());
-                }
-                if (updatedUser.getUsercountry() != null) {
-                    existingUser.setUsercountry(updatedUser.getUsercountry());
-                }
-                if (updatedUser.getUserstate() != null) {
-                    existingUser.setUserstate(updatedUser.getUserstate());
-                }
-                if (updatedUser.getUsercity() != null) {
-                    existingUser.setUsercity(updatedUser.getUsercity());
-                }
-                if (updatedUser.getWebsiteuser() != null) {
-                    existingUser.setWebsiteuser(updatedUser.getWebsiteuser());
-                }
-                if (updatedUser.isVerified() != false) {
-                    existingUser.setVerified(updatedUser.isVerified());
-                }
-                User updatedRecord = ud.save(existingUser);
-                System.out.println("Updated Record: " + updatedRecord.toString());
-
-                return ResponseEntity.ok(updatedRecord);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with UID " + updatedUser.getUid() + " not found.");
+// Update user Profile
+@CrossOrigin(origins = "https://job4jobless.com")
+@PostMapping("/updateUser")
+public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
+    try {
+    String uid = updatedUser.getUid();
+         System.out.println("Received UID: " + uid);
+         Optional<User> existingUserOptional = ud.findById(uid);
+         System.out.println("Existing User Optional: " + existingUserOptional);
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+          
+            if (updatedUser.getUserName() != null) {
+                existingUser.setUserName(updatedUser.getUserName());
             }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+            if (updatedUser.getUserFirstName() != null) {
+                existingUser.setUserFirstName(updatedUser.getUserFirstName());
+            }
+            if (updatedUser.getUserLastName() != null) {
+                existingUser.setUserLastName(updatedUser.getUserLastName());
+            }
+            if (updatedUser.getCompanyuser() != null) {
+                existingUser.setCompanyuser(updatedUser.getCompanyuser());
+            }
+            if (updatedUser.getUserphone() != null) {
+                existingUser.setUserphone(updatedUser.getUserphone());
+            }
+            if (updatedUser.getUsercountry() != null) {
+                existingUser.setUsercountry(updatedUser.getUsercountry());
+            }
+            if (updatedUser.getUserstate() != null) {
+                existingUser.setUserstate(updatedUser.getUserstate());
+            }
+            if (updatedUser.getUsercity() != null) {
+                existingUser.setUsercity(updatedUser.getUsercity());
+            }
+            if (updatedUser.getWebsiteuser() != null) {
+                existingUser.setWebsiteuser(updatedUser.getWebsiteuser());
+            }
+            if (updatedUser.isVerified() != false) {
+                existingUser.setVerified(updatedUser.isVerified());
+            }
+            if (updatedUser.getSocialLinks() != null) {
+                existingUser.setSocialLinks(updatedUser.getSocialLinks());
+            }
+            if (updatedUser.getSummary() != null) {
+                existingUser.setSummary(updatedUser.getSummary());
+            }
+            
+            if (updatedUser.getUserbio() != null) {
+                existingUser.setUserbio(updatedUser.getUserbio());
+            }
+            
+            User updatedRecord = ud.save(existingUser);
+            System.out.println("Updated Record: " + updatedRecord.toString());
+
+            return ResponseEntity.ok(updatedRecord);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with UID " + updatedUser.getUid() + " not found.");
         }
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
     }
+}
 
 
 

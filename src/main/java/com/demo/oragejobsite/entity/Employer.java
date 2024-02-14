@@ -1,5 +1,7 @@
 package com.demo.oragejobsite.entity;
 
+import java.util.Map;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,14 +20,16 @@ public class Employer {
 	private String empcity;
 	private String descriptionemp;
 	   private boolean verifiedemp;
+	   private String websiteUrl;
+	    private String designation;
+	    private Map<String, String> socialProfiles;
 	public Employer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
 	public Employer(String empid, String empfname, String emplname, String empcompany, String empmailid, String emppass,
 			Long empphone, String empcountry, String empstate, String empcity, String descriptionemp,
-			boolean verifiedemp) {
+			boolean verifiedemp, String websiteUrl, String designation, Map<String, String> socialProfiles) {
 		super();
 		this.empid = empid;
 		this.empfname = empfname;
@@ -39,26 +43,16 @@ public class Employer {
 		this.empcity = empcity;
 		this.descriptionemp = descriptionemp;
 		this.verifiedemp = verifiedemp;
+		this.websiteUrl = websiteUrl;
+		this.designation = designation;
+		this.socialProfiles = socialProfiles;
 	}
 	public String getEmpid() {
 		return empid;
 	}
-
 	public void setEmpid(String empid) {
 		this.empid = empid;
 	}
-
-	public boolean isVerifiedemp() {
-		return verifiedemp;
-	}
-
-
-
-	public void setVerifiedemp(boolean verifiedemp) {
-		this.verifiedemp = verifiedemp;
-	}
-
-
 	public String getEmpfname() {
 		return empfname;
 	}
@@ -119,6 +113,31 @@ public class Employer {
 	public void setDescriptionemp(String descriptionemp) {
 		this.descriptionemp = descriptionemp;
 	}
+	public boolean isVerifiedemp() {
+		return verifiedemp;
+	}
+	public void setVerifiedemp(boolean verifiedemp) {
+		this.verifiedemp = verifiedemp;
+	}
+	public String getWebsiteUrl() {
+		return websiteUrl;
+	}
+	public void setWebsiteUrl(String websiteUrl) {
+		this.websiteUrl = websiteUrl;
+	}
+	public String getDesignation() {
+		return designation;
+	}
+	public void setDesignation(String designation) {
+		this.designation = designation;
+	}
+	public Map<String, String> getSocialProfiles() {
+		return socialProfiles;
+	}
+	public void setSocialProfiles(Map<String, String> socialProfiles) {
+		this.socialProfiles = socialProfiles;
+	}
+	
 	
 	
 }

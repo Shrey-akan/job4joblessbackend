@@ -97,25 +97,6 @@ public ResponseEntity<Object> insertEmployer(@RequestBody Employer emp) {
 }
 
 
-
-// Fetch Employer API
-//@CrossOrigin(origins = "https://job4jobless.com")
-//@GetMapping("/fetchemployer")
-//public ResponseEntity<List<Employer>> fetchemployer() {
-//   try {
-//       List<Employer> users = ed.findAll();
-//       if (users.isEmpty()) {
-//           return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-//       } else {
-//           return ResponseEntity.ok(users);
-//       }
-//   } catch (Exception e) {
-//       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//   }
-//}
-
-
-
 @CrossOrigin(origins = "https://job4jobless.com")
 @GetMapping("/fetchemployer")
 public ResponseEntity<List<Employer>> fetchemployer(@RequestParam(required = false) String empid) {
@@ -195,6 +176,16 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
            }
                 if (updatedEmployer.isVerifiedemp() != false) {
                 existingEmployer.setVerifiedemp(updatedEmployer.isVerifiedemp());
+                }
+                
+                if (updatedEmployer.getWebsiteUrl() != null) {
+                    existingEmployer.setWebsiteUrl(updatedEmployer.getWebsiteUrl());
+                }
+                if (updatedEmployer.getDesignation() != null) {
+                    existingEmployer.setDesignation(updatedEmployer.getDesignation());
+                }
+                if (updatedEmployer.getSocialProfiles() != null) {
+                    existingEmployer.setSocialProfiles(updatedEmployer.getSocialProfiles());
                 }
            Employer updatedRecord = ed.save(existingEmployer);
            System.out.println("Updated Record: " + updatedRecord.toString());
