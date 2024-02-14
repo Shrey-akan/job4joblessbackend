@@ -229,28 +229,34 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
         User checkmail = checkMailUser(checkemail, checkpass);
 
         if (checkmail != null) {
-            Cookie userCookie = new Cookie("user", checkemail);
-            userCookie.setMaxAge(3600);
-            userCookie.setPath("/");
-            response.addCookie(userCookie);
-         String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
-            RefreshToken refreshTokenEntity = new RefreshToken();
-            refreshTokenEntity.setTokenId(refreshToken);
-            refreshTokenEntity.setUsername(checkmail.getUid());
-            refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
-            refreshTokenRepository.save(refreshTokenEntity);
-            String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
-            System.out.println(refreshToken);
-            System.out.println(accessToken);
-            System.out.println("checking the value of refresh token and access token");
-            Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("accessToken", accessToken);
-            responseBody.put("refreshToken", refreshToken);
-            responseBody.put("uid", checkmail.getUid());
-            
-            return ResponseEntity.ok(responseBody);
+            if (checkmail.isVerified()) {
+                Cookie userCookie = new Cookie("user", checkemail);
+                userCookie.setMaxAge(3600);
+                userCookie.setPath("/");
+                response.addCookie(userCookie);
+                String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
+                RefreshToken refreshTokenEntity = new RefreshToken();
+                refreshTokenEntity.setTokenId(refreshToken);
+                refreshTokenEntity.setUsername(checkmail.getUid());
+                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                refreshTokenRepository.save(refreshTokenEntity);
+                String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("accessToken", accessToken);
+                responseBody.put("refreshToken", refreshToken);
+                responseBody.put("uid", checkmail.getUid());
+                return ResponseEntity.ok(responseBody);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            // Check if email exists in the database
+            User userByEmail = ud.findByUserName(checkemail);
+            if (userByEmail != null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found");
+            }
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -266,9 +272,7 @@ public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletRespo
    try {
        String checkemail = c12.getUserName();
        boolean emailExists = checkIfEmailExists(checkemail);
-
        if (emailExists) {
-
            Optional<User> userOptional = Optional.ofNullable(ud.findByUserName(checkemail));
            if (userOptional.isPresent()) {
                User user = userOptional.get();
@@ -276,21 +280,13 @@ public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletRespo
                userCookie.setMaxAge(3600);
                userCookie.setPath("/");
                response.addCookie(userCookie);
-               
-
                String refreshToken = tokenProvider.generateRefreshToken(checkemail, user.getUid());
-
                RefreshToken refreshTokenEntity = new RefreshToken();
                refreshTokenEntity.setTokenId(refreshToken);
                refreshTokenEntity.setUsername(user.getUid());
-
                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
                refreshTokenRepository.save(refreshTokenEntity);
-
-
                String accessToken = tokenProvider.generateAccessToken(user.getUid());
-
-
                Map<String, Object> responseBody = new HashMap<>();
                responseBody.put("accessToken", accessToken);
                responseBody.put("refreshToken", refreshToken);
@@ -323,18 +319,18 @@ public boolean checkIfEmailExists(String email) {
 }
 
 
-    private User checkMailUser(String checkemail, String checkpass) {
-        // TODO Auto-generated method stub
-        List<User> allMails = ud.findAll();
-        for (User u1 : allMails) {
-        System.out.println("Checking the password"+checkpass);
-        if (u1.getUserName().equals(checkemail) && u1.getUserPassword().equals(checkpass) && u1.isVerified()) {
-         System.out.println("Checking the password"+u1.getUserPassword());
-                return u1;
-            }
-        }
+private User checkMailUser(String checkemail, String checkpass) {
+    // Find the user with the provided email
+    User user = ud.findByUserName(checkemail);
+    
+    // If user not found or password doesn't match, return null
+    if (user == null || !user.getUserPassword().equals(checkpass)) {
         return null;
     }
+    
+    // Return the user if all conditions are met
+    return user;
+}
 
     // Verified User By Email API
     @CrossOrigin(origins = "https://job4jobless.com")
@@ -579,53 +575,60 @@ public boolean checkIfEmailExists(String email) {
     
 
    // Login API for Flutter Mobile App
-@CrossOrigin(origins = "https://job4jobless.com")
-@PostMapping("/applogin")
-public ResponseEntity<?> applogin(@RequestBody User c12, HttpServletResponse response) {
-    try {
-        String checkemail = c12.getUserName();
-        String checkpass = c12.getUserPassword();
-        checkpass = hashPassword(checkpass);
+    @CrossOrigin(origins = "https://job4jobless.com")
+    @PostMapping("/applogin")
+    public ResponseEntity<?> applogin(@RequestBody User c12, HttpServletResponse response) {
+        try {
+            String checkemail = c12.getUserName();
+            String checkpass = c12.getUserPassword();
+            checkpass = hashPassword(checkpass);
 
-        User checkmail = checkMailUser(checkemail, checkpass);
+            User checkmail = checkMailUser(checkemail, checkpass);
 
-        if (checkmail != null) {
-  
-            Cookie userCookie = new Cookie("user", checkemail);
-            userCookie.setMaxAge(3600); 
-            userCookie.setPath("/");
-            response.addCookie(userCookie);
+            if (checkmail != null) {
+                if (checkmail.isVerified()) {
+                    Cookie userCookie = new Cookie("user", checkemail);
+                    userCookie.setMaxAge(3600);
+                    userCookie.setPath("/");
+                    response.addCookie(userCookie);
 
-         String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
-            RefreshToken refreshTokenEntity = new RefreshToken();
-            refreshTokenEntity.setTokenId(refreshToken);
-            refreshTokenEntity.setUsername(checkmail.getUid());
-            refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
-            refreshTokenRepository.save(refreshTokenEntity);
-            String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
-            System.out.println(refreshToken);
-            System.out.println(accessToken);
-            System.out.println("checking the value of refresh token and access token");
-            Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("accessToken", accessToken);
-            responseBody.put("refreshToken", refreshToken);
-            responseBody.put("uid", checkmail.getUid());
-            responseBody.put("userName", checkmail.getUserName());
-            responseBody.put("userFirstName", checkmail.getUserFirstName());
-            responseBody.put("userLastName", checkmail.getUserLastName());
-            responseBody.put("usercountry", checkmail.getUsercountry());
-            responseBody.put("usercity", checkmail.getUsercity());
-            responseBody.put("userstate", checkmail.getUserstate());
-            responseBody.put("websiteuser", checkmail.getWebsiteuser());
-            return ResponseEntity.ok(responseBody);
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+                    String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
+                    RefreshToken refreshTokenEntity = new RefreshToken();
+                    refreshTokenEntity.setTokenId(refreshToken);
+                    refreshTokenEntity.setUsername(checkmail.getUid());
+                    refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                    refreshTokenRepository.save(refreshTokenEntity);
+                    String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
+                    
+                    Map<String, Object> responseBody = new HashMap<>();
+                    responseBody.put("accessToken", accessToken);
+                    responseBody.put("refreshToken", refreshToken);
+                    responseBody.put("uid", checkmail.getUid());
+                    responseBody.put("userName", checkmail.getUserName());
+                    responseBody.put("userFirstName", checkmail.getUserFirstName());
+                    responseBody.put("userLastName", checkmail.getUserLastName());
+                    responseBody.put("usercountry", checkmail.getUsercountry());
+                    responseBody.put("usercity", checkmail.getUsercity());
+                    responseBody.put("userstate", checkmail.getUserstate());
+                    responseBody.put("websiteuser", checkmail.getWebsiteuser());
+                    
+                    return ResponseEntity.ok(responseBody);
+                } else {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
+                }
+            } else {
+            	  User userByEmail = ud.findByUserName(checkemail);
+                  if (userByEmail != null) {
+                      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+                  } else {
+                      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found");
+                  }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request");
         }
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request");
     }
-}
 
 
 }

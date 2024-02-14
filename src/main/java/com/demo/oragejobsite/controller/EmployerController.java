@@ -257,17 +257,18 @@ public boolean checkIfEmailExists(String email) {
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/logincheckemp")
 public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletResponse response) {
-   try {
-       String checkemail = e12.getEmpmailid();
-       String checkpass = e12.getEmppass();
-       checkpass = hashPassword(checkpass);
-       System.out.println(checkemail + " " + checkpass);
-       Employer checkmail = checkMailUser(checkemail, checkpass);
-       if (checkmail != null) {
-           Cookie employerCookie = new Cookie("emp", checkmail.toString());
-           employerCookie.setMaxAge(3600);
-           employerCookie.setPath("/");
-           response.addCookie(employerCookie);
+    try {
+        String checkemail = e12.getEmpmailid();
+        String checkpass = e12.getEmppass();
+        checkpass = hashPassword(checkpass);
+        System.out.println(checkemail + " " + checkpass);
+        Employer checkmail = checkMailUser(checkemail, checkpass);
+        if (checkmail != null) {
+            if (checkmail.isVerifiedemp()) {
+                Cookie employerCookie = new Cookie("emp", checkmail.toString());
+                employerCookie.setMaxAge(3600);
+                employerCookie.setPath("/");
+                response.addCookie(employerCookie);
                 String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
                 String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
                 RefreshToken refreshTokenEntity = new RefreshToken();
@@ -286,29 +287,39 @@ public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletRes
                 responseBody.put("empstate", checkmail.getEmpstate());
                 responseBody.put("empcity", checkmail.getEmpcity());
                 return ResponseEntity.ok(responseBody);
-       }
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-   } catch (Exception e) {
-       e.printStackTrace();
-       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-   }
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
+            }
+        } else {
+            // Check if email exists in the database
+            Employer employerByEmail = ed.findByEmpmailid(checkemail);
+            if (employerByEmail != null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found");
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    }
 }
-
 
 private Employer checkMailUser(String checkemail, String checkpass) {
-   System.out.println("hello");
-   List<Employer> allMails = ed.findAll();
-   for (Employer u1 : allMails) {
-       System.out.println(checkemail);
-       System.out.println("Checking the password"+checkpass);
-       if (u1.getEmpmailid() != null && u1.getEmpmailid().equals(checkemail) && u1.getEmppass() != null && u1.getEmppass().equals(checkpass) && u1.isVerifiedemp()) {
-           System.out.println("inside");
-           System.out.println("Checking the password"+u1.getEmppass());
-           return u1;
-       }
-   }
-   return null;
+    System.out.println("hello");
+    List<Employer> allMails = ed.findAll();
+    for (Employer u1 : allMails) {
+        System.out.println(checkemail);
+        System.out.println("Checking the password"+checkpass);
+        if (u1.getEmpmailid() != null && u1.getEmpmailid().equals(checkemail) && u1.getEmppass() != null && u1.getEmppass().equals(checkpass) && u1.isVerifiedemp()) {
+            System.out.println("inside");
+            System.out.println("Checking the password"+u1.getEmppass());
+            return u1;
+        }
+    }
+    return null;
 }
+
 
 // Verify Employer
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -546,30 +557,41 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
 
        Employer checkmail = checkMailUser(checkemail, checkpass);
        if (checkmail != null) {
-           Cookie employerCookie = new Cookie("emp", checkmail.toString());
-           employerCookie.setMaxAge(3600);
-           employerCookie.setPath("/");
-           response.addCookie(employerCookie);
-                String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
-                String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
-                RefreshToken refreshTokenEntity = new RefreshToken();
-                refreshTokenEntity.setTokenId(refreshToken);
-                refreshTokenEntity.setUsername(checkmail.getEmpid()); 
-                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
-                refreshTokenRepository.save(refreshTokenEntity);
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("accessToken", accessToken);
-                responseBody.put("refreshToken", refreshToken);
-                responseBody.put("empid", checkmail.getEmpid());
-                responseBody.put("empfname", checkmail.getEmpfname());
-                responseBody.put("emplname", checkmail.getEmplname());
-                responseBody.put("empmailid", checkmail.getEmpmailid());
-                responseBody.put("empcountry", checkmail.getEmpcountry());
-                responseBody.put("empstate", checkmail.getEmpstate());
-                responseBody.put("empcity", checkmail.getEmpcity());
-                return ResponseEntity.ok(responseBody);
+           if (checkmail.isVerifiedemp()) {
+               Cookie employerCookie = new Cookie("emp", checkmail.toString());
+               employerCookie.setMaxAge(3600);
+               employerCookie.setPath("/");
+               response.addCookie(employerCookie);
+               String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
+               String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
+               RefreshToken refreshTokenEntity = new RefreshToken();
+               refreshTokenEntity.setTokenId(refreshToken);
+               refreshTokenEntity.setUsername(checkmail.getEmpid());
+               refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+               refreshTokenRepository.save(refreshTokenEntity);
+               Map<String, Object> responseBody = new HashMap<>();
+               responseBody.put("accessToken", accessToken);
+               responseBody.put("refreshToken", refreshToken);
+               responseBody.put("empid", checkmail.getEmpid());
+               responseBody.put("empfname", checkmail.getEmpfname());
+               responseBody.put("emplname", checkmail.getEmplname());
+               responseBody.put("empmailid", checkmail.getEmpmailid());
+               responseBody.put("empcountry", checkmail.getEmpcountry());
+               responseBody.put("empstate", checkmail.getEmpstate());
+               responseBody.put("empcity", checkmail.getEmpcity());
+               return ResponseEntity.ok(responseBody);
+           } else {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
+           }
+       } else {
+           // Check if email exists in the database
+           Employer employerByEmail = ed.findByEmpmailid(checkemail);
+           if (employerByEmail != null) {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+           } else {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found");
+           }
        }
-       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
    } catch (Exception e) {
        e.printStackTrace();
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
