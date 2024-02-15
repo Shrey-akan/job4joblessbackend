@@ -229,27 +229,29 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
         String checkemail = c12.getUserName();
         String checkpass = c12.getUserPassword();
         checkpass = hashPassword(checkpass);
-
         User checkmail = checkMailUser(checkemail, checkpass);
-
         if (checkmail != null) {
             if (checkmail.isVerified()) {
-                Cookie userCookie = new Cookie("user", checkemail);
-                userCookie.setMaxAge(3600);
-                userCookie.setPath("/");
-                response.addCookie(userCookie);
-                String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
-                RefreshToken refreshTokenEntity = new RefreshToken();
-                refreshTokenEntity.setTokenId(refreshToken);
-                refreshTokenEntity.setUsername(checkmail.getUid());
-                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
-                refreshTokenRepository.save(refreshTokenEntity);
-                String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("accessToken", accessToken);
-                responseBody.put("refreshToken", refreshToken);
-                responseBody.put("uid", checkmail.getUid());
-                return ResponseEntity.ok(responseBody);
+               if(!checkmail.isAccdeactivate()) {
+            	   Cookie userCookie = new Cookie("user", checkemail);
+                   userCookie.setMaxAge(3600);
+                   userCookie.setPath("/");
+                   response.addCookie(userCookie);
+                   String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getUid());
+                   RefreshToken refreshTokenEntity = new RefreshToken();
+                   refreshTokenEntity.setTokenId(refreshToken);
+                   refreshTokenEntity.setUsername(checkmail.getUid());
+                   refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                   refreshTokenRepository.save(refreshTokenEntity);
+                   String accessToken = tokenProvider.generateAccessToken(checkmail.getUid());
+                   Map<String, Object> responseBody = new HashMap<>();
+                   responseBody.put("accessToken", accessToken);
+                   responseBody.put("refreshToken", refreshToken);
+                   responseBody.put("uid", checkmail.getUid());
+                   return ResponseEntity.ok(responseBody);
+               }else {
+            	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Deactivated");
+               }
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
             }
@@ -280,6 +282,10 @@ public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletRespo
            Optional<User> userOptional = Optional.ofNullable(ud.findByUserName(checkemail));
            if (userOptional.isPresent()) {
                User user = userOptional.get();
+               if (user.isAccdeactivate()) {
+               
+                   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is deactivated");
+               }
                Cookie userCookie = new Cookie("user", checkemail);
                userCookie.setMaxAge(3600);
                userCookie.setPath("/");
@@ -489,6 +495,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     @PostMapping("/createOrGetUser")
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
         try {
+        	  System.out.println("checking the statement");
             String userName = requestBody.get("userName");
             String fullName = requestBody.get("userFirstName");
             String[] nameParts = fullName.split("\\s+", 2);
@@ -498,8 +505,15 @@ private User checkMailUser(String checkemail, String checkpass) {
             userLastName = userLastName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
             userName = userName.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
             User existingUser = ud.findByUserName(userName);
-
+            System.out.println("checking the statement"+existingUser);
             if (existingUser != null) {
+                if (existingUser.isAccdeactivate()) {
+                    // Account is deactivated, return unauthorized response
+                    Map<String, Object> errorResponse = new HashMap<>();
+                    System.out.println("checking the statement");
+                    errorResponse.put("error", "Account is deactivated");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+                }
                 String accessToken = tokenProvider.generateAccessToken(existingUser.getUid());
                 String refreshToken = tokenProvider.generateRefreshToken(userName, existingUser.getUid());
                 RefreshToken refreshTokenEntity = new RefreshToken();
