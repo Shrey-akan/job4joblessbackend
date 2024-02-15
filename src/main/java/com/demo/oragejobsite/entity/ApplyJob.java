@@ -35,14 +35,23 @@ public class ApplyJob {
 	 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
 	 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	 private Date sendTime = new Date();
+	 private boolean notifydelete;
+	 
+	 
+	 
+	 
 	public ApplyJob() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	
+	
 	public ApplyJob(String juid, String juname, String jumail, String jucompny, String jutitle, String juresume,
 			String jurelocation, String jueducation, String juexperience, String juinterviewdate, String jujobtitle,
 			String jucompanyname, String description, Long juphone, String julastsal, String juexpecsalary,
-			String empid, String uid, String jobid, String profileupdate, Boolean userStatus, Date sendTime) {
+			String empid, String uid, String jobid, String profileupdate, Boolean userStatus, Date sendTime,
+			boolean notifydelete) {
 		super();
 		this.juid = juid;
 		this.juname = juname;
@@ -66,7 +75,11 @@ public class ApplyJob {
 		this.profileupdate = profileupdate;
 		this.userStatus = userStatus;
 		this.sendTime = sendTime;
+		this.notifydelete = notifydelete;
 	}
+
+
+
 	public String getJuid() {
 		return juid;
 	}
@@ -198,6 +211,18 @@ public class ApplyJob {
 	}
 	public void setSendTime(Date sendTime) {
 		this.sendTime = sendTime;
+	}
+
+
+
+	public boolean isNotifydelete() {
+		return notifydelete;
+	}
+
+
+
+	public void setNotifydelete(boolean notifydelete) {
+		this.notifydelete = notifydelete;
 	}
 	
 	

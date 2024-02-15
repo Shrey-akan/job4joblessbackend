@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.demo.oragejobsite.dao.ApplyDao;
 import com.demo.oragejobsite.dao.UserStatusDao;
+import com.demo.oragejobsite.entity.ApplyJob;
 import com.demo.oragejobsite.entity.UserStatus;
 
 
@@ -25,6 +27,8 @@ public class UserStatusController {
 
 	@Autowired
 	private UserStatusDao userstatdao;
+	@Autowired
+	private ApplyDao applyJobRepository;
 	
 	   @CrossOrigin(origins = "https://job4jobless.com")
 	   @GetMapping("/countTrueStatus")
@@ -74,6 +78,13 @@ public class UserStatusController {
 	           UserStatus userStatus = userstatdao.findByUidAndJuid(uid, juid);
 	           if (userStatus != null) {
 	               userstatdao.delete(userStatus);
+	               
+	               
+	               ApplyJob applyJob = applyJobRepository.findByJuid(juid);
+	               if (applyJob != null) {
+	                   applyJob.setNotifydelete(true);
+	                   applyJobRepository.save(applyJob);
+	               }
 	               return ResponseEntity.ok(true); // Return true if deletion is successful
 	           } else {
 	               return ResponseEntity.ok(false); // Return false if UserStatus not found
