@@ -163,6 +163,7 @@ public class ApplyController {
 	        ApplyJob existingApplyJob = apd.findByJuid(applyJob.getJuid());
 	        if (existingApplyJob != null) {
 	            existingApplyJob.setProfileupdate(applyJob.getProfileupdate());
+	            existingApplyJob.setNotifydelete(false);
 	            ApplyJob updatedApplyJob = apd.save(existingApplyJob);	            
 	            String jobid = applyJob.getJobid();
 	            UserStatus userstat = userstatusdao.findByJuid(applyJob.getJuid());
