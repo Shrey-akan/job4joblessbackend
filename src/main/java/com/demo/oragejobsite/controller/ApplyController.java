@@ -112,14 +112,8 @@ public class ApplyController {
 	            // Get all UserStatus entries for the given uid
 	            List<UserStatus> userStatusList = userstatdao.findByUid(uid);
 	            System.out.println(userStatusList);
-//	            userStatusList = userStatusList.stream()
-//	                    .filter(userStatus -> Boolean.TRUE.equals(userStatus.getViewcheck()))
-//	                    .collect(Collectors.toList());
-//	            System.out.println(userStatusList);findByUid
-	            // Combine ApplyJob and filtered UserStatus information
 	            for (ApplyJob applyJob : applyJobs) {
 	                boolean foundMatchingUserStatus = false;
-
 	                for (UserStatus userStatus : userStatusList) {
 	                    if (uid.equals(userStatus.getUid()) && 
 	                        applyJob.getUid().equals(userStatus.getUid()) && 
@@ -141,6 +135,10 @@ public class ApplyController {
 
 	                if (!foundMatchingUserStatus) {
 	                    applyJob.setUserStatus(false);
+	                }
+	                if (applyJob.isNotifydelete()) {
+	                    // Remove data where notifydelete is true
+	                    applyJobs.remove(applyJob);
 	                }
 	            }
 
