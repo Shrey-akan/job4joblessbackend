@@ -1,6 +1,5 @@
 package com.demo.oragejobsite.entity;
 
-import java.util.Map;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,14 +25,21 @@ private String userName;
    private String userlinkden;
    private String usergithub;
    private String otherturluser;
+   private boolean accdeactivate;
+   
+   
    
 public User() {
 	super();
 }
 
+
+
+
 public User(String uid, String userName, String userFirstName, String userLastName, String userPassword,
 		String companyuser, String websiteuser, String userphone, String usercountry, String userstate, String usercity,
-		boolean verified, String summary, String userlinkden, String usergithub, String otherturluser) {
+		boolean verified, String summary, String userlinkden, String usergithub, String otherturluser,
+		boolean accdeactivate) {
 	super();
 	this.uid = uid;
 	this.userName = userName;
@@ -51,7 +57,11 @@ public User(String uid, String userName, String userFirstName, String userLastNa
 	this.userlinkden = userlinkden;
 	this.usergithub = usergithub;
 	this.otherturluser = otherturluser;
+	this.accdeactivate = accdeactivate;
 }
+
+
+
 
 public String getUid() {
 	return uid;
@@ -179,6 +189,20 @@ public String getOtherturluser() {
 
 public void setOtherturluser(String otherturluser) {
 	this.otherturluser = otherturluser;
+}
+
+
+
+
+public boolean isAccdeactivate() {
+	return accdeactivate;
+}
+
+
+
+
+public void setAccdeactivate(boolean accdeactivate) {
+	this.accdeactivate = accdeactivate;
 }
 
 

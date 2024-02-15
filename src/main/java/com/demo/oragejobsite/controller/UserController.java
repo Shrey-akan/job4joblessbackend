@@ -371,7 +371,9 @@ private User checkMailUser(String checkemail, String checkpass) {
             Optional<User> existingUserOptional = ud.findById(uid);
 
             if (existingUserOptional.isPresent()) {
-                ud.delete(existingUserOptional.get());
+            	  User existingUser = existingUserOptional.get();
+                  existingUser.setAccdeactivate(true);
+                  ud.save(existingUser);
 
                 return ResponseEntity.status(HttpStatus.OK).body(true);
             } else {

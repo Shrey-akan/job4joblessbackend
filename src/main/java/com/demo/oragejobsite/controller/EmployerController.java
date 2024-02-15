@@ -357,7 +357,9 @@ public ResponseEntity<?> deleteEmployer(@PathVariable String empid) {
    try {
        Optional<Employer> existingEmployerOptional = ed.findById(empid);
        if (existingEmployerOptional.isPresent()) {
-           ed.delete(existingEmployerOptional.get());
+    	   Employer existingEmployer = existingEmployerOptional.get();
+           existingEmployer.setAccempldeactivate(true);
+           ed.save(existingEmployer);
            return ResponseEntity.status(HttpStatus.OK).body(true);
        } else {
            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employer with empid " + empid + " not found.");
