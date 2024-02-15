@@ -22,14 +22,15 @@ public class Employer {
 	   private boolean verifiedemp;
 	   private String websiteUrl;
 	    private String designation;
-	    private Map<String, String> socialProfiles;
+	private String emplinkden;
+	private String empotherurl;
 	public Employer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Employer(String empid, String empfname, String emplname, String empcompany, String empmailid, String emppass,
 			Long empphone, String empcountry, String empstate, String empcity, String descriptionemp,
-			boolean verifiedemp, String websiteUrl, String designation, Map<String, String> socialProfiles) {
+			boolean verifiedemp, String websiteUrl, String designation, String emplinkden, String empotherurl) {
 		super();
 		this.empid = empid;
 		this.empfname = empfname;
@@ -45,7 +46,8 @@ public class Employer {
 		this.verifiedemp = verifiedemp;
 		this.websiteUrl = websiteUrl;
 		this.designation = designation;
-		this.socialProfiles = socialProfiles;
+		this.emplinkden = emplinkden;
+		this.empotherurl = empotherurl;
 	}
 	public String getEmpid() {
 		return empid;
@@ -131,14 +133,18 @@ public class Employer {
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public Map<String, String> getSocialProfiles() {
-		return socialProfiles;
+	public String getEmplinkden() {
+		return emplinkden;
 	}
-	public void setSocialProfiles(Map<String, String> socialProfiles) {
-		this.socialProfiles = socialProfiles;
+	public void setEmplinkden(String emplinkden) {
+		this.emplinkden = emplinkden;
 	}
-	
-	
+	public String getEmpotherurl() {
+		return empotherurl;
+	}
+	public void setEmpotherurl(String empotherurl) {
+		this.empotherurl = empotherurl;
+	}
 	
 }
 

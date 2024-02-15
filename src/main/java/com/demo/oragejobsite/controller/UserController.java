@@ -190,16 +190,20 @@ public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
             if (updatedUser.isVerified() != false) {
                 existingUser.setVerified(updatedUser.isVerified());
             }
-            if (updatedUser.getSocialLinks() != null) {
-                existingUser.setSocialLinks(updatedUser.getSocialLinks());
+            if (updatedUser.getUserlinkden() != null) {
+                existingUser.setUserlinkden(updatedUser.getUserlinkden());
+            }
+            if (updatedUser.getUsergithub() != null) {
+                existingUser.setUsergithub(updatedUser.getUsergithub());
+            }
+            if (updatedUser.getOtherturluser() != null) {
+                existingUser.setOtherturluser(updatedUser.getOtherturluser());
             }
             if (updatedUser.getSummary() != null) {
                 existingUser.setSummary(updatedUser.getSummary());
             }
             
-            if (updatedUser.getUserbio() != null) {
-                existingUser.setUserbio(updatedUser.getUserbio());
-            }
+        
             
             User updatedRecord = ud.save(existingUser);
             System.out.println("Updated Record: " + updatedRecord.toString());

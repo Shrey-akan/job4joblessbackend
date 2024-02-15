@@ -184,9 +184,13 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
                 if (updatedEmployer.getDesignation() != null) {
                     existingEmployer.setDesignation(updatedEmployer.getDesignation());
                 }
-                if (updatedEmployer.getSocialProfiles() != null) {
-                    existingEmployer.setSocialProfiles(updatedEmployer.getSocialProfiles());
+                if (updatedEmployer.getEmplinkden() != null) {
+                    existingEmployer.setEmplinkden(updatedEmployer.getEmplinkden());
                 }
+                if (updatedEmployer.getEmpotherurl() != null) {
+                    existingEmployer.setEmpotherurl(updatedEmployer.getEmpotherurl());
+                }
+        
            Employer updatedRecord = ed.save(existingEmployer);
            System.out.println("Updated Record: " + updatedRecord.toString());
            return ResponseEntity.ok(updatedRecord);
