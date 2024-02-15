@@ -215,7 +215,14 @@ public ResponseEntity<?> employerLoginCheck(@RequestBody Employer employer, Http
        if (emailExists) {
            Optional<Employer> employerOptional = Optional.ofNullable(ed.findByEmpmailid(checkEmail));
            if (employerOptional.isPresent()) {
+        	   
+        	   
                Employer foundEmployer = employerOptional.get();
+               
+               if (foundEmployer.isAccempldeactivate()) {
+                   
+                   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account is deactivated");
+               }
                Cookie employerCookie = new Cookie("emp", checkEmail);
                employerCookie.setMaxAge(3600);
                employerCookie.setPath("/");
@@ -269,28 +276,32 @@ public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletRes
         Employer checkmail = checkMailUser(checkemail, checkpass);
         if (checkmail != null) {
             if (checkmail.isVerifiedemp()) {
-                Cookie employerCookie = new Cookie("emp", checkmail.toString());
-                employerCookie.setMaxAge(3600);
-                employerCookie.setPath("/");
-                response.addCookie(employerCookie);
-                String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
-                String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
-                RefreshToken refreshTokenEntity = new RefreshToken();
-                refreshTokenEntity.setTokenId(refreshToken);
-                refreshTokenEntity.setUsername(checkmail.getEmpid());
-                refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
-                refreshTokenRepository.save(refreshTokenEntity);
-                Map<String, Object> responseBody = new HashMap<>();
-                responseBody.put("accessToken", accessToken);
-                responseBody.put("refreshToken", refreshToken);
-                responseBody.put("empid", checkmail.getEmpid());
-                responseBody.put("empfname", checkmail.getEmpfname());
-                responseBody.put("emplname", checkmail.getEmplname());
-                responseBody.put("empmailid", checkmail.getEmpmailid());
-                responseBody.put("empcountry", checkmail.getEmpcountry());
-                responseBody.put("empstate", checkmail.getEmpstate());
-                responseBody.put("empcity", checkmail.getEmpcity());
-                return ResponseEntity.ok(responseBody);
+              if(!checkmail.isAccempldeactivate()) {
+            	  Cookie employerCookie = new Cookie("emp", checkmail.toString());
+                  employerCookie.setMaxAge(3600);
+                  employerCookie.setPath("/");
+                  response.addCookie(employerCookie);
+                  String accessToken = tokenProvider.generateAccessToken(checkmail.getEmpid());
+                  String refreshToken = tokenProvider.generateRefreshToken(checkemail, checkmail.getEmpid());
+                  RefreshToken refreshTokenEntity = new RefreshToken();
+                  refreshTokenEntity.setTokenId(refreshToken);
+                  refreshTokenEntity.setUsername(checkmail.getEmpid());
+                  refreshTokenEntity.setExpiryDate(tokenProvider.getExpirationDateFromRefreshToken(refreshToken));
+                  refreshTokenRepository.save(refreshTokenEntity);
+                  Map<String, Object> responseBody = new HashMap<>();
+                  responseBody.put("accessToken", accessToken);
+                  responseBody.put("refreshToken", refreshToken);
+                  responseBody.put("empid", checkmail.getEmpid());
+                  responseBody.put("empfname", checkmail.getEmpfname());
+                  responseBody.put("emplname", checkmail.getEmplname());
+                  responseBody.put("empmailid", checkmail.getEmpmailid());
+                  responseBody.put("empcountry", checkmail.getEmpcountry());
+                  responseBody.put("empstate", checkmail.getEmpstate());
+                  responseBody.put("empcity", checkmail.getEmpcity());
+                  return ResponseEntity.ok(responseBody);
+              }else {
+            	  return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Employer Deactivate");
+              }
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
             }
@@ -475,7 +486,15 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
       emplname = emplname.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
         Employer existingEmployer = ed.findByEmpmailid(empmailid);
         if (existingEmployer != null) {
-  Cookie employerCookie = new Cookie("emp", empmailid);
+        	
+        	   if (existingEmployer.isAccempldeactivate()) {
+                   // Account is deactivated, return unauthorized response
+                   Map<String, Object> errorResponse = new HashMap<>();
+                   System.out.println("checking the statement");
+                   errorResponse.put("error", "Account is deactivated");
+                   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+               }
+        	Cookie employerCookie = new Cookie("emp", empmailid);
             employerCookie.setMaxAge(3600);
             employerCookie.setPath("/");
             response.addCookie(employerCookie);
