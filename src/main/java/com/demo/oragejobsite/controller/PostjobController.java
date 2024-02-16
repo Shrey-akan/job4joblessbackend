@@ -32,7 +32,7 @@ import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
-
+import java.lang.reflect.Field;
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -189,63 +189,40 @@ public class PostjobController {
 	 
 	@CrossOrigin(origins = "https://job4jobless.com")
     @PutMapping("/jobpostupdate/{jobid}")
-    public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
-        try {
-            Optional<PostJob> existingJob = pjd.findById(jobid);
-            if (existingJob.isPresent()) {
-                PostJob currentJob = existingJob.get();
-                if(updatedJob.getJobtitle() != null) {
-                	 currentJob.setJobtitle(updatedJob.getJobtitle());
-                }
-                if(updatedJob.getEmpName() != null) {
-                    currentJob.setEmpName(updatedJob.getEmpName());
-               }
-                if(updatedJob.getEmpEmail() != null) {
-                	   currentJob.setEmpEmail(updatedJob.getEmpEmail());
-               }
-                if(updatedJob.getCompanyforthisjob() != null) {
-                	 currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
-                }
-                if(updatedJob.getNumberofopening() != null) {
-                	  currentJob.setNumberofopening(updatedJob.getNumberofopening());
-                }
-               
-                if(updatedJob.getLocationjob() != null) {
-                	  currentJob.setLocationjob(updatedJob.getLocationjob());
-                }
-                if(updatedJob.getJobtype() != null) {
-                	  currentJob.setJobtype(updatedJob.getJobtype());
-                }
-              
-                if(updatedJob.getSchedulejob() != null) {
-                	  currentJob.setSchedulejob(updatedJob.getSchedulejob());
-                }
-            
-                if(updatedJob.getPayjob() != null) {
-                	  currentJob.setPayjob(updatedJob.getPayjob());
-                }
-                if(updatedJob.getPayjobsup() != null) {
-                	 currentJob.setPayjobsup(updatedJob.getPayjobsup());
-                }
-                if(updatedJob.getDescriptiondata() != null) {
-                	  currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
-                }
-                if(updatedJob.isArchive() != false) {
-              	  currentJob.setArchive(updatedJob.isArchive());
-              }
-                pjd.save(currentJob);
-                return ResponseEntity.status(HttpStatus.OK).body(currentJob);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-            }
-        } catch (DataAccessException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-        }
-    }
+	public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
+	    try {
+	        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
+	        if (existingJobOptional.isPresent()) {
+	            PostJob existingJob = existingJobOptional.get();
+
+	            // Get all fields of the PostJob class
+	            Field[] fields = PostJob.class.getDeclaredFields();
+	            for (Field field : fields) {
+	                // Set field accessible to allow modification
+	                field.setAccessible(true);
+
+	                // Get the value of the field from the updatedJob object
+	                Object value = field.get(updatedJob);
+
+	                // If the value is not null, update the corresponding field in the existingJob object
+	                if (value != null) {
+	                    field.set(existingJob, value);
+	                }
+	            }
+
+	            pjd.save(existingJob);
+	            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+	        }
+	    } catch (DataAccessException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	    }
+	}
 	
 	
 	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })

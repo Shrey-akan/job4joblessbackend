@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-
+import java.lang.reflect.Field;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -153,64 +153,28 @@ public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
 @PostMapping("/updateUser")
 public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
     try {
-    String uid = updatedUser.getUid();
-         System.out.println("Received UID: " + uid);
-         Optional<User> existingUserOptional = ud.findById(uid);
-         System.out.println("Existing User Optional: " + existingUserOptional);
+        String uid = updatedUser.getUid();
+        Optional<User> existingUserOptional = ud.findById(uid);
+
         if (existingUserOptional.isPresent()) {
             User existingUser = existingUserOptional.get();
-          
-            if (updatedUser.getUserName() != null) {
-                existingUser.setUserName(updatedUser.getUserName());
-            }
-            if (updatedUser.getUserFirstName() != null) {
-                existingUser.setUserFirstName(updatedUser.getUserFirstName());
-            }
-            if (updatedUser.getUserLastName() != null) {
-                existingUser.setUserLastName(updatedUser.getUserLastName());
-            }
-            if (updatedUser.getUserdesignation() != null) {
-                existingUser.setUserdesignation(updatedUser.getUserdesignation());
-            }
-            if (updatedUser.getUserphone() != null) {
-                existingUser.setUserphone(updatedUser.getUserphone());
-            }
-            if (updatedUser.getUsercountry() != null) {
-                existingUser.setUsercountry(updatedUser.getUsercountry());
-            }
-            if (updatedUser.getUserstate() != null) {
-                existingUser.setUserstate(updatedUser.getUserstate());
-            }
-            if (updatedUser.getUsercity() != null) {
-                existingUser.setUsercity(updatedUser.getUsercity());
-            }
-            if (updatedUser.getWebsiteuser() != null) {
-                existingUser.setWebsiteuser(updatedUser.getWebsiteuser());
-            }
-            if (updatedUser.isVerified() != false) {
-                existingUser.setVerified(updatedUser.isVerified());
-            }
-            if (updatedUser.getUserlinkden() != null) {
-                existingUser.setUserlinkden(updatedUser.getUserlinkden());
-            }
-            if (updatedUser.getUsergithub() != null) {
-                existingUser.setUsergithub(updatedUser.getUsergithub());
-            }
-            if (updatedUser.getOtherturluser() != null) {
-                existingUser.setOtherturluser(updatedUser.getOtherturluser());
-            }
-            if (updatedUser.getSummary() != null) {
-                existingUser.setSummary(updatedUser.getSummary());
-            }
-            if (updatedUser.isAccdeactivate() != true) {
-                existingUser.setAccdeactivate(updatedUser.isAccdeactivate());
-            }
-            
-        
-            
-            User updatedRecord = ud.save(existingUser);
-            System.out.println("Updated Record: " + updatedRecord.toString());
 
+            // Get all fields of the User class
+            Field[] fields = User.class.getDeclaredFields();
+            for (Field field : fields) {
+                // Set field accessible to allow modification
+                field.setAccessible(true);
+
+                // Get the value of the field from the updatedUser object
+                Object value = field.get(updatedUser);
+
+                // If the value is not null, update the corresponding field in the existingUser object
+                if (value != null) {
+                    field.set(existingUser, value);
+                }
+            }
+
+            User updatedRecord = ud.save(existingUser);
             return ResponseEntity.ok(updatedRecord);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with UID " + updatedUser.getUid() + " not found.");

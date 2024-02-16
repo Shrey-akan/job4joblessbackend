@@ -34,7 +34,7 @@ import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.RefreshToken;
 
 import com.demo.oragejobsite.util.TokenProvider;
-
+import java.lang.reflect.Field;
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -144,68 +144,41 @@ public ResponseEntity<Employer> fetchEmpById(@PathVariable String empid) {
 @CrossOrigin(origins = "https://job4jobless.com")
 @PostMapping("/updateEmployee")
 public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
-   try {
-    String empid = updatedEmployer.getEmpid();
-             System.out.println("Received UID: " + empid);
-       Optional<Employer> existingEmployerOptional = ed.findById(updatedEmployer.getEmpid());
-       if (existingEmployerOptional.isPresent()) {
-           Employer existingEmployer = existingEmployerOptional.get();
-           if (updatedEmployer.getEmpfname() != null) {
-               existingEmployer.setEmpfname(updatedEmployer.getEmpfname());
-           }
-           if (updatedEmployer.getEmplname() != null) {
-               existingEmployer.setEmplname(updatedEmployer.getEmplname());
-           }
-           if (updatedEmployer.getEmpcompany() != null) {
-               existingEmployer.setEmpcompany(updatedEmployer.getEmpcompany());
-           }
-           if (updatedEmployer.getEmpphone() != null) {
-               existingEmployer.setEmpphone(updatedEmployer.getEmpphone());
-           }
-           if (updatedEmployer.getEmpcountry() != null) {
-               existingEmployer.setEmpcountry(updatedEmployer.getEmpcountry());
-           }
-           if (updatedEmployer.getEmpstate() != null) {
-               existingEmployer.setEmpstate(updatedEmployer.getEmpstate());
-           }
-           if (updatedEmployer.getEmpcity() != null) {
-               existingEmployer.setEmpcity(updatedEmployer.getEmpcity());
-           }
-           if (updatedEmployer.getDescriptionemp() != null) {
-               existingEmployer.setDescriptionemp(updatedEmployer.getDescriptionemp());
-           }
-                if (updatedEmployer.isVerifiedemp() != false) {
-                existingEmployer.setVerifiedemp(updatedEmployer.isVerifiedemp());
+    try {
+        String empid = updatedEmployer.getEmpid();
+        Optional<Employer> existingEmployerOptional = ed.findById(empid);
+
+        if (existingEmployerOptional.isPresent()) {
+            Employer existingEmployer = existingEmployerOptional.get();
+
+            // Get all fields of the Employer class
+            Field[] fields = Employer.class.getDeclaredFields();
+            for (Field field : fields) {
+                // Set field accessible to allow modification
+                field.setAccessible(true);
+
+                // Get the value of the field from the updatedEmployer object
+                Object value = field.get(updatedEmployer);
+
+                // If the value is not null, update the corresponding field in the existingEmployer object
+                if (value != null) {
+                    field.set(existingEmployer, value);
                 }
-                if (updatedEmployer.isAccempldeactivate() != true) {
-                    existingEmployer.setAccempldeactivate(updatedEmployer.isAccempldeactivate());
-                    }
-                
-                if (updatedEmployer.getWebsiteUrl() != null) {
-                    existingEmployer.setWebsiteUrl(updatedEmployer.getWebsiteUrl());
-                }
-                if (updatedEmployer.getDesignation() != null) {
-                    existingEmployer.setDesignation(updatedEmployer.getDesignation());
-                }
-                if (updatedEmployer.getEmplinkden() != null) {
-                    existingEmployer.setEmplinkden(updatedEmployer.getEmplinkden());
-                }
-                if (updatedEmployer.getEmpotherurl() != null) {
-                    existingEmployer.setEmpotherurl(updatedEmployer.getEmpotherurl());
-                }
-        
-           Employer updatedRecord = ed.save(existingEmployer);
-           System.out.println("Updated Record: " + updatedRecord.toString());
-           return ResponseEntity.ok(updatedRecord);
-       } else {
-           Employer newEmployer = ed.save(updatedEmployer);
-           return ResponseEntity.status(HttpStatus.CREATED).body(newEmployer);
-       }
-   } catch (Exception e) {
-       e.printStackTrace();
-       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-   }
+            }
+
+            Employer updatedRecord = ed.save(existingEmployer);
+            return ResponseEntity.ok(updatedRecord);
+        } else {
+            Employer newEmployer = ed.save(updatedEmployer);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newEmployer);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+    }
 }
+
+
 
 
 // Employer Login Check Google Sign In
