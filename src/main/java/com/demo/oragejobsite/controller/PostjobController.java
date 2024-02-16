@@ -168,6 +168,24 @@ public class PostjobController {
 	    }
 	}
 
+	
+	@GetMapping("/fetchArchivedJobPosts")
+	public ResponseEntity<List<PostJob>> fetchArchivedJobPosts(@RequestParam(required = false) String empid) {
+	    try {
+	        List<PostJob> archivedJobPosts;
+	        if (empid != null) {
+	            archivedJobPosts = pjd.findByEmpidAndArchiveTrue(empid);
+	        } else {
+	            archivedJobPosts = pjd.findByArchiveTrue();
+	        }
+	        return ResponseEntity.ok(archivedJobPosts);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+	
+	
 	 
 	@CrossOrigin(origins = "https://job4jobless.com")
     @PutMapping("/jobpostupdate/{jobid}")

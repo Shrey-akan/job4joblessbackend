@@ -17,6 +17,10 @@ public interface PostjobDao extends MongoRepository<PostJob, String>{
 
 	List<PostJob> findByEmpid(String empid);
 
+	List<PostJob> findByEmpidAndArchiveTrue(String empid);
+
+	List<PostJob> findByArchiveTrue();
+
 
 	
 }
