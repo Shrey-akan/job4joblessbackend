@@ -169,8 +169,8 @@ public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
             if (updatedUser.getUserLastName() != null) {
                 existingUser.setUserLastName(updatedUser.getUserLastName());
             }
-            if (updatedUser.getCompanyuser() != null) {
-                existingUser.setCompanyuser(updatedUser.getCompanyuser());
+            if (updatedUser.getUserdesignation() != null) {
+                existingUser.setUserdesignation(updatedUser.getUserdesignation());
             }
             if (updatedUser.getUserphone() != null) {
                 existingUser.setUserphone(updatedUser.getUserphone());
@@ -201,6 +201,9 @@ public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
             }
             if (updatedUser.getSummary() != null) {
                 existingUser.setSummary(updatedUser.getSummary());
+            }
+            if (updatedUser.isAccdeactivate() != false) {
+                existingUser.setAccdeactivate(updatedUser.isAccdeactivate());
             }
             
         

@@ -177,6 +177,9 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
                 if (updatedEmployer.isVerifiedemp() != false) {
                 existingEmployer.setVerifiedemp(updatedEmployer.isVerifiedemp());
                 }
+                if (updatedEmployer.isAccempldeactivate() != false) {
+                    existingEmployer.setAccempldeactivate(updatedEmployer.isAccempldeactivate());
+                    }
                 
                 if (updatedEmployer.getWebsiteUrl() != null) {
                     existingEmployer.setWebsiteUrl(updatedEmployer.getWebsiteUrl());
