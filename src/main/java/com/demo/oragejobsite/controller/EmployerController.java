@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
+import java.lang.reflect.Field;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,7 +34,7 @@ import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.RefreshToken;
 
 import com.demo.oragejobsite.util.TokenProvider;
-import java.lang.reflect.Field;
+
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -177,8 +177,6 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
     }
 }
-
-
 
 
 // Employer Login Check Google Sign In

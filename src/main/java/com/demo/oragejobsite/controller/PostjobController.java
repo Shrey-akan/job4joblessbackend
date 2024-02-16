@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.lang.reflect.Field;
 import com.demo.oragejobsite.dao.ApplicantsCountDao;
 import com.demo.oragejobsite.dao.PostjobDao;
 import com.demo.oragejobsite.dao.SavedJobDao;
 import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.SavedJob;
-import java.lang.reflect.Field;
+
 
 
 @CrossOrigin(origins = "https://job4jobless.com")
@@ -189,40 +189,40 @@ public class PostjobController {
 	 
 	@CrossOrigin(origins = "https://job4jobless.com")
     @PutMapping("/jobpostupdate/{jobid}")
-	public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
-	    try {
-	        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
-	        if (existingJobOptional.isPresent()) {
-	            PostJob existingJob = existingJobOptional.get();
+   public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
+    try {
+        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
+        if (existingJobOptional.isPresent()) {
+            PostJob existingJob = existingJobOptional.get();
 
-	            // Get all fields of the PostJob class
-	            Field[] fields = PostJob.class.getDeclaredFields();
-	            for (Field field : fields) {
-	                // Set field accessible to allow modification
-	                field.setAccessible(true);
+            // Get all fields of the PostJob class
+            Field[] fields = PostJob.class.getDeclaredFields();
+            for (Field field : fields) {
+                // Set field accessible to allow modification
+                field.setAccessible(true);
 
-	                // Get the value of the field from the updatedJob object
-	                Object value = field.get(updatedJob);
+                // Get the value of the field from the updatedJob object
+                Object value = field.get(updatedJob);
 
-	                // If the value is not null, update the corresponding field in the existingJob object
-	                if (value != null) {
-	                    field.set(existingJob, value);
-	                }
-	            }
+                // If the value is not null, update the corresponding field in the existingJob object
+                if (value != null) {
+                    field.set(existingJob, value);
+                }
+            }
 
-	            pjd.save(existingJob);
-	            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
-	        } else {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
-	        }
-	    } catch (DataAccessException e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-	    }
-	}
+            pjd.save(existingJob);
+            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+    } catch (DataAccessException e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+    }
+}
 	
 	
 	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })
