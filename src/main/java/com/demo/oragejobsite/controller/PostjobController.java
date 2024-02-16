@@ -174,34 +174,34 @@ public class PostjobController {
                }
                 if(updatedJob.getCompanyforthisjob() != null) {
                 	 currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
-            }
+                }
                 if(updatedJob.getNumberofopening() != null) {
                 	  currentJob.setNumberofopening(updatedJob.getNumberofopening());
-           }
+                }
                
                 if(updatedJob.getLocationjob() != null) {
                 	  currentJob.setLocationjob(updatedJob.getLocationjob());
-         }
+                }
                 if(updatedJob.getJobtype() != null) {
                 	  currentJob.setJobtype(updatedJob.getJobtype());
-       }
+                }
               
                 if(updatedJob.getSchedulejob() != null) {
                 	  currentJob.setSchedulejob(updatedJob.getSchedulejob());
-     }
+                }
             
                 if(updatedJob.getPayjob() != null) {
                 	  currentJob.setPayjob(updatedJob.getPayjob());
-   }
+                }
                 if(updatedJob.getPayjobsup() != null) {
                 	 currentJob.setPayjobsup(updatedJob.getPayjobsup());
- }
+                }
                 if(updatedJob.getDescriptiondata() != null) {
                 	  currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
-}
-             
-               
-              
+                }
+                if(updatedJob.isArchive() != false) {
+              	  currentJob.setArchive(updatedJob.isArchive());
+              }
                 pjd.save(currentJob);
                 return ResponseEntity.status(HttpStatus.OK).body(currentJob);
             } else {
@@ -215,7 +215,6 @@ public class PostjobController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
-	
 	
 	
 	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })

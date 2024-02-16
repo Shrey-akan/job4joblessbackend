@@ -27,7 +27,7 @@ private Long payjobsup;
 private String descriptiondata;
 private String empid;
 private int applicants;
-private String archive;
+private boolean archive;
 
 //@Field("sendTime")
 //@CreatedDate
@@ -41,7 +41,7 @@ public PostJob() {
 }
 public PostJob(String jobid, String empName, String empEmail, String jobtitle, String companyforthisjob,
 		Long numberofopening, String locationjob, String jobtype, String schedulejob, Long payjob, Long payjobsup,
-		String descriptiondata, String empid, int applicants, String archive, Date sendTime) {
+		String descriptiondata, String empid, int applicants, boolean archive, Date sendTime) {
 	super();
 	this.jobid = jobid;
 	this.empName = empName;
@@ -144,10 +144,10 @@ public int getApplicants() {
 public void setApplicants(int applicants) {
 	this.applicants = applicants;
 }
-public String getArchive() {
+public boolean isArchive() {
 	return archive;
 }
-public void setArchive(String archive) {
+public void setArchive(boolean archive) {
 	this.archive = archive;
 }
 public Date getSendTime() {
