@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -72,6 +72,10 @@ public class PostjobController {
 	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
 	        try {
 	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
+	            
+	            jobPosts = jobPosts.stream()
+	                    .filter(jobPost -> !jobPost.isArchive())
+	                    .collect(Collectors.toList());
 	            for (PostJob jobPost : jobPosts) {
 	                
 	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
@@ -103,6 +107,9 @@ public class PostjobController {
 	        List<Map<String, Object>> jobPostsWithStatus = new ArrayList<>();
 	        List<PostJob> allJobPosts = pjd.findAll();
 	        for (PostJob postJob : allJobPosts) {
+	        	 if (postJob.isArchive()) {
+	                 continue;
+	             }
 	            Map<String, Object> jobPostMap = new HashMap<>();
 	            jobPostMap.put("jobid", postJob.getJobid());
 	            jobPostMap.put("empName", postJob.getEmpName());
@@ -117,6 +124,7 @@ public class PostjobController {
 	            jobPostMap.put("payjobsup", postJob.getPayjobsup());
 	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
 	            jobPostMap.put("empid", postJob.getEmpid());
+	            jobPostMap.put("archive",postJob.isArchive() );
 	            LocalDateTime sendTime = postJob.getSendTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 // Format sendTime
@@ -145,6 +153,11 @@ public class PostjobController {
 	    try {
 	        Optional<PostJob> jobPost = pjd.findById(jobId);
 	        if (jobPost.isPresent()) {
+	        	  PostJob jobPostdata = jobPost.get();
+	              
+	              if (jobPostdata.isArchive()) {
+	                  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Skip archived job posts
+	              }
 	            return ResponseEntity.ok(jobPost.get());
 	        } else {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
