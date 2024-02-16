@@ -202,7 +202,7 @@ public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
             if (updatedUser.getSummary() != null) {
                 existingUser.setSummary(updatedUser.getSummary());
             }
-            if (updatedUser.isAccdeactivate() != false) {
+            if (updatedUser.isAccdeactivate() != true) {
                 existingUser.setAccdeactivate(updatedUser.isAccdeactivate());
             }
             

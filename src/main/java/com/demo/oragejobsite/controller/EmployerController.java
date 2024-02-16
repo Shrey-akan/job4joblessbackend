@@ -177,7 +177,7 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
                 if (updatedEmployer.isVerifiedemp() != false) {
                 existingEmployer.setVerifiedemp(updatedEmployer.isVerifiedemp());
                 }
-                if (updatedEmployer.isAccempldeactivate() != false) {
+                if (updatedEmployer.isAccempldeactivate() != true) {
                     existingEmployer.setAccempldeactivate(updatedEmployer.isAccempldeactivate());
                     }
                 
