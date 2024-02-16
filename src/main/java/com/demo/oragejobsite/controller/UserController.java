@@ -610,6 +610,7 @@ private User checkMailUser(String checkemail, String checkpass) {
 
             if (checkmail != null) {
                 if (checkmail.isVerified()) {
+                	 if(!checkmail.isAccdeactivate()) {
                     Cookie userCookie = new Cookie("user", checkemail);
                     userCookie.setMaxAge(3600);
                     userCookie.setPath("/");
@@ -636,6 +637,10 @@ private User checkMailUser(String checkemail, String checkpass) {
                     responseBody.put("websiteuser", checkmail.getWebsiteuser());
                     
                     return ResponseEntity.ok(responseBody);
+                	 }
+                	 else {
+                		 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Deactivated");
+                	 }
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
                 }

@@ -72,7 +72,6 @@ public class PostjobController {
 	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
 	        try {
 	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
-
 	            for (PostJob jobPost : jobPosts) {
 	                
 	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
@@ -96,24 +95,7 @@ public class PostjobController {
 	            e.printStackTrace();
 	            return 0;
 	        }
-	    }
-//	  @GetMapping("/fetchjobpost")
-//	  public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
-//	      try {
-//	          List<PostJob> jobPosts;
-//	          if (empid != null && !empid.isEmpty()) {
-//	              jobPosts = pjd.findByEmpid(empid);
-//	          } else {
-//	              jobPosts = pjd.findAll();
-//	          }
-//	          return ResponseEntity.ok(jobPosts);
-//	      } catch (Exception e) {
-//	          e.printStackTrace();
-//	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//	      }
-//	  }
-
-	
+	    }	
 	
 	@GetMapping("/fetchjobpoststatus")
 	public ResponseEntity<List<Map<String, Object>>> fetchjobpoststatus(@RequestParam(required = false) String uid) {
@@ -181,18 +163,45 @@ public class PostjobController {
             Optional<PostJob> existingJob = pjd.findById(jobid);
             if (existingJob.isPresent()) {
                 PostJob currentJob = existingJob.get();
-                currentJob.setJobtitle(updatedJob.getJobtitle());
-                currentJob.setEmpName(updatedJob.getEmpName());
-                currentJob.setEmpEmail(updatedJob.getEmpEmail());
+                if(updatedJob.getJobtitle() != null) {
+                	 currentJob.setJobtitle(updatedJob.getJobtitle());
+                }
+                if(updatedJob.getEmpName() != null) {
+                    currentJob.setEmpName(updatedJob.getEmpName());
+               }
+                if(updatedJob.getEmpEmail() != null) {
+                	   currentJob.setEmpEmail(updatedJob.getEmpEmail());
+               }
+                if(updatedJob.getCompanyforthisjob() != null) {
+                	 currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
+            }
+                if(updatedJob.getNumberofopening() != null) {
+                	  currentJob.setNumberofopening(updatedJob.getNumberofopening());
+           }
                
-                currentJob.setCompanyforthisjob(updatedJob.getCompanyforthisjob());
-                currentJob.setNumberofopening(updatedJob.getNumberofopening());
-                currentJob.setLocationjob(updatedJob.getLocationjob());
-                currentJob.setJobtype(updatedJob.getJobtype());
-                currentJob.setSchedulejob(updatedJob.getSchedulejob());
-                currentJob.setPayjob(updatedJob.getPayjob());
-                currentJob.setPayjobsup(updatedJob.getPayjobsup());
-                currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
+                if(updatedJob.getLocationjob() != null) {
+                	  currentJob.setLocationjob(updatedJob.getLocationjob());
+         }
+                if(updatedJob.getJobtype() != null) {
+                	  currentJob.setJobtype(updatedJob.getJobtype());
+       }
+              
+                if(updatedJob.getSchedulejob() != null) {
+                	  currentJob.setSchedulejob(updatedJob.getSchedulejob());
+     }
+            
+                if(updatedJob.getPayjob() != null) {
+                	  currentJob.setPayjob(updatedJob.getPayjob());
+   }
+                if(updatedJob.getPayjobsup() != null) {
+                	 currentJob.setPayjobsup(updatedJob.getPayjobsup());
+ }
+                if(updatedJob.getDescriptiondata() != null) {
+                	  currentJob.setDescriptiondata(updatedJob.getDescriptiondata());
+}
+             
+               
+              
                 pjd.save(currentJob);
                 return ResponseEntity.status(HttpStatus.OK).body(currentJob);
             } else {

@@ -27,6 +27,8 @@ private Long payjobsup;
 private String descriptiondata;
 private String empid;
 private int applicants;
+private String archive;
+
 //@Field("sendTime")
 //@CreatedDate
 //private Date sendTime;
@@ -39,7 +41,7 @@ public PostJob() {
 }
 public PostJob(String jobid, String empName, String empEmail, String jobtitle, String companyforthisjob,
 		Long numberofopening, String locationjob, String jobtype, String schedulejob, Long payjob, Long payjobsup,
-		String descriptiondata, String empid, int applicants, Date sendTime) {
+		String descriptiondata, String empid, int applicants, String archive, Date sendTime) {
 	super();
 	this.jobid = jobid;
 	this.empName = empName;
@@ -55,6 +57,7 @@ public PostJob(String jobid, String empName, String empEmail, String jobtitle, S
 	this.descriptiondata = descriptiondata;
 	this.empid = empid;
 	this.applicants = applicants;
+	this.archive = archive;
 	this.sendTime = sendTime;
 }
 public String getJobid() {
@@ -141,12 +144,19 @@ public int getApplicants() {
 public void setApplicants(int applicants) {
 	this.applicants = applicants;
 }
+public String getArchive() {
+	return archive;
+}
+public void setArchive(String archive) {
+	this.archive = archive;
+}
 public Date getSendTime() {
 	return sendTime;
 }
 public void setSendTime(Date sendTime) {
 	this.sendTime = sendTime;
 }
+
 
 
 

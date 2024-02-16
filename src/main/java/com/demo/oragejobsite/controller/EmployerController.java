@@ -586,6 +586,7 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
        Employer checkmail = checkMailUser(checkemail, checkpass);
        if (checkmail != null) {
            if (checkmail.isVerifiedemp()) {
+        	   if(!checkmail.isAccempldeactivate()) {
                Cookie employerCookie = new Cookie("emp", checkmail.toString());
                employerCookie.setMaxAge(3600);
                employerCookie.setPath("/");
@@ -608,6 +609,10 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
                responseBody.put("empstate", checkmail.getEmpstate());
                responseBody.put("empcity", checkmail.getEmpcity());
                return ResponseEntity.ok(responseBody);
+        	   }
+        	   else{
+        		   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Employer Deactivate");
+        	   }
            } else {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
            }
