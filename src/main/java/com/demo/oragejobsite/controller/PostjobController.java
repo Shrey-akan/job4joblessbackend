@@ -73,9 +73,7 @@ public class PostjobController {
 	        try {
 	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
 	            
-	            jobPosts = jobPosts.stream()
-	                    .filter(jobPost -> !jobPost.isArchive())
-	                    .collect(Collectors.toList());
+	          
 	            for (PostJob jobPost : jobPosts) {
 	                
 	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
