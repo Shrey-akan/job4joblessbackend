@@ -1,6 +1,7 @@
 package com.demo.oragejobsite.controller;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -113,28 +114,39 @@ public class ApplyController {
 	            List<UserStatus> userStatusList = userstatdao.findByUid(uid);
 	            System.out.println(userStatusList);
 
-	            // Process each ApplyJob
-	            applyJobs = applyJobs.stream()
-	                .filter(applyJob -> {
-	                    boolean foundMatchingUserStatus = userStatusList.stream()
-	                        .anyMatch(userStatus ->
-	                            uid.equals(userStatus.getUid()) &&
-	                            applyJob.getUid().equals(userStatus.getUid()) &&
-	                            applyJob.getJuid().equals(userStatus.getJuid()) &&
-	                            userStatus.getViewcheck() != null &&
-	                            userStatus.getViewcheck()
-	                        );
+	            Iterator<ApplyJob> iterator = applyJobs.iterator();
+	            while (iterator.hasNext()) {
+	                ApplyJob applyJob = iterator.next();
+	                boolean foundMatchingUserStatus = false;
+	                for (UserStatus userStatus : userStatusList) {
+	                    if (uid.equals(userStatus.getUid()) &&
+	                        applyJob.getUid().equals(userStatus.getUid()) &&
+	                        applyJob.getJuid().equals(userStatus.getJuid()) &&  
+	                        userStatus.getViewcheck() != null && 
+	                        userStatus.getViewcheck()) {
 
-	                    if (!foundMatchingUserStatus) {
-	                        applyJob.setUserStatus(false);
+	                        System.out.println(uid.equals(userStatus.getUid()));
+	                        System.out.println(applyJob.getUid().equals(userStatus.getUid()));
+	                        System.out.println(applyJob.getJuid().equals(userStatus.getJuid()));
+	                        System.out.println(userStatus.getViewcheck());
+
+	                        applyJob.setUserStatus(true);
+	                        System.out.println("check");
+	                        foundMatchingUserStatus = true;
+	                        break;
 	                    }
-	                    return !applyJob.isNotifydelete();
-	                })
-	                .collect(Collectors.toList());
+	                }
+
+	                if (!foundMatchingUserStatus) {
+	                    applyJob.setUserStatus(false);
+	                }
+	                if (applyJob.isNotifydelete()) {
+	                    iterator.remove(); // Safely remove the element using iterator
+	                }
+	            }
 	        } else {
 	            applyJobs = apd.findAll();
 	        }
-
 	        return ResponseEntity.ok(applyJobs);
 	    } catch (DataAccessException e) {
 	        e.printStackTrace();
