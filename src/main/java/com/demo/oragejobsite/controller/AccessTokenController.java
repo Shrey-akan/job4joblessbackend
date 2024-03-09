@@ -27,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class AccessTokenController {
 	
 	@Value("${jwt.secret}")
@@ -47,7 +47,7 @@ public class AccessTokenController {
 		this.tokenProvider = tokenProvider;
 	}
 	 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@PostMapping("/checkAccessTokenValidity")
 	public ResponseEntity<String> checkAccessTokenValidity(@RequestBody Map<String, String> requestMap) {
 	    try {
@@ -64,7 +64,7 @@ public class AccessTokenController {
 	}
 
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@PostMapping("/refreshToken")
 	public ResponseEntity<?> refreshToken(@RequestBody Map<String, String> requestMap) {
 	    try { 

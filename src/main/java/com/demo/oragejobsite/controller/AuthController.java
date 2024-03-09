@@ -11,7 +11,7 @@ import com.demo.oragejobsite.entity.RefreshTokenRequest;
 import com.demo.oragejobsite.service.AccessTokenResponse;
 import com.demo.oragejobsite.util.JwtTokenUtil;
 import com.demo.oragejobsite.util.RefreshTokenUtil;
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class AuthController {
 
@@ -20,7 +20,7 @@ public class AuthController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/api/refreshToken")
     public ResponseEntity<AccessTokenResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         String refreshToken = refreshTokenRequest.getRefreshToken();

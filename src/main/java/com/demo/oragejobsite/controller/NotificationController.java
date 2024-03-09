@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.demo.oragejobsite.dao.NotificationDao;
 import com.demo.oragejobsite.entity.Notification;
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class NotificationController {
 	@Autowired
 	private NotificationDao nd;
 	
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@PostMapping("/insertnotification")
 	public ResponseEntity<Boolean> insertnotification(@RequestBody Notification nn) {
 	    try {
@@ -37,7 +37,7 @@ public class NotificationController {
 	    }
 	}
 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/fetchnotify")
 	public ResponseEntity<List<Notification>> fetchnotify() {
 	    try {

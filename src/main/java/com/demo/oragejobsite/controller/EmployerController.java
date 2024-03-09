@@ -37,7 +37,7 @@ import com.demo.oragejobsite.util.TokenProvider;
 
 
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class EmployerController {
 @Autowired
@@ -72,7 +72,7 @@ private EmployerDao ed;
     }
 
 // Insert Employer API
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/insertEmployer")
 public ResponseEntity<Object> insertEmployer(@RequestBody Employer emp) {
    try {
@@ -97,7 +97,7 @@ public ResponseEntity<Object> insertEmployer(@RequestBody Employer emp) {
 }
 
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @GetMapping("/fetchemployer")
 public ResponseEntity<List<Employer>> fetchemployer(@RequestParam(required = false) String empid) {
     try {
@@ -123,7 +123,7 @@ public ResponseEntity<List<Employer>> fetchemployer(@RequestParam(required = fal
 
 
 // Fetch Employer By empid
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @GetMapping("/fetchempById/{empid}")
 public ResponseEntity<Employer> fetchEmpById(@PathVariable String empid) {
     try {
@@ -141,7 +141,7 @@ public ResponseEntity<Employer> fetchEmpById(@PathVariable String empid) {
 
 
 // Update Employer Details 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/updateEmployee")
 public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
     try {
@@ -180,7 +180,7 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
 
 
 // Employer Login Check Google Sign In
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/employerLoginCheck")
 public ResponseEntity<?> employerLoginCheck(@RequestBody Employer employer, HttpServletResponse response) {
    try {
@@ -239,7 +239,7 @@ public boolean checkIfEmailExists(String email) {
 
 
 // Employer Login
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/logincheckemp")
 public ResponseEntity<?> logincheckemp(@RequestBody Employer e12, HttpServletResponse response) {
     try {
@@ -311,7 +311,7 @@ private Employer checkMailUser(String checkemail, String checkpass) {
 
 
 // Verify Employer
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/verifyEmployer")
 public ResponseEntity<Object> verifyEmployer(@RequestBody Map<String, String> request) {
    try {
@@ -336,7 +336,7 @@ public ResponseEntity<Object> verifyEmployer(@RequestBody Map<String, String> re
 
 
 // Delete Employer By empid
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @DeleteMapping("/deleteEmployer/{empid}")
 public ResponseEntity<?> deleteEmployer(@PathVariable String empid) {
    try {
@@ -357,7 +357,7 @@ public ResponseEntity<?> deleteEmployer(@PathVariable String empid) {
 
 
 // Reset Password with old password
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/resetPasswordEmp")
 public ResponseEntity<Boolean> resetPasswordEmp(@RequestBody Map<String, String> request) {
    try {
@@ -385,7 +385,7 @@ public ResponseEntity<Boolean> resetPasswordEmp(@RequestBody Map<String, String>
 
 
 // create new password
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/resetPasswordEmpverify")
 public ResponseEntity<Boolean> resetPasswordEmpverify(@RequestBody Map<String, String> request) {
    try {
@@ -408,7 +408,7 @@ public ResponseEntity<Boolean> resetPasswordEmpverify(@RequestBody Map<String, S
 }
 
 	// google sign up api
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
     @GetMapping("/checkEmployer")
     public ResponseEntity<Object> checkEmployer(@RequestParam String empmailid) {
         try {
@@ -428,7 +428,7 @@ public ResponseEntity<Boolean> resetPasswordEmpverify(@RequestBody Map<String, S
 
 	
 	//logout employer
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/logoutEmployer")
 public ResponseEntity<String> logoutEmployer(HttpServletResponse response) {
    Cookie empCookie = new Cookie("emp", null);
@@ -447,7 +447,7 @@ public ResponseEntity<String> logoutEmployer(HttpServletResponse response) {
 }
 
 //sign up employerusing google
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/createOrGetEmployer")
 public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
     try {
@@ -545,7 +545,7 @@ public ResponseEntity<Map<String, Object>> createOrGetEmployer(@RequestBody Map<
    
    
 // Mobile App Login API fo Employer
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/apploginemployer")
 public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServletResponse response) {
    try {

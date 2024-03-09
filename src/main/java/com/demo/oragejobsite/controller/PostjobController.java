@@ -35,7 +35,7 @@ import com.demo.oragejobsite.entity.SavedJob;
 
 
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class PostjobController {
 	@Autowired
@@ -47,7 +47,7 @@ public class PostjobController {
 	  @Autowired
 	    private ApplicantsCountDao applicantsCountRepository;
 	  
-	  @CrossOrigin(origins = "https://job4jobless.com")
+	  @CrossOrigin(origins = "${myapp.url}")
 	  @PostMapping("/jobpostinsert")
 	  public ResponseEntity<?> jobpostinsert(@RequestBody PostJob pj) {
 	      try {
@@ -67,7 +67,7 @@ public class PostjobController {
 	  }
 
 	  
-	  @CrossOrigin(origins = "https://job4jobless.com")
+	  @CrossOrigin(origins = "${myapp.url}")
 	   @GetMapping("/fetchjobpost")
 	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
 	        try {
@@ -123,6 +123,7 @@ public class PostjobController {
 	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
 	            jobPostMap.put("empid", postJob.getEmpid());
 	            jobPostMap.put("archive",postJob.isArchive() );
+	            jobPostMap.put("approvejob",postJob.isApprovejob() );
 	            LocalDateTime sendTime = postJob.getSendTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 // Format sendTime
@@ -145,7 +146,7 @@ public class PostjobController {
 	}
 
 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/fetchJobPostById/{jobId}")
 	public ResponseEntity<PostJob> fetchJobPostById(@PathVariable String jobId) {
 	    try {
@@ -185,7 +186,7 @@ public class PostjobController {
 	
 	
 	 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
     @PutMapping("/jobpostupdate/{jobid}")
    public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
     try {
@@ -223,7 +224,7 @@ public class PostjobController {
 }
 	
 	
-	@CrossOrigin(origins = "https://job4jobless.com", methods = { RequestMethod.PUT })
+	@CrossOrigin(origins = "${myapp.url}", methods = { RequestMethod.PUT })
 	@PutMapping("/updateJobStatus/{jobid}")
 	public ResponseEntity<Object> updateJobStatus(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
 	    try {

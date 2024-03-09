@@ -18,7 +18,7 @@ import com.demo.oragejobsite.service.SavedJobService;
 import com.demo.oragejobsite.service.SavedJobServiceImpl;
 
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class SavedJobController {
 

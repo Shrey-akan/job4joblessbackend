@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.demo.oragejobsite.entity.Blogs;
 import com.demo.oragejobsite.service.BlogService;
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class BlogController {
 
@@ -25,7 +25,7 @@ public class BlogController {
 	    }
    
 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/createBlog")
     public ResponseEntity<?> createBlog(@RequestBody Blogs blog) {
 		Blogs savedBlog = blogService.createBlog(blog);

@@ -42,7 +42,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class UserController {
 
@@ -78,7 +78,7 @@ public class UserController {
     }
 
 // Insert User API
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/insertusermail")
 public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
    try {
@@ -103,7 +103,7 @@ public ResponseEntity<Object> insertusermail(@RequestBody User c1) {
    }
 }
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @GetMapping("/fetchuser")
 public ResponseEntity<List<User>> fetchuser(@RequestParam(required = false) String uid) {
     try {
@@ -129,7 +129,7 @@ public ResponseEntity<List<User>> fetchuser(@RequestParam(required = false) Stri
 
 
 // Fetch User By uid
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @GetMapping("/fetchuserById/{uid}")
 public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
     try {
@@ -149,7 +149,7 @@ public ResponseEntity<User> fetchUserById(@PathVariable String uid) {
 }
 
 // Update user Profile
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/updateUser")
 public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
     try {
@@ -189,7 +189,7 @@ public ResponseEntity<?> updateUser(@RequestBody User updatedUser) {
 
 
 // Login API For User
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/logincheck")
 public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse response) {
     try {
@@ -239,7 +239,7 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
 
 
 // login using Google API
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @PostMapping("/logincheckgmail")
 public ResponseEntity<?> logincheckgmail(@RequestBody User c12, HttpServletResponse response) {
    try {
@@ -310,7 +310,7 @@ private User checkMailUser(String checkemail, String checkpass) {
 }
 
     // Verified User By Email API
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/verifyUser")
     public ResponseEntity<?> verifyUser(@RequestBody Map<String, String> request) {
         try {
@@ -337,7 +337,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     }
 
     // Delete User API
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @DeleteMapping("/deleteUser/{uid}")
     public ResponseEntity<Object> deleteUserByUid(@PathVariable String uid) {
         try {
@@ -360,7 +360,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     
     
     // Rset Password API if User Knows the OLD Password
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/resetPassword")
     public ResponseEntity<Boolean> resetPassword(@RequestBody Map<String, String> request) {
 
@@ -391,7 +391,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     
     
     // Reset Password API 
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/resetPasswordUser")
     public ResponseEntity<Boolean> resetPasswordUser(@RequestBody Map<String, String> request) {
         try {
@@ -413,7 +413,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     }
 
     //Checking user exit API
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @GetMapping("/checkuser")
     public ResponseEntity<Object> checkUser(@RequestParam String userName) {
         try {
@@ -432,7 +432,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     }
 
     // Logout API
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletResponse response) {
         try {
@@ -458,7 +458,7 @@ private User checkMailUser(String checkemail, String checkpass) {
 
     
     // Google Sign-Up API
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/createOrGetUser")
     public ResponseEntity<Map<String, Object>> createOrGetUser(@RequestBody Map<String, String> requestBody, HttpServletResponse response) {
         try {
@@ -562,7 +562,7 @@ private User checkMailUser(String checkemail, String checkpass) {
     
 
    // Login API for Flutter Mobile App
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/applogin")
     public ResponseEntity<?> applogin(@RequestBody User c12, HttpServletResponse response) {
         try {

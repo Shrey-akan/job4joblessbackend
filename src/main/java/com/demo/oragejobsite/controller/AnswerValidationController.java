@@ -15,7 +15,7 @@ import com.demo.oragejobsite.entity.UserAnswer;
 
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class AnswerValidationController {
 	
 	 private final QuizQuestionRepository quizQuestionRepository;
@@ -25,7 +25,7 @@ public class AnswerValidationController {
 	        this.quizQuestionRepository = quizQuestionRepository;
 	    }
 	    
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/checkallanswer")
     public ResponseEntity<Boolean> validateAnswers(@RequestBody List<UserAnswer> userAnswers) {
         System.out.println(userAnswers.get(0).getQuestionId());

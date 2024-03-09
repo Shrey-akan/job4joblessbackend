@@ -24,7 +24,7 @@ import com.demo.oragejobsite.entity.ApplicantsCount;
 import com.demo.oragejobsite.entity.ApplyJob;
 import com.demo.oragejobsite.entity.UserStatus;
 
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 @RestController
 public class ApplyController {
 	@Autowired
@@ -36,7 +36,7 @@ public class ApplyController {
 	
 	@Autowired
 	private UserStatusDao userstatdao;
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/insertapplyjob")
     public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
         try {
@@ -78,7 +78,7 @@ public class ApplyController {
     }
 	
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/fetchapplyform")
 	public ResponseEntity<?> fetchapplyform(@RequestParam(required = false) String uid) {
 	    try {
@@ -101,7 +101,7 @@ public class ApplyController {
 	    }
 	}
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/notificationforuser")
 	public ResponseEntity<?> notificationforuser(@RequestParam(required = false) String uid) {
 	    try {
@@ -158,7 +158,7 @@ public class ApplyController {
 	                .body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@PostMapping("/updateProfileUpdate")
 	public ResponseEntity<?> updateProfileUpdate(@RequestBody ApplyJob applyJob) {
 	    try {
@@ -208,7 +208,7 @@ public class ApplyController {
 	    }
 	}
 	
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/fetchapplyformbyjobid")
 	public ResponseEntity<?> fetchApplyFormByJobId(
 	        @RequestParam(name = "empid") String empid,
@@ -243,7 +243,7 @@ public class ApplyController {
 //        }
 //    }
 
-	@CrossOrigin(origins = "https://job4jobless.com")
+	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/notifyEmployer")
 	public ResponseEntity<?> notifyEmployer(@RequestParam(name = "empid") String empid) {
 	    try {

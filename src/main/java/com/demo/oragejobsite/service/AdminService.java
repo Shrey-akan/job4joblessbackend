@@ -15,7 +15,7 @@ public class AdminService {
     public AdminService(AdminDao adminRepository) {
         this.adminRepository = adminRepository;
     }
-
+    
     public Admin authenticateAdmin(String adminMail, String adminPass) {
         Admin admin = adminRepository.findByAdminMail(adminMail);
         

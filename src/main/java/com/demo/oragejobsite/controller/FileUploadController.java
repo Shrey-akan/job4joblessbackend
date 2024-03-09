@@ -26,7 +26,7 @@ import com.demo.oragejobsite.entity.ResumeUpload;
 
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class FileUploadController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class FileUploadController {
 
     
     @PostMapping("/uploadPdf")
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     public ResponseEntity<?> uploadPdf(@RequestParam("file") MultipartFile file, @RequestParam("uid") String uid) {
         if (!file.isEmpty()) {
             try {
@@ -62,7 +62,7 @@ public class FileUploadController {
 
     
     @GetMapping("/fetchByUid")
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     public ResponseEntity<ResumeUpload> fetchByUid(@RequestParam("uid") String uid) {
         try {
             ResumeUpload resumeUpload = resumeUploadRepository.findByUid(uid);
@@ -78,7 +78,7 @@ public class FileUploadController {
     }
     
     @GetMapping("/fetchAll")
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     public ResponseEntity<java.util.List<ResumeUpload>> fetchAll() {
         try {
             java.util.List<ResumeUpload> resumeUploads = resumeUploadRepository.findAll();
@@ -94,7 +94,7 @@ public class FileUploadController {
     }
 
     @GetMapping("/getPdfByUid/{uid}")
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     public void getPdfByUid(@PathVariable("uid") String uid, HttpServletResponse response) {
         try {
             ResumeUpload resumeUpload = resumeUploadRepository.findByUid(uid);
@@ -111,6 +111,7 @@ public class FileUploadController {
         }
     }
     @GetMapping("/getPdfByUi/{uid}")
+    @CrossOrigin(origins = "${myapp.url}")
     public ResponseEntity<byte[]> getPdfByUi(@PathVariable("uid") String uid) {
         try {
             String filePath = "/root/folder_name/upload_pdf/" + uid + ".pdf";

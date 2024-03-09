@@ -16,7 +16,7 @@ import com.demo.oragejobsite.entity.SendMessage;
 import com.demo.oragejobsite.service.MessageService;
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class SendMessageController {
     @Autowired
     private final MessageService messageService;
@@ -26,7 +26,7 @@ public class SendMessageController {
         this.messageService = messageService;
     }
 
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/send")
     public ResponseEntity<SendMessage> sendMessage(@RequestBody SendMessage message) {
         try {
@@ -37,7 +37,7 @@ public class SendMessageController {
         }
     }
 
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @GetMapping("/fetchMessages")
     public ResponseEntity<List<SendMessage>> fetchMessages() {
         try {

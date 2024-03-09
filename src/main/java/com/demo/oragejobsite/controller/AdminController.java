@@ -29,7 +29,7 @@ import com.demo.oragejobsite.util.TokenProvider;
 
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class AdminController {
 
     @Autowired
@@ -38,6 +38,8 @@ public class AdminController {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    
+    
     @Autowired
     public AdminController(AdminService adminService, TokenProvider tokenProvider,
             RefreshTokenRepository refreshTokenRepository) {
@@ -62,7 +64,7 @@ public class AdminController {
             throw new RuntimeException("Error hashing password", e);
         }
     }
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/insertadmin")
     public ResponseEntity<Object> insertadmin(@RequestBody Admin admin) {
         try {
@@ -79,7 +81,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unexpected error");
         }
     }
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/adminLoginCheck")
     public ResponseEntity<?> adminLoginCheck(@RequestBody Admin admin, HttpServletResponse response) {
         try {
@@ -124,7 +126,7 @@ public class AdminController {
     }
 
     
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/adminlogout")
     public ResponseEntity<String> adminlogout(HttpServletResponse response) {
         try {
@@ -146,7 +148,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during logout");
         }
     }
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @GetMapping("/fetchadmin")
     public ResponseEntity<List<Admin>> fetchadmin() {
         try {

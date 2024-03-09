@@ -52,10 +52,12 @@ public User(String uid, String userName, String userFirstName, String userLastNa
 	this.userstate = userstate;
 	this.usercity = usercity;
 	this.verified = verified;
+	
 	this.summary = summary;
 	this.userlinkden = userlinkden;
 	this.usergithub = usergithub;
 	this.otherturluser = otherturluser;
+	
 	this.accdeactivate = accdeactivate;
 }
 

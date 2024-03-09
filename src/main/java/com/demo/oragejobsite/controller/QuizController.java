@@ -19,14 +19,14 @@ import com.demo.oragejobsite.entity.QuizQuestion;
 
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class QuizController {
 
     @Autowired
     private QuizQuestionRepository questionRepository;
 
     
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/add")
     public ResponseEntity<Object> addQuestion(@RequestParam String jobid, @RequestBody QuizQuestion question) {
         try {
@@ -41,7 +41,7 @@ public class QuizController {
     }
 
 	
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/fetchquestion")
 	public ResponseEntity<List<QuizQuestion>> fetchquestion() {
 	    try {
@@ -69,13 +69,14 @@ public class QuizController {
     public ResponseEntity<Boolean> checkJobIdExists(@RequestParam String jobid) {
         try {
             boolean exists = questionRepository.existsByJobid(jobid);
+            System.out.println("checkin hejob id "+jobid);
             return ResponseEntity.ok(exists);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
-    @CrossOrigin(origins = "https://job4jobless.com")
+    @CrossOrigin(origins = "${myapp.url}")
 	@PostMapping("/deletequestion")
 	public ResponseEntity<String> deleteQuestionById(@RequestBody Map<String, String> request) {
 	    String id = request.get("id");

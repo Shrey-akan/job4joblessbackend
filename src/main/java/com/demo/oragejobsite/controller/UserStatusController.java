@@ -22,7 +22,7 @@ import com.demo.oragejobsite.entity.UserStatus;
 
 
 @RestController
-@CrossOrigin(origins = "https://job4jobless.com")
+@CrossOrigin(origins = "${myapp.url}")
 public class UserStatusController {
 
 	@Autowired
@@ -30,7 +30,7 @@ public class UserStatusController {
 	@Autowired
 	private ApplyDao applyJobRepository;
 	
-	   @CrossOrigin(origins = "https://job4jobless.com")
+	   @CrossOrigin(origins = "${myapp.url}")
 	   @GetMapping("/countTrueStatus")
 	   public ResponseEntity<Map<String, Integer>> countTrueStatus(@RequestParam String uid) {
 		    try {
@@ -51,7 +51,7 @@ public class UserStatusController {
 		    }
 		}
 	   
-	   @CrossOrigin(origins = "https://job4jobless.com")
+	   @CrossOrigin(origins = "${myapp.url}")
 	   @PutMapping("/updateViewCheck")
 	   public ResponseEntity<Boolean> updateViewCheck(@RequestParam String uid, @RequestParam String juid) {
 		    try {
@@ -71,7 +71,7 @@ public class UserStatusController {
 		    }
 		}
 	   
-	   @CrossOrigin(origins = "https://job4jobless.com")
+	   @CrossOrigin(origins = "${myapp.url}")
 	   @DeleteMapping("/deleteUserStatus")
 	   public ResponseEntity<Boolean> deleteUserStatus(@RequestParam String uid, @RequestParam String juid) {
 	       try {
