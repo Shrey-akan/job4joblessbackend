@@ -22,8 +22,8 @@ private Long numberofopening;
 private String locationjob;
 private String jobtype;
 private String schedulejob;
-private Long payjob;
-private Long payjobsup;
+private Double payjob;
+private Double payjobsup;
 private String descriptiondata;
 private String empid;
 private int applicants;
@@ -40,7 +40,7 @@ public PostJob() {
 	// TODO Auto-generated constructor stub
 }
 public PostJob(String jobid, String empName, String empEmail, String jobtitle, String companyforthisjob,
-		Long numberofopening, String locationjob, String jobtype, String schedulejob, Long payjob, Long payjobsup,
+		Long numberofopening, String locationjob, String jobtype, String schedulejob, Double payjob, Double payjobsup,
 		String descriptiondata, String empid, int applicants, boolean archive, boolean approvejob, Date sendTime) {
 	super();
 	this.jobid = jobid;
@@ -115,16 +115,16 @@ public String getSchedulejob() {
 public void setSchedulejob(String schedulejob) {
 	this.schedulejob = schedulejob;
 }
-public Long getPayjob() {
+public Double getPayjob() {
 	return payjob;
 }
-public void setPayjob(Long payjob) {
+public void setPayjob(Double payjob) {
 	this.payjob = payjob;
 }
-public Long getPayjobsup() {
+public Double getPayjobsup() {
 	return payjobsup;
 }
-public void setPayjobsup(Long payjobsup) {
+public void setPayjobsup(Double payjobsup) {
 	this.payjobsup = payjobsup;
 }
 public String getDescriptiondata() {
