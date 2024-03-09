@@ -227,21 +227,6 @@ public class ApplyController {
 	}
 
 	
-//	  public ResponseEntity<?> notifyEmployer(@RequestParam(name = "empid") String empid) {
-//        try {
-//            List<ApplyJob> applyJobs = apd.findByEmpid(empid);
-//            Map<String, Long> jobidUidCountMap = applyJobs.stream()
-//                    .collect(Collectors.groupingBy(ApplyJob::getJobid, Collectors.mapping(ApplyJob::getUid, Collectors.collectingAndThen(Collectors.toSet(), set -> (long) set.size()))));
-//
-//            return ResponseEntity.ok(jobidUidCountMap);
-//        } catch (DataAccessException e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-//        }
-//    }
 
 	@CrossOrigin(origins = "${myapp.url}")
 	@GetMapping("/notifyEmployer")
