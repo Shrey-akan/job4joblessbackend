@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.demo.oragejobsite.dao.PostjobDao;
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
+import com.demo.oragejobsite.dao.SubAdminDao;
 import com.demo.oragejobsite.entity.PostJob;
 import com.demo.oragejobsite.entity.RefreshToken;
 import com.demo.oragejobsite.entity.SubAdminDetails;
@@ -31,13 +33,16 @@ import com.demo.oragejobsite.util.TokenProvider;
 @RequestMapping("/subadmindetails")
 @CrossOrigin(origins = "${myapp.url}")
 public class SubAdminDetController {
-
-
+	
 	  private final SubAdminDetailsService subAdminDetailsService;
 	    private final TokenProvider tokenProvider;
 	    private final RefreshTokenRepository refreshTokenRepository;
 	    private final PostjobDao postjobDao;
-
+	    
+	    
+	    @Autowired
+	    private SubAdminDao subAdminDetailsDao;
+	    
 	    @Autowired
 	    public SubAdminDetController(SubAdminDetailsService subAdminDetailsService,
 	                                 TokenProvider tokenProvider,
@@ -129,15 +134,61 @@ public class SubAdminDetController {
         return subAdminDetailsService.getSubAdminById(id);
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Object> updateSubAdmin(@PathVariable String id, @RequestBody SubAdminDetails subAdminDetails) {
+//        return subAdminDetailsService.updateSubAdmin(id, subAdminDetails);
+//    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateSubAdmin(@PathVariable String id, @RequestBody SubAdminDetails subAdminDetails) {
-        return subAdminDetailsService.updateSubAdmin(id, subAdminDetails);
+        try {
+        	
+            Optional<SubAdminDetails> existingSubAdminOptional = subAdminDetailsDao.findById(id);
+            if (!existingSubAdminOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            
+            // Update the existing subadmin details
+            SubAdminDetails existingSubAdmin = existingSubAdminOptional.get();
+            existingSubAdmin.setSubadminame(subAdminDetails.getSubadminame());
+            existingSubAdmin.setSubadminmail(subAdminDetails.getSubadminmail());
+            existingSubAdmin.setSubadminpassword(subAdminDetails.getSubadminpassword());
+            existingSubAdmin.setManageUsers(subAdminDetails.isManageUsers());
+            existingSubAdmin.setManageEmployers(subAdminDetails.isManageEmployers());
+            existingSubAdmin.setPostJob(subAdminDetails.isPostJob());
+            existingSubAdmin.setApplyJob(subAdminDetails.isApplyJob());
+            existingSubAdmin.setManageBlogs(subAdminDetails.isManageBlogs());
+            existingSubAdmin.setPushNotification(subAdminDetails.isPushNotification());
+            existingSubAdmin.setApproveJobDetails(subAdminDetails.isApproveJobDetails());
+            // Update fields of existingSubAdmin with values from subAdminDetails
+
+            subAdminDetailsDao.save(existingSubAdmin); // Save the updated subadmin details
+            
+            return ResponseEntity.ok().body("{\"message\": \"SubAdmin with ID " + id + " updated successfully\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update SubAdmin with ID: " + id);
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteSubAdmin(@PathVariable String id) {
-        return subAdminDetailsService.deleteSubAdmin(id);
+        try {
+            Optional<SubAdminDetails> subAdminOptional = subAdminDetailsDao.findById(id);
+            if (!subAdminOptional.isPresent()) {
+                return ResponseEntity.notFound().build();
+            }
+            subAdminDetailsDao.deleteById(id);
+//            return ResponseEntity.ok("SubAdmin with ID " + id + " deleted successfully");
+            return ResponseEntity.ok().body("{\"message\": \"SubAdmin with ID " + id + " deleted successfully\"}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete SubAdmin with ID: " + id);
+        }
     }
+
     
     @PostMapping("/approveJob")
     public ResponseEntity<?> approveJobPost(@RequestParam String jobId, @RequestParam String subAdminId) {
