@@ -21,6 +21,8 @@ public interface PostjobDao extends MongoRepository<PostJob, String>{
 
 	List<PostJob> findByArchiveTrue();
 
+	List<PostJob> findByApprovejob(boolean b);
+
 
 	
 }

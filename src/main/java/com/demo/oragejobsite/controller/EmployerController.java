@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +33,7 @@ import com.demo.oragejobsite.dao.EmployerDao;
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.RefreshToken;
-
+import com.demo.oragejobsite.entity.User;
 import com.demo.oragejobsite.util.TokenProvider;
 
 
@@ -178,6 +179,26 @@ public ResponseEntity<?> updateEmployee(@RequestBody Employer updatedEmployer) {
     }
 }
 
+@CrossOrigin(origins = "${myapp.url}")
+@PutMapping("/empldeactivate/{empid}")
+public ResponseEntity<String> deactivateUser(@PathVariable String empid) {
+
+    Optional<Employer> optionalEmployer = ed.findById(empid);
+    
+    if (!optionalEmployer.isPresent()) {
+        return ResponseEntity.notFound().build(); // User not found
+    }
+
+    Employer employee = optionalEmployer.get();
+    employee.setAccempldeactivate(!employee.isAccempldeactivate());
+    ed.save(employee);
+    if(employee.isAccempldeactivate())
+    {
+    	return ResponseEntity.ok().body("{\"message\": \"Employeer with ID " + empid + " activated successfully\"}");
+    }
+
+    return ResponseEntity.ok().body("{\"message\": \"Employeer with ID " + empid + " deactivated successfully\"}");
+}
 
 // Employer Login Check Google Sign In
 @CrossOrigin(origins = "${myapp.url}")

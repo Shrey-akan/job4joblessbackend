@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -337,28 +338,55 @@ private User checkMailUser(String checkemail, String checkpass) {
     }
 
     // Delete User API
+//    @CrossOrigin(origins = "${myapp.url}")
+//    @DeleteMapping("/deleteUser/{uid}")
+//    public ResponseEntity<Object> deleteUserByUid(@PathVariable String uid) {
+//        try {
+//            Optional<User> existingUserOptional = ud.findById(uid);
+//
+//            if (existingUserOptional.isPresent()) {
+//            	  User existingUser = existingUserOptional.get();
+//                  existingUser.setAccdeactivate(true);
+//                  ud.save(existingUser);
+//
+//                return ResponseEntity.status(HttpStatus.OK).body(true);
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with UID " + uid + " not found.");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+//        }
+//    }
+    
     @CrossOrigin(origins = "${myapp.url}")
-    @DeleteMapping("/deleteUser/{uid}")
-    public ResponseEntity<Object> deleteUserByUid(@PathVariable String uid) {
-        try {
-            Optional<User> existingUserOptional = ud.findById(uid);
+    @PutMapping("/deactivate/{userId}")
+    public ResponseEntity<String> deactivateUser(@PathVariable String userId) {
+        // Find the user by their ID
+        Optional<User> optionalUser = ud.findById(userId);
 
-            if (existingUserOptional.isPresent()) {
-            	  User existingUser = existingUserOptional.get();
-                  existingUser.setAccdeactivate(true);
-                  ud.save(existingUser);
-
-                return ResponseEntity.status(HttpStatus.OK).body(true);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with UID " + uid + " not found.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.notFound().build(); // User not found
         }
+
+        // Get the user object from Optional
+        User user = optionalUser.get();
+
+        // Deactivate the user account by setting accdeactivate to false
+//        user.setAccdeactivate(false);
+        user.setAccdeactivate(!user.isAccdeactivate());
+
+        // Save the updated user object
+        ud.save(user);
+        
+        if(user.isAccdeactivate())
+        {
+        	return ResponseEntity.ok().body("{\"message\": \"User with ID " + userId + " activated successfully\"}");
+        }
+
+        return ResponseEntity.ok().body("{\"message\": \"SubAdmin with ID " + userId + " deactivated successfully\"}");
     }
-    
-    
+
     // Rset Password API if User Knows the OLD Password
     @CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/resetPassword")

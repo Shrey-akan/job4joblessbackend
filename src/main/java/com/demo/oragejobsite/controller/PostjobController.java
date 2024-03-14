@@ -67,25 +67,43 @@ public class PostjobController {
 	  }
 
 	  
+//	  @CrossOrigin(origins = "${myapp.url}")
+//	   @GetMapping("/fetchjobpost")
+//	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
+//	        try {
+//	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
+//	            
+//	          
+//	            for (PostJob jobPost : jobPosts) {
+//	                
+//	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
+//	                jobPost.setApplicants(applicantsCount);
+//	            }
+//
+//	            return ResponseEntity.ok(jobPosts);
+//	        } catch (Exception e) {
+//	            e.printStackTrace();
+//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+//	        }
+//	    }
 	  @CrossOrigin(origins = "${myapp.url}")
-	   @GetMapping("/fetchjobpost")
-	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
-	        try {
-	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
-	            
+	  @GetMapping("/fetchjobpost")
+	  public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
+	      try {
+	          List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findByApprovejob(true);
 	          
-	            for (PostJob jobPost : jobPosts) {
-	                
-	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
-	                jobPost.setApplicants(applicantsCount);
-	            }
+	          for (PostJob jobPost : jobPosts) {
+	              int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
+	              jobPost.setApplicants(applicantsCount);
+	          }
 
-	            return ResponseEntity.ok(jobPosts);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-	        }
-	    }
+	          return ResponseEntity.ok(jobPosts);
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	      }
+	  }
+
 
 	    // Helper method to fetch the count of applicants based on jobid and empid
 	    private int getApplicantsCount(String jobid, String empid) {
@@ -105,7 +123,7 @@ public class PostjobController {
 	        List<Map<String, Object>> jobPostsWithStatus = new ArrayList<>();
 	        List<PostJob> allJobPosts = pjd.findAll();
 	        for (PostJob postJob : allJobPosts) {
-	        	 if (postJob.isArchive()) {
+	        	 if (postJob.isArchive() || !postJob.isApprovejob()) {
 	                 continue;
 	             }
 	            Map<String, Object> jobPostMap = new HashMap<>();

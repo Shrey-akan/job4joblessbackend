@@ -10,6 +10,7 @@ import com.demo.oragejobsite.entity.User;
 public interface UserDao extends MongoRepository<User, String>{
 	 Optional<User> findByUid(String uid);
 	User findByUserName(String userName);
+	void save(Optional<User> user);
 }
 
 
