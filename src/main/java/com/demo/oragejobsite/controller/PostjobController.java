@@ -103,6 +103,27 @@ public class PostjobController {
 	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	      }
 	  }
+	  
+	  
+	  @CrossOrigin(origins = "${myapp.url}")
+	  @GetMapping("/fetchjobpostadmin")
+	  public ResponseEntity<List<PostJob>> fetchjobpostadmin(@RequestParam(required = false) String empid) {
+	      try {
+	    	  List<PostJob> jobPosts = pjd.findAll();
+
+
+	          
+	          for (PostJob jobPost : jobPosts) {
+	              int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
+	              jobPost.setApplicants(applicantsCount);
+	          }
+
+	          return ResponseEntity.ok(jobPosts);
+	      } catch (Exception e) {
+	          e.printStackTrace();
+	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	      }
+	  }
 
 
 	    // Helper method to fetch the count of applicants based on jobid and empid
