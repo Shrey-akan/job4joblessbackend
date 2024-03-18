@@ -233,7 +233,6 @@ public class PostjobController {
 	        if (existingJobOptional.isPresent()) {
 	            PostJob existingJob = existingJobOptional.get();
 
-	            // Get the current value of the approvejob field
 	            boolean currentApprovalStatus = existingJob.isApprovejob();
 
 	            // Update the approvejob field based on its current value
@@ -243,6 +242,9 @@ public class PostjobController {
 	            Field[] fields = PostJob.class.getDeclaredFields();
 	            for (Field field : fields) {
 	                // Set field accessible to allow modification
+	            	if (field.getName().equals("approvejob")) {
+	                    continue;
+	                }
 	                field.setAccessible(true);
 
 	                // Get the value of the field from the updatedJob object
@@ -267,6 +269,34 @@ public class PostjobController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
+	
+//	@CrossOrigin(origins = "${myapp.url}")
+//	@PutMapping("/jobpostupdate/{jobid}")
+//	public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
+//	    try {
+//	        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
+//	        if (existingJobOptional.isPresent()) {
+//	            PostJob existingJob = existingJobOptional.get();
+//
+//	            // Update the approvejob field
+//	            existingJob.setApprovejob(!existingJob.isApprovejob());
+//
+//	            // Save the updated job
+//	            pjd.save(existingJob);
+//
+//	            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
+//	        } else {
+//	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job not found");
+//	        }
+//	    } catch (DataAccessException e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+//	    } catch (Exception e) {
+//	        e.printStackTrace();
+//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+//	    }
+//	}
+
 	
 	@CrossOrigin(origins = "${myapp.url}", methods = { RequestMethod.PUT })
 	@PutMapping("/updateJobStatus/{jobid}")
