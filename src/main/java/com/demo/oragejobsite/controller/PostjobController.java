@@ -90,8 +90,13 @@ public class PostjobController {
 	  @GetMapping("/fetchjobpost")
 	  public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
 	      try {
-	          List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findByApprovejob(true);
-	          
+	    	  List<PostJob> jobPosts;
+	            if (empid != null && !empid.isEmpty()) {
+	                jobPosts = pjd.findByEmpidAndApprovejob(empid, true);
+	            } else {
+	                jobPosts = pjd.findByApprovejob(true);
+	            }
+	          System.out.println("hello"+jobPosts);
 	          for (PostJob jobPost : jobPosts) {
 	              int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
 	              jobPost.setApplicants(applicantsCount);

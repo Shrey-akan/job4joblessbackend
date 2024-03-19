@@ -23,6 +23,8 @@ public interface PostjobDao extends MongoRepository<PostJob, String>{
 
 	List<PostJob> findByApprovejob(boolean b);
 
+	List<PostJob> findByEmpidAndApprovejob(String empid, boolean b);
+
 
 	
 }
