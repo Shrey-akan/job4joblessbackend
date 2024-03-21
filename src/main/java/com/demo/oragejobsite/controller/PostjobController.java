@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -65,6 +66,30 @@ public class PostjobController {
 	              .body(null); // Or you can return a ResponseEntity with HttpStatus and without a body
 	      }
 	  }
+	  	
+	  	@CrossOrigin(origins = "${myapp.url}")
+	  	@DeleteMapping("/deleteJob/{jobId}")
+	    public ResponseEntity<Object> deleteJob(@PathVariable String jobId) {
+	        try {
+	                       if (pjd.existsById(jobId)) {
+	               
+	                pjd.deleteById(jobId);
+	                return ResponseEntity.status(HttpStatus.OK).body("Job with ID " + jobId + " has been deleted successfully.");
+	            } else {
+	               
+	                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job with ID " + jobId + " does not exist.");
+	            }
+	        } catch (DataAccessException e) {
+	            // Handle database access exception
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	        } catch (Exception e) {
+	            // Handle other exceptions
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	        }
+	    }
+
 
 	  
 //	  @CrossOrigin(origins = "${myapp.url}")
@@ -163,7 +188,7 @@ public class PostjobController {
 	            jobPostMap.put("jobtype", postJob.getJobtype());
 	            jobPostMap.put("schedulejob", postJob.getSchedulejob());
 	            jobPostMap.put("payjob", postJob.getPayjob());
-	            jobPostMap.put("payjobsup", postJob.getPayjobsup());
+//	            jobPostMap.put("payjobsup", postJob.getPayjobsup());
 	            jobPostMap.put("descriptiondata", postJob.getDescriptiondata());
 	            jobPostMap.put("empid", postJob.getEmpid());
 	            jobPostMap.put("archive",postJob.isArchive() );
@@ -197,8 +222,10 @@ public class PostjobController {
 	        Optional<PostJob> jobPost = pjd.findById(jobId);
 	        if (jobPost.isPresent()) {
 	        	  PostJob jobPostdata = jobPost.get();
-	              
+	              System.out.println("Hello"+jobPostdata);
 	              if (jobPostdata.isArchive()) {
+	            	  System.out.println("Hello"+jobPostdata.isArchive());
+	            	  System.out.println("Hello dfghdrthdfjh"+jobPostdata.getEmpEmail());
 	                  return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Skip archived job posts
 	              }
 	            return ResponseEntity.ok(jobPost.get());

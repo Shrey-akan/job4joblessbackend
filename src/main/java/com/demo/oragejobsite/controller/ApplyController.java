@@ -38,14 +38,21 @@ public class ApplyController {
 	private UserStatusDao userstatdao;
 	@CrossOrigin(origins = "${myapp.url}")
     @PostMapping("/insertapplyjob")
-    public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
+	public ResponseEntity<?> insertapplyjob(@RequestBody ApplyJob applyjob) {
         try {
+            // Check if the jobid and uid already exist
+            ApplyJob existingApplyJob = apd.findByJobidAndUid(applyjob.getJobid(), applyjob.getUid());
+            if (existingApplyJob != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have already applied for this job.");
+            }
+
             applyjob.setProfileupdate("Waiting");
             System.out.println("ApplyJob object before saving: " + applyjob.getProfileupdate());
             ApplyJob savedApplyJob = apd.save(applyjob);
             // Update ApplicantsCount based on jobid
             String jobid = applyjob.getJobid();
-            ApplicantsCount applicantsCount = getApplicantsCountByJobId(jobid);
+            // Rest of the code to update applicants count...
+ApplicantsCount applicantsCount = getApplicantsCountByJobId(jobid);
             if (applicantsCount == null) {
                 // If no entry exists for the jobid, create a new one
                 applicantsCount = new ApplicantsCount();
@@ -53,14 +60,15 @@ public class ApplyController {
                 applicantsCount.setEmpid(applyjob.getEmpid());
                 applicantsCount.setUid(applyjob.getUid());
                 applicantsCount.setJuid(applyjob.getJuid());
-                applicantsCount.setApplicants(1); 
+                applicantsCount.setApplicants(1);
                 System.out.println(applicantsCount.getApplicants()+" "+applicantsCount.getJobid());
             } else {
-            	int currentApplicants = applicantsCount.getApplicants();
-            	currentApplicants++;
-            	applicantsCount.setApplicants(currentApplicants);
+            int currentApplicants = applicantsCount.getApplicants();
+            currentApplicants++;
+            applicantsCount.setApplicants(currentApplicants);
             }
             applicantsCountRepository.save(applicantsCount);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(savedApplyJob);
         } catch (DataAccessException e) {
             e.printStackTrace();
@@ -71,6 +79,7 @@ public class ApplyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
         }
     }
+
 
     // Helper method to retrieve ApplicantsCount by jobid
     private ApplicantsCount getApplicantsCountByJobId(String jobid) {
