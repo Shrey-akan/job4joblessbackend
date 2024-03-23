@@ -154,6 +154,39 @@ public class PostjobController {
 	          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	      }
 	  }
+	  
+	  @CrossOrigin(origins = "${myapp.url}")
+	  @GetMapping("/fetchdisapprovejobpost")
+	    public ResponseEntity<List<PostJob>> fetchDisapprovejobpostadmin(@RequestParam(required = false) String empid) {
+	        try {
+	            List<PostJob> jobPosts;
+	            
+	            if (empid != null && !empid.isEmpty()) {
+	                // Filter job posts based on empid
+	                jobPosts = pjd.findByEmpid(empid);
+	            } else {
+	                // If empid is not provided, fetch all job posts
+	                jobPosts = pjd.findAll();
+	            }
+
+	            // Filter out job posts where approve is true
+	            jobPosts = jobPosts.stream()
+	                               .filter(jobPost -> !jobPost.isApprovejob())
+	                               .collect(Collectors.toList());
+
+	            // Calculate applicants count for each job post
+	            for (PostJob jobPost : jobPosts) {
+	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
+	                jobPost.setApplicants(applicantsCount);
+	            }
+
+	            return ResponseEntity.ok(jobPosts);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	        }
+	    }
+
 
 
 	    // Helper method to fetch the count of applicants based on jobid and empid
