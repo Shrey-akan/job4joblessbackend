@@ -140,8 +140,6 @@ public class PostjobController {
 	  public ResponseEntity<List<PostJob>> fetchjobpostadmin(@RequestParam(required = false) String empid) {
 	      try {
 	    	  List<PostJob> jobPosts = pjd.findAll();
-
-
 	          
 	          for (PostJob jobPost : jobPosts) {
 	              int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);

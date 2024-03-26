@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.demo.oragejobsite.dao.AdminDao;
 import com.demo.oragejobsite.dao.EmployerDao;
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
+import com.demo.oragejobsite.dao.SubAdminDao;
 import com.demo.oragejobsite.dao.UserDao;
 import com.demo.oragejobsite.entity.Admin;
 import com.demo.oragejobsite.entity.Employer;
+import com.demo.oragejobsite.entity.SubAdminDetails;
 import com.demo.oragejobsite.entity.User;
 import com.demo.oragejobsite.util.TokenProvider;
 
@@ -40,7 +42,8 @@ public class AccessTokenController {
 	    private EmployerDao employerDao; 
 	    @Autowired
 	    private RefreshTokenRepository refreshTokenRepository;
-
+	    @Autowired
+	    private SubAdminDao subadmindao;
 	private TokenProvider tokenProvider;
 
 	public AccessTokenController(TokenProvider tokenProvider) {
@@ -84,9 +87,13 @@ public class AccessTokenController {
 	            	Optional<User> userOptional = userDao.findByUid(uid);
 	            	Optional<Employer> employerOptional = employerDao.findByEmpid(uid);
 	            	Optional<Admin> adminOptional = adminDao.findByAdminid(uid);
+//	            	Optional<SubAdminDetails> subadminOptional = subadmindao.findBySubAdminId(uid);
+	            	Optional<SubAdminDetails> subadminOptional = subadmindao.findBySubadminid(uid);
 	            	   System.out.println("Received Refresh Token: " + userOptional);
 	            	   System.out.println("Received Refresh Token: " + employerOptional);
 	            	   System.out.println("Received Refresh Token: " + adminOptional);
+	            	   System.out.println("Received Refresh Token: " + subadminOptional);
+	            	   
                     if (userOptional.isPresent()) {    
                     	User user = userOptional.get();
                         String newAccessToken = tokenProvider.generateAccessToken(user.getUid());
@@ -114,6 +121,16 @@ public class AccessTokenController {
                         responseBody.put("accessToken", newAccessToken);
                         responseBody.put("role", "admin");
                         responseBody.put("adminid", admin.getAdminId());
+                        return ResponseEntity.ok(responseBody);
+                    }
+                    else if (subadminOptional.isPresent()) {
+                    	SubAdminDetails admin = subadminOptional.get();
+                        String newAccessToken = tokenProvider.generateAccessToken(admin.getSubadminid());
+                        System.out.println("Received Refresh Token: " + newAccessToken);
+                        Map<String, Object> responseBody = new HashMap<>();
+                        responseBody.put("accessToken", newAccessToken);
+                        responseBody.put("role", "subadmin");
+                        responseBody.put("subadminid", admin.getSubadminid());
                         return ResponseEntity.ok(responseBody);
                     }
                 }

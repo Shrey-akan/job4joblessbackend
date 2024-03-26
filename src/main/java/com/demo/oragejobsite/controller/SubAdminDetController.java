@@ -160,6 +160,7 @@ public class SubAdminDetController {
             existingSubAdmin.setManageBlogs(subAdminDetails.isManageBlogs());
             existingSubAdmin.setPushNotification(subAdminDetails.isPushNotification());
             existingSubAdmin.setApproveJobDetails(subAdminDetails.isApproveJobDetails());
+            existingSubAdmin.setEnquiry(subAdminDetails.isEnquiry());
             // Update fields of existingSubAdmin with values from subAdminDetails
 
             subAdminDetailsDao.save(existingSubAdmin); // Save the updated subadmin details
