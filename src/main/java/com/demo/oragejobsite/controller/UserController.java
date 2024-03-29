@@ -218,18 +218,21 @@ public ResponseEntity<?> logincheck(@RequestBody User c12, HttpServletResponse r
                    responseBody.put("uid", checkmail.getUid());
                    return ResponseEntity.ok(responseBody);
                }else {
-            	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User Deactivated");
+                   return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User account is deactivated");
                }
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not verified");
+                // User account is not verified
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User account is not verified");
             }
         } else {
             // Check if email exists in the database
             User userByEmail = ud.findByUserName(checkemail);
             if (userByEmail != null) {
+                // Incorrect password
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email not found");
+                // Email not found
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
             }
         }
     } catch (Exception e) {

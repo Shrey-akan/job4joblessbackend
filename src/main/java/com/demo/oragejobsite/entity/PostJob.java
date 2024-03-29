@@ -29,6 +29,7 @@ private String empid;
 private int applicants;
 private boolean archive;
 private boolean approvejob;
+private String experience;
 //@Field("sendTime")
 //@CreatedDate
 //private Date sendTime;
@@ -41,7 +42,8 @@ public PostJob() {
 }
 public PostJob(String jobid, String empName, String empEmail, String jobtitle, String companyforthisjob,
 		Long numberofopening, String locationjob, String jobtype, String schedulejob, String payjob,
-		String descriptiondata, String empid, int applicants, boolean archive, boolean approvejob, Date sendTime) {
+		String descriptiondata, String empid, int applicants, boolean archive, boolean approvejob, String experience,
+		Date sendTime) {
 	super();
 	this.jobid = jobid;
 	this.empName = empName;
@@ -58,6 +60,7 @@ public PostJob(String jobid, String empName, String empEmail, String jobtitle, S
 	this.applicants = applicants;
 	this.archive = archive;
 	this.approvejob = approvejob;
+	this.experience = experience;
 	this.sendTime = sendTime;
 }
 public String getJobid() {
@@ -150,12 +153,19 @@ public boolean isApprovejob() {
 public void setApprovejob(boolean approvejob) {
 	this.approvejob = approvejob;
 }
+public String getExperience() {
+	return experience;
+}
+public void setExperience(String experience) {
+	this.experience = experience;
+}
 public Date getSendTime() {
 	return sendTime;
 }
 public void setSendTime(Date sendTime) {
 	this.sendTime = sendTime;
 }
+
 
 
 }

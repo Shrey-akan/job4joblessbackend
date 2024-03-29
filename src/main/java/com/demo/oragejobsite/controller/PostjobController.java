@@ -224,6 +224,8 @@ public class PostjobController {
 	            jobPostMap.put("empid", postJob.getEmpid());
 	            jobPostMap.put("archive",postJob.isArchive() );
 	            jobPostMap.put("approvejob",postJob.isApprovejob() );
+	            jobPostMap.put("experience",postJob.getExperience() );
+	            
 	            LocalDateTime sendTime = postJob.getSendTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
                 // Format sendTime
