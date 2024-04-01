@@ -192,7 +192,7 @@ public ResponseEntity<String> deactivateUser(@PathVariable String empid) {
     Employer employee = optionalEmployer.get();
     employee.setAccempldeactivate(!employee.isAccempldeactivate());
     ed.save(employee);
-    if(employee.isAccempldeactivate())
+    if(!employee.isAccempldeactivate())
     {
     	return ResponseEntity.ok().body("{\"message\": \"Employeer with ID " + empid + " activated successfully\"}");
     }
@@ -622,6 +622,19 @@ public ResponseEntity<?> apploginemployer(@RequestBody Employer e12, HttpServlet
        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
    }
 }
-
+//@CrossOrigin(origins = "${myapp.url}")
+@GetMapping("/employer/fullname")
+public ResponseEntity<String> getEmployerFullNameByEmpId(@RequestParam String empid) {
+    // Fetch the employer by empid
+    Employer employer = ed.findByEmpid(empid).orElse(null);
+    if (employer != null) {
+        // Return the employer full name with 200 OK status
+        String fullName = employer.getEmpfname() + " " + employer.getEmplname();
+        return ResponseEntity.ok().body("{\"fullName\": \"" + fullName + "\"}");
+    } else {
+        // Return "Employer not found" with 404 Not Found status
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"Employer not found\"}");
+    }
+}
 
 }

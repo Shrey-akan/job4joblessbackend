@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.dao.UserDao;
-
+import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.RefreshToken;
 import com.demo.oragejobsite.entity.User;
 
@@ -382,7 +382,7 @@ private User checkMailUser(String checkemail, String checkpass) {
         // Save the updated user object
         ud.save(user);
         
-        if(user.isAccdeactivate())
+        if(!user.isAccdeactivate())
         {
         	return ResponseEntity.ok().body("{\"message\": \"User with ID " + userId + " activated successfully\"}");
         }
@@ -652,6 +652,18 @@ private User checkMailUser(String checkemail, String checkpass) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request");
         }
     }
-
+    @GetMapping("/user/fullname")
+    public ResponseEntity<String> getUserFullNameByEmpId(@RequestParam String uid) {
+        // Fetch the employer by empid
+        User user = ud.findByUid(uid).orElse(null);
+        if (user != null) {
+            // Return the employer full name with 200 OK status
+            String fullName = user.getUserFirstName() + " " + user.getUserLastName();
+            return ResponseEntity.ok().body("{\"fullName\": \"" + fullName + "\"}");
+        } else {
+            // Return "Employer not found" with 404 Not Found status
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\": \"User not found\"}");
+        }
+    }
 
 }

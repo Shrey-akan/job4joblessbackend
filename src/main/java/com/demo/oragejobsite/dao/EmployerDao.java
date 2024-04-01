@@ -12,6 +12,7 @@ import com.demo.oragejobsite.entity.Employer;
 @Repository
 public interface EmployerDao extends MongoRepository<Employer, String>{
 
-	Optional<Employer> findByEmpid(String empid);
 	Employer findByEmpmailid(String empmailid);
+
+	Optional<Employer> findByEmpid(String empid);
 }
