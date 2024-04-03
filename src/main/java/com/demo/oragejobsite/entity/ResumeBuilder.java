@@ -6,27 +6,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ResumeBuilder {
 	@Id
 	private String rid;
-	private String rname;
-	private String rmail;
-	private Long rphone;
-	private String experience;
+	private String heading;
 	private String skills;
-	private String projectlink;
+	private String experience;
+	private String education;
 	private String description;
 	
 
-	public ResumeBuilder(String rid, String rname, String rmail, Long rphone, String experience, String skills,
-			String projectlink, String description) {
+	public ResumeBuilder(String rid, String heading, String skills, String experience, String education,
+			String description) {
 		super();
 		this.rid = rid;
-		this.rname = rname;
-		this.rmail = rmail;
-		this.rphone = rphone;
-		this.experience = experience;
+		this.heading = heading;
 		this.skills = skills;
-		this.projectlink = projectlink;
+		this.experience = experience;
+		this.education = education;
 		this.description = description;
-		
 	}
 	public ResumeBuilder() {
 		super();
@@ -38,29 +33,11 @@ public class ResumeBuilder {
 	public void setRid(String rid) {
 		this.rid = rid;
 	}
-	public String getRname() {
-		return rname;
+	public String getHeading() {
+		return heading;
 	}
-	public void setRname(String rname) {
-		this.rname = rname;
-	}
-	public String getRmail() {
-		return rmail;
-	}
-	public void setRmail(String rmail) {
-		this.rmail = rmail;
-	}
-	public Long getRphone() {
-		return rphone;
-	}
-	public void setRphone(Long rphone) {
-		this.rphone = rphone;
-	}
-	public String getExperience() {
-		return experience;
-	}
-	public void setExperience(String experience) {
-		this.experience = experience;
+	public void setHeading(String heading) {
+		this.heading = heading;
 	}
 	public String getSkills() {
 		return skills;
@@ -68,11 +45,17 @@ public class ResumeBuilder {
 	public void setSkills(String skills) {
 		this.skills = skills;
 	}
-	public String getProjectlink() {
-		return projectlink;
+	public String getExperience() {
+		return experience;
 	}
-	public void setProjectlink(String projectlink) {
-		this.projectlink = projectlink;
+	public void setExperience(String experience) {
+		this.experience = experience;
+	}
+	public String getEducation() {
+		return education;
+	}
+	public void setEducation(String education) {
+		this.education = education;
 	}
 	public String getDescription() {
 		return description;
@@ -80,10 +63,7 @@ public class ResumeBuilder {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 
-	
-	
-	
-	
 	
 }

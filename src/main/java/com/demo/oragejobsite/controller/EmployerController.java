@@ -33,7 +33,6 @@ import com.demo.oragejobsite.dao.EmployerDao;
 import com.demo.oragejobsite.dao.RefreshTokenRepository;
 import com.demo.oragejobsite.entity.Employer;
 import com.demo.oragejobsite.entity.RefreshToken;
-import com.demo.oragejobsite.entity.User;
 import com.demo.oragejobsite.util.TokenProvider;
 
 
