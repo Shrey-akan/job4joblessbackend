@@ -90,27 +90,6 @@ public class PostjobController {
 	        }
 	    }
 
-
-	  
-//	  @CrossOrigin(origins = "${myapp.url}")
-//	   @GetMapping("/fetchjobpost")
-//	    public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
-//	        try {
-//	            List<PostJob> jobPosts = (empid != null && !empid.isEmpty()) ? pjd.findByEmpid(empid) : pjd.findAll();
-//	            
-//	          
-//	            for (PostJob jobPost : jobPosts) {
-//	                
-//	                int applicantsCount = getApplicantsCount(jobPost.getJobid(), empid);
-//	                jobPost.setApplicants(applicantsCount);
-//	            }
-//
-//	            return ResponseEntity.ok(jobPosts);
-//	        } catch (Exception e) {
-//	            e.printStackTrace();
-//	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//	        }
-//	    }
 	  @CrossOrigin(origins = "${myapp.url}")
 	  @GetMapping("/fetchjobpost")
 	  public ResponseEntity<List<PostJob>> fetchjobpost(@RequestParam(required = false) String empid) {
@@ -334,33 +313,48 @@ public class PostjobController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
-	
-//	@CrossOrigin(origins = "${myapp.url}")
-//	@PutMapping("/jobpostupdate/{jobid}")
-//	public ResponseEntity<Object> jobpostupdate(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
-//	    try {
-//	        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
-//	        if (existingJobOptional.isPresent()) {
-//	            PostJob existingJob = existingJobOptional.get();
-//
-//	            // Update the approvejob field
-//	            existingJob.setApprovejob(!existingJob.isApprovejob());
-//
-//	            // Save the updated job
-//	            pjd.save(existingJob);
-//
-//	            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
-//	        } else {
-//	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Job not found");
-//	        }
-//	    } catch (DataAccessException e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
-//	    } catch (Exception e) {
-//	        e.printStackTrace();
-//	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
-//	    }
-//	}
+
+@CrossOrigin(origins = "${myapp.url}")
+    @PutMapping("/jobpostupdatedis/{jobid}")
+	public ResponseEntity<Object> jobpostupdatedis(@PathVariable String jobid, @RequestBody PostJob updatedJob) {
+	    try {
+	        Optional<PostJob> existingJobOptional = pjd.findById(jobid);
+	        if (existingJobOptional.isPresent()) {
+	            PostJob existingJob = existingJobOptional.get();
+
+	            // Get all fields of the PostJob class
+	            Field[] fields = PostJob.class.getDeclaredFields();
+	            for (Field field : fields) {
+	                // Set field accessible to allow modification
+	            	if (field.getName().equals("approvejob")) {
+	                    continue;
+	                }
+	                field.setAccessible(true);
+
+	                // Get the value of the field from the updatedJob object
+	                Object value = field.get(updatedJob);
+
+	                // If the value is not null, update the corresponding field in the existingJob object
+	                if (value != null) {
+	                    field.set(existingJob, value);
+	                }
+	            }
+
+	            pjd.save(existingJob);
+	            return ResponseEntity.status(HttpStatus.OK).body(existingJob);
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+	        }
+	    } catch (DataAccessException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred: " + e.getMessage());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
+	    }
+	}
+
+
 
 	
 	@CrossOrigin(origins = "${myapp.url}", methods = { RequestMethod.PUT })
@@ -384,6 +378,33 @@ public class PostjobController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing your request: " + e.getMessage());
 	    }
 	}
+	
+	
+	
+	
+	@CrossOrigin(origins = "${myapp.url}")
+	@GetMapping("/fetchJobByTitle")
+	public ResponseEntity<List<PostJob>> fetchJobs(@RequestParam(required = false) String title, @RequestParam(required = false) String company) {
+	    try {
+	        List<PostJob> jobResults;
+	        
+	        if (title != null && company != null) {
+	            jobResults = pjd.findByJobtitleContainingIgnoreCaseAndCompanyforthisjobContainingIgnoreCase(title, company);
+	        } else if (title != null) {
+	            jobResults = pjd.findByJobtitleContainingIgnoreCase(title);
+	        } else if (company != null) {
+	            jobResults = pjd.findByCompanyforthisjobContainingIgnoreCase(company);
+	        } else {
+	            return ResponseEntity.badRequest().body(null); // Both title and company are null
+	        }
+	        
+	        return ResponseEntity.ok(jobResults);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	    }
+	}
+
 
 }
 

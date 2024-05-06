@@ -25,6 +25,13 @@ public interface PostjobDao extends MongoRepository<PostJob, String>{
 
 	List<PostJob> findByEmpidAndApprovejob(String empid, boolean b);
 
+	List<PostJob> findByJobtitleContainingIgnoreCase(String title);
+
+	List<PostJob> findByJobtitleContainingIgnoreCaseAndCompanyforthisjobContainingIgnoreCase(String title,
+			String company);
+
+	List<PostJob> findByCompanyforthisjobContainingIgnoreCase(String company);
+
 
 	
 }
